@@ -66,8 +66,6 @@ class UninterruptableAgent(Agent):
         self.session.say("I'll interrupt you after 1 sentence.")
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

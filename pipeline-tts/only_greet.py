@@ -20,8 +20,6 @@ class GreeterAgent(Agent):
         self.session.say("Hi there! Is there anything I can help you with?")
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

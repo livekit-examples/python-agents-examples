@@ -122,8 +122,6 @@ class SimpleAgent(Agent):
         return process_stream()
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     userdata = TurnTakingUserData(ctx=ctx)
 
     session = AgentSession[TurnTakingUserData](

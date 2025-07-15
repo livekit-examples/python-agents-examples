@@ -80,8 +80,6 @@ class EchoTranscriberAgent(Agent):
         return super().stt_node(audio_with_buffer(), model_settings)
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-    
     await ctx.room.local_participant.set_attributes({"lk.agent.state": "listening"})
     
     session = AgentSession()

@@ -179,8 +179,6 @@ class SimpleAgent(Agent):
         raise StopResponse()
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

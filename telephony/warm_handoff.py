@@ -104,8 +104,6 @@ class WarmHandoffAgent(Agent):
         self.session.generate_reply()
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
     agent = WarmHandoffAgent(job_context=ctx)
 

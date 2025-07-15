@@ -82,7 +82,6 @@ class SummaryAgent(BaseAgent):
         await self.job_context.api.room.delete_room(request)
 
 async def entrypoint(ctx: JobContext) -> None:
-    await ctx.connect()
     session = AgentSession()
     await session.start(
         agent=GreetingAgent(

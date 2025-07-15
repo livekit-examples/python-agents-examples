@@ -96,8 +96,6 @@ class STTMetricsAgent(Agent):
 
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

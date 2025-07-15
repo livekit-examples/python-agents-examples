@@ -373,8 +373,6 @@ class ReturnsAgent(BaseAgent):
 
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     # Initialize user data with context
     userdata = UserData(ctx=ctx)
 

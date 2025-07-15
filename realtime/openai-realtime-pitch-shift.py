@@ -59,8 +59,6 @@ class Assistant(Agent):
         )
 
 async def entrypoint(ctx: agents.JobContext):
-    await ctx.connect()
-
     session = AgentSession(
         llm=openai.realtime.RealtimeModel(),
         vad=silero.VAD.load()

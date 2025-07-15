@@ -111,8 +111,6 @@ class DiarizationAgent(Agent):
         await self.session.say(f"Hi there! Is there anything I can help you with?")
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     userdata = SpeechmaticsUserData(ctx=ctx)
 
     session = AgentSession[SpeechmaticsUserData](

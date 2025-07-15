@@ -203,8 +203,6 @@ def create_shopify_agent(shopify_mcp_url: str) -> Agent:
     return ShopifyAgent(shopify_mcp_url)
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     userdata = ShopifyUserData(ctx=ctx)
 
     session = AgentSession[ShopifyUserData](

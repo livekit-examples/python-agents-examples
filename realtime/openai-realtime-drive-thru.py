@@ -459,8 +459,6 @@ IMPORTANT: Always use the appropriate tools to manage the order. Don't just talk
 
 
 async def entrypoint(ctx: agents.JobContext):
-    await ctx.connect()
-
     session = AgentSession[DriveThruUserData](
         userdata=DriveThruUserData(),
         llm=openai.realtime.RealtimeModel(

@@ -290,8 +290,6 @@ class FormFillerAgent(Agent):
     
 
 async def entrypoint(ctx: agents.JobContext):
-    await ctx.connect()
-    
     userdata = UserData(ctx=ctx)
 
     session = AgentSession[UserData](

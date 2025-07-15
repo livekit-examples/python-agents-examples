@@ -44,8 +44,6 @@ class SimpleAgent(Agent):
         )
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     agent = SimpleAgent()
     agent.emitter.on('participant_joined', agent.welcome_participant)
     agent.emitter.on('participant_left', agent.farewell_participant)

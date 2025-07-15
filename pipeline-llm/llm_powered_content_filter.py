@@ -108,7 +108,6 @@ class SimpleAgent(Agent):
         return process_stream()
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
     await AgentSession().start(agent=SimpleAgent(), room=ctx.room)
 
 if __name__ == "__main__":

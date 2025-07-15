@@ -26,8 +26,6 @@ def count_sentences(text):
     return len(sentences)
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-    
     session = AgentSession()
     agent = Agent(
         instructions="You are a helpful agent that politely interrupts users when they talk too much.",

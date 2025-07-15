@@ -216,8 +216,6 @@ class RAGEnrichedAgent(Agent):
 
 async def entrypoint(ctx: JobContext):
     """Main entrypoint for the agent."""
-    await ctx.connect()
-
     session = AgentSession(
         stt=deepgram.STT(),
         llm=openai.LLM(model="gpt-4o"),

@@ -230,8 +230,6 @@ class RPCStateAgent(Agent):
 
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     # Create user session data - this is the shared state container
     userdata = UserSessionData()
     

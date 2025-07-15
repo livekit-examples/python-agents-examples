@@ -466,9 +466,6 @@ async def send_initial_nutrition_update(ctx: agents.JobContext, participant_iden
 async def entrypoint(ctx: agents.JobContext):
     # Initialize database on startup
     init_database()
-    
-    await ctx.connect()
-    
     # Wait for participant
     participant = await ctx.wait_for_participant()
     print(f"Starting nutrition assistant for {participant.identity} (using fixed ID: {FIXED_PARTICIPANT_ID})")

@@ -345,8 +345,6 @@ class Assistant(Agent):
         return str((fahrenheit - 32) * 5 / 9)
 
 async def entrypoint(ctx: agents.JobContext):
-    await ctx.connect()
-
     session = AgentSession(
         llm=openai.realtime.RealtimeModel(
             model="gpt-4o-realtime-preview-2025-06-03"

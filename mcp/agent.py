@@ -23,8 +23,6 @@ class MyAgent(Agent):
         self.session.generate_reply()
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession(
         vad=silero.VAD.load(),
         stt=deepgram.STT(model="nova-3", language="multi"),

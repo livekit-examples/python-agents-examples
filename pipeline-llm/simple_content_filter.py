@@ -49,8 +49,6 @@ class SimpleAgent(Agent):
         return process_stream()
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

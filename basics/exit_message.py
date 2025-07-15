@@ -35,8 +35,6 @@ class GoodbyeAgent(Agent):
         await self.session.say("Goodbye!")
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(
