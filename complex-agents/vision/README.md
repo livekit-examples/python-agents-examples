@@ -112,7 +112,7 @@ The agent maintains conversation context that includes:
 
 ## Customization
 
-1. **Change Vision Model**: Replace Grok-2-Vision with other multimodal LLMs like GPT-4V or Claude 3
+1. **Change Vision Model**: Replace Grok-2-Vision with other multimodal LLMs like GPT-4o or Claude 3
 2. **Modify Frame Capture Logic**: Adjust when frames are captured (e.g., continuous vs. on-demand)
 3. **Add Visual Analysis Tools**: Integrate specialized vision APIs for OCR, object detection, etc.
 4. **Enhance Agent Instructions**: Update the prompt to specialize in specific visual tasks
