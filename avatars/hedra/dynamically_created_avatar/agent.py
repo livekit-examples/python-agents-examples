@@ -131,8 +131,6 @@ async def entrypoint(ctx: agents.JobContext):
         openai_client=openai_client,
     )
 
-    await ctx.connect()
-
     session = AgentSession[SessionState](
         stt=deepgram.STT(model="nova-3", language="multi"),
         llm=openai.LLM(model="gpt-4.1-mini", client=openai_client),

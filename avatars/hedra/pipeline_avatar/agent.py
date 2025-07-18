@@ -51,8 +51,6 @@ async def entrypoint(ctx: agents.JobContext):
     
     session_state = SessionState()
     
-    await ctx.connect()
-    
     job_context = get_job_context()
     avatar_identity = "static-avatar"
     session_state.avatar_session = hedra.AvatarSession(
