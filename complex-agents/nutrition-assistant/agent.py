@@ -467,6 +467,13 @@ async def entrypoint(ctx: agents.JobContext):
     # Initialize database on startup
     init_database()
 
+    # Connect to the room *before* awaiting the participant
+    await ctx.connect()
+    
+    # Wait for participant
+    participant = await ctx.wait_for_participant()
+    print(f"Starting nutrition assistant for {participant.identity} (using fixed ID: {FIXED_PARTICIPANT_ID})")
+
     session = AgentSession[NutritionUserData](
         userdata=NutritionUserData(participant_identity=FIXED_PARTICIPANT_ID, ctx=ctx),
         llm=openai.realtime.RealtimeModel(
@@ -487,10 +494,6 @@ async def entrypoint(ctx: agents.JobContext):
             noise_cancellation=noise_cancellation.BVC()
         )
     )
-
-    # Wait for participant
-    participant = await ctx.wait_for_participant()
-    print(f"Starting nutrition assistant for {participant.identity} (using fixed ID: {FIXED_PARTICIPANT_ID})")
 
     await asyncio.sleep(0.5)
     
