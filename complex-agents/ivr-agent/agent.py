@@ -124,7 +124,7 @@ async def entrypoint(ctx: JobContext):
             )
         )
 
-    # Wait for the first participant to connect after starting the agent session
+    # Wait for the first participant to connect
     await ctx.wait_for_participant()
     logger.info("Waiting for SIP participants to connect")
 
