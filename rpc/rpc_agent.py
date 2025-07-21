@@ -257,6 +257,10 @@ async def entrypoint(ctx: JobContext):
     # So changes made via RPC are visible to the LLM, and changes made by
     # the LLM are visible via RPC.
 
+    # Wait for a participant to join after starting the agent session
+    participant = await ctx.wait_for_participant()
+    logger.info(f"Participant {participant.identity} joined")
+
     # ====== RPC Handler for Client State Operations ======
     """
     RPC handler for managing state operations through RPC calls.
@@ -426,10 +430,6 @@ async def entrypoint(ctx: JobContext):
             audio_enabled=True
         )
     )
-
-    # Wait for a participant to join after starting the agent session
-    participant = await ctx.wait_for_participant()
-    logger.info(f"Participant {participant.identity} joined")
 
 if __name__ == "__main__":
     cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
