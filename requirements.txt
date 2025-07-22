@@ -1,4 +1,4 @@
-livekit-agents[openai,silero,turn-detector,deepgram,google,anthropic,cartesia,elevenlabs,rime,playai,groq,tavus,gladia]
+livekit-agents[openai,silero,turn-detector,deepgram,google,anthropic,cartesia,elevenlabs,rime,playai,groq,tavus,gladia,hedra,inworld]
 livekit-plugins-aws[realtime]
 livekit-plugins-noise-cancellation
 python-dotenv
