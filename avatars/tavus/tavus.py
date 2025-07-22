@@ -405,6 +405,8 @@ class AvatarAgent(Agent):
 
 async def entrypoint(ctx: JobContext):
     agent = AvatarAgent()
+    await ctx.connect()
+    
     # Create a single AgentSession with userdata
     userdata = UserData(ctx=ctx)
     session = AgentSession[UserData](

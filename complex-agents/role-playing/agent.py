@@ -17,6 +17,7 @@ load_dotenv()
 
 async def entrypoint(ctx: JobContext):
     """Main entry point for the game"""
+    await ctx.connect()
     # Initialize user data
     userdata = GameUserData(ctx=ctx)
     
