@@ -50,9 +50,6 @@ async def entrypoint(ctx: JobContext):
     )
     lkapi = api.LiveKitAPI()
     res = await lkapi.egress.start_room_composite_egress(req)
-
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

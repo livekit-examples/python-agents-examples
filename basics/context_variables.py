@@ -32,8 +32,6 @@ class ContextAgent(Agent):
         self.session.generate_reply()
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     context_variables = {
         "name": "Shayne",
         "age": 35,

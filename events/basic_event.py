@@ -38,8 +38,6 @@ class SimpleAgent(Agent):
         self.emitter.emit('greet', 'Bob')
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     agent = SimpleAgent()
     agent.emitter.on('greet', agent.greet)
 

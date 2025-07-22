@@ -14,8 +14,6 @@ class Assistant(Agent):
         super().__init__(instructions="You are a helpful voice AI assistant.")
 
 async def entrypoint(ctx: agents.JobContext):
-    await ctx.connect()
-
     session = AgentSession(
         llm=openai.realtime.RealtimeModel(),
         vad=silero.VAD.load()

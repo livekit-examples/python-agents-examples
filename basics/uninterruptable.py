@@ -24,8 +24,6 @@ class UninterruptableAgent(Agent):
         self.session.generate_reply(user_input="Say something somewhat long and boring so I can test if you're interruptable.")
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

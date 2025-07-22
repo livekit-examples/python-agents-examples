@@ -10,8 +10,6 @@ import datetime
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
 async def entrypoint(ctx: JobContext):
-    
-    await ctx.connect()
     session = AgentSession()
     
     @session.on("user_input_transcribed")

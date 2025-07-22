@@ -59,8 +59,6 @@ class LongAgent(Agent):
         self.session.update_agent(ShortAgent())
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

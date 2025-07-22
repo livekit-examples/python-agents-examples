@@ -37,8 +37,6 @@ class AddFunctionAgent(Agent):
         self.session.generate_reply()
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
     agent=AddFunctionAgent()
 

@@ -117,7 +117,6 @@ flow = {
 }
 
 async def entrypoint(ctx: JobContext) -> None:
-    await ctx.connect()
     session = AgentSession()
     session.userdata = SurveyData()
     session.state = {"current_node": "collect_name"}

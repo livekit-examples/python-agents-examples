@@ -39,8 +39,6 @@ class WarAndPeaceAgent(Agent):
         self.session.generate_reply("Welcome to the War and Peace book club! I'm here to discuss Leo Tolstoy's epic novel with you. What would you like to talk about?")
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

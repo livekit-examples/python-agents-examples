@@ -156,8 +156,6 @@ class BillingAgent(BaseAgent):
 
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     userdata = UserData(ctx=ctx)
     triage_agent = TriageAgent()
     support_agent = SupportAgent()

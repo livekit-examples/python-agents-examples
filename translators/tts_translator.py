@@ -12,8 +12,6 @@ from launch_demos.livekit_plugins_gladia import stt
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
 async def entrypoint(ctx: JobContext):
-    
-    await ctx.connect()
     session = AgentSession()
     
     # Process transcription events - let the agent say what it receives

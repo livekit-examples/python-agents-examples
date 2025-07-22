@@ -52,8 +52,6 @@ class SimpleEvaluationAgent(Agent):
         return None, "I've graded the answer."
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

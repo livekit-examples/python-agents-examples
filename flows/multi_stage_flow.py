@@ -255,7 +255,6 @@ class SummaryAgent(BaseAgent):
             logger.error(f"Error deleting room: {e}")
 
 async def entrypoint(ctx: JobContext) -> None:
-    await ctx.connect()
     session = AgentSession()
     session.userdata = SurveyData()
     await session.start(

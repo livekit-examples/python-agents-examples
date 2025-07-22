@@ -22,7 +22,6 @@ import os
 
 load_dotenv()
 
-
 class StaticAvatarAgent(Agent):
     def __init__(self) -> None:
         super().__init__(

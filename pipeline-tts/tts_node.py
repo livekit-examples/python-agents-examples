@@ -44,8 +44,6 @@ class TtsNodeOverrideAgent(Agent):
         await self.session.say(f"Hi there! Is there anything I can help you with? If you say something funny, I might respond with lol.")
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(

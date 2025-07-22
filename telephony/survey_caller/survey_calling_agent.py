@@ -70,8 +70,6 @@ class SurveyAgent(Agent):
         return None, f"[Call ended]"
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-    
     metadata_json = ctx.job.metadata
     logger.info(f"Received metadata: {metadata_json}")
     

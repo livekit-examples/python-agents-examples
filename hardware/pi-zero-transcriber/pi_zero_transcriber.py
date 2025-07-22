@@ -73,8 +73,6 @@ def display_transcription(text):
 
 async def entrypoint(ctx: JobContext):
     show_startup_screen()
-    
-    await ctx.connect()
     session = AgentSession()
 
     # Keep track of the current transcription

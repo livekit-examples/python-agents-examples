@@ -78,8 +78,6 @@ class VisionAgent(Agent):
         self._tasks.append(task)
 
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
-
     session = AgentSession()
 
     await session.start(
