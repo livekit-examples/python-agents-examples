@@ -12,16 +12,9 @@ from livekit.plugins import (
 )
 
 from PIL import Image
-from dataclasses import dataclass
 import os
 
 load_dotenv()
-
-
-@dataclass
-class SessionState:
-    avatar_session: hedra.AvatarSession | None = None
-
 
 class StaticAvatarAgent(Agent):
     def __init__(self) -> None:
@@ -43,11 +36,9 @@ async def entrypoint(ctx: agents.JobContext):
     if not avatar_image:
         raise FileNotFoundError("No avatar image found. Please place an avatar.png, avatar.jpg, or avatar.jpeg in the avatars directory.")
     
-    session_state = SessionState()
-    
     job_context = get_job_context()
     avatar_identity = "static-avatar"
-    session_state.avatar_session = hedra.AvatarSession(
+    avatar_session = hedra.AvatarSession(
         avatar_participant_identity=avatar_identity,
         avatar_image=avatar_image,
     )
@@ -57,7 +48,7 @@ async def entrypoint(ctx: agents.JobContext):
         vad=silero.VAD.load()
     )
     
-    await session_state.avatar_session.start(
+    await avatar_session.start(
         session, room=job_context.room
     )
 

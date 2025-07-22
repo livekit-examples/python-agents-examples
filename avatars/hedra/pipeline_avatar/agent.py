@@ -18,16 +18,9 @@ from livekit.plugins import (
 
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from PIL import Image
-from dataclasses import dataclass
 import os
 
 load_dotenv()
-
-
-@dataclass
-class SessionState:
-    avatar_session: hedra.AvatarSession | None = None
-
 
 class StaticAvatarAgent(Agent):
     def __init__(self) -> None:
@@ -49,25 +42,22 @@ async def entrypoint(ctx: agents.JobContext):
     if not avatar_image:
         raise FileNotFoundError("No avatar image found. Please place an avatar.png, avatar.jpg, or avatar.jpeg in the avatars directory.")
     
-    session_state = SessionState()
-    
     job_context = get_job_context()
     avatar_identity = "static-avatar"
-    session_state.avatar_session = hedra.AvatarSession(
+    avatar_session = hedra.AvatarSession(
         avatar_participant_identity=avatar_identity,
         avatar_image=avatar_image,
     )
 
-    session = AgentSession[SessionState](
+    session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="multi"),
         llm=openai.LLM(),
         tts=inworld.TTS(voice="Alex"),
         vad=silero.VAD.load(),
-        userdata=session_state,
         turn_detection=MultilingualModel(),
     )
     
-    await session_state.avatar_session.start(
+    await avatar_session.start(
         session, room=job_context.room
     )
 
