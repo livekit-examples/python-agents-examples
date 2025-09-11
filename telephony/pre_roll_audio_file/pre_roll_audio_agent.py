@@ -18,10 +18,10 @@ import logging
 import asyncio
 from typing import AsyncIterable
 from datetime import datetime
-
+from pathlib import Path
 from dotenv import load_dotenv
 
-from livekit import api, rtc
+from livekit import rtc
 from livekit.agents import (
     NOT_GIVEN,
     Agent,
@@ -33,12 +33,10 @@ from livekit.agents import (
     MetricsCollectedEvent,
     RoomInputOptions,
     RoomOutputOptions,
-    RunContext,
     WorkerOptions,
     cli,
     metrics,
 )
-from livekit.agents.llm import function_tool
 from livekit.agents.utils.codecs import AudioStreamDecoder
 from livekit.plugins import deepgram, openai, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
@@ -50,20 +48,34 @@ logger = logging.getLogger("basic-agent")
 
 load_dotenv()
 
-audio_file = "pre_roll_audio.mp3"
-closed_audio_file = "closed.mp3"
+audio_path = Path(__file__).parent
+audio_file = f"{audio_path}/pre_roll_audio.mp3"
+closed_audio_file =  f"{audio_path}/closed.mp3"
+
 
 async def load_audio_file(file_path: str) -> AsyncIterable[rtc.AudioFrame]:
     """Load an audio file and convert it to AudioFrames"""
+    # Check if file exists before attempting to load
+    if not Path(file_path).exists():
+        logger.error("Audio file could not be loaded: %s", file_path)
+        logger.error("File path: %s", Path(file_path).absolute())
+        logger.error("File name: %s", Path(file_path).name)
+        raise FileNotFoundError(f"Audio file not found: {file_path}")
+    
+    logger.info("Loading audio file: %s", file_path)
     decoder = AudioStreamDecoder(sample_rate=48000, num_channels=1)
     
-    with open(file_path, 'rb') as f:
-        while chunk := f.read(4096):
-            decoder.push(chunk)
-        decoder.end_input()
-    
-    async for frame in decoder:
-        yield frame
+    try:
+        with open(file_path, 'rb') as f:
+            while chunk := f.read(4096):
+                decoder.push(chunk)
+            decoder.end_input()
+        
+        async for frame in decoder:
+            yield frame
+    except Exception as e:
+        logger.error("Error loading audio file %s: %s", file_path, e)
+        raise
 
 class MyAgent(Agent):
     def __init__(self) -> None:
@@ -76,9 +88,14 @@ class MyAgent(Agent):
         )
 
     async def on_enter(self):
-        audio_frames = load_audio_file(audio_file)
-        await self.session.say(".", audio=audio_frames, allow_interruptions=False)
-        await asyncio.sleep(3)
+        try:
+            audio_frames = load_audio_file(audio_file)
+            await self.session.say(".", audio=audio_frames, allow_interruptions=False)
+            await asyncio.sleep(3)
+        except FileNotFoundError as e:
+            logger.error("Pre-roll audio file not found, continuing without audio: %s", e)
+        except Exception as e:
+            logger.error("Error loading pre-roll audio file: %s", e)
 
         # Generate a reply
         await self.session.say("Hello, thank you for calling. I am Pat. How can I help you today?")
@@ -106,6 +123,15 @@ async def entrypoint_office_closed(ctx: JobContext):
     """Play background audio when office is closed"""
     logger.info("Office is closed, playing background audio")
     
+    # Check if closed audio file exists
+    if not Path(closed_audio_file).exists():
+        logger.error("Closed office audio file could not be loaded: %s", closed_audio_file)
+        logger.error("File path: %s", Path(closed_audio_file).absolute())
+        logger.error("File name: %s", Path(closed_audio_file).name)
+        logger.error("Cannot play background audio, hanging up call")
+        await ctx.delete_room()
+        return
+    
     # Connect to the room first
     await ctx.connect()
     
@@ -117,11 +143,12 @@ async def entrypoint_office_closed(ctx: JobContext):
     try:
         # Start the background audio player
         await background_audio.start(room=ctx.room, agent_session=None)
+        logger.info("Successfully started background audio: %s", closed_audio_file)
         
         # Keep the audio playing for N seconds then hang up
         start_time = datetime.now()
         while True:
-            # after 5 seconds hangup call
+            # after 10 seconds hangup call
             if (datetime.now() - start_time).seconds >= 10:
                 await background_audio.aclose()
                 await ctx.delete_room()
@@ -129,11 +156,18 @@ async def entrypoint_office_closed(ctx: JobContext):
 
             await asyncio.sleep(1)
             
+    except FileNotFoundError as e:
+        logger.error("Background audio file not found during playback: %s", e)
+        logger.error("File path: %s", Path(closed_audio_file).absolute())
+        logger.error("File name: %s", Path(closed_audio_file).name)
     except Exception as e:
-        logger.error(f"Error in office closed mode: {e}")
+        logger.error("Error in office closed mode: %s", e)
     finally:
         # Clean up the background audio player
-        await background_audio.aclose()
+        try:
+            await background_audio.aclose()
+        except Exception as e:
+            logger.error("Error closing background audio player: %s", e)
 
 
 async def entrypoint_office_open(ctx: JobContext):
@@ -168,7 +202,7 @@ async def entrypoint_office_open(ctx: JobContext):
 
     async def log_usage():
         summary = usage_collector.get_summary()
-        logger.info(f"Usage: {summary}")
+        logger.info("Usage: %s", summary)
 
     # shutdown callbacks are triggered when the session is over
     ctx.add_shutdown_callback(log_usage)
