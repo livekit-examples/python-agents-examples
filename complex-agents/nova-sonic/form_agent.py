@@ -1,3 +1,21 @@
+"""
+---
+title: Job Application Form Agent
+category: complex-agents
+tags: [aws_realtime, form_filling, rpc_frontend, interview, structured_data]
+difficulty: advanced
+description: Interactive interview agent for job applications with AWS Realtime
+demonstrates:
+  - AWS Realtime model integration
+  - Structured form data collection
+  - RPC communication with frontend for live updates
+  - Multi-section interview process
+  - Field validation and capitalization
+  - Application status tracking
+  - Frontend form highlighting and updates
+---
+"""
+
 from dotenv import load_dotenv
 from pathlib import Path
 from livekit import agents

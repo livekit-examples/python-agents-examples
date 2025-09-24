@@ -1,3 +1,20 @@
+"""
+---
+title: Medical Office Triage System
+category: complex-agents
+tags: [multi_agent, agent_transfer, medical, context_preservation, chat_history]
+difficulty: advanced
+description: Multi-agent medical triage system with specialized departments
+demonstrates:
+  - Multiple specialized agents (triage, support, billing)
+  - Agent-to-agent transfer with context preservation
+  - Chat history truncation and management
+  - Shared userdata across agent transfers
+  - Room attribute updates for agent tracking
+  - YAML prompt loading for agent instructions
+---
+"""
+
 import logging
 from dataclasses import dataclass, field
 from typing import Optional

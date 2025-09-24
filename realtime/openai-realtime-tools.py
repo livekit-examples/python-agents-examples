@@ -1,3 +1,22 @@
+"""
+---
+title: OpenAI Realtime with 50+ Tools
+category: realtime
+tags: [massive_function_collection, math_tools, string_tools, list_tools, conversion_tools]
+difficulty: intermediate
+description: OpenAI Realtime agent with comprehensive function tool collection
+demonstrates:
+  - 50+ function tools implementation
+  - Math operations (arithmetic, advanced, conversions)
+  - String manipulation tools
+  - List and array operations
+  - Random generation utilities
+  - ASCII and temperature conversions
+  - Password generation
+  - Anagram and palindrome checks
+---
+"""
+
 import librosa
 import random, math
 import numpy as np

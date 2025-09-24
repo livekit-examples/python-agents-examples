@@ -1,3 +1,17 @@
+"""
+---
+title: Ollama Local LLM
+category: pipeline-llm
+tags: [ollama, local_llm, self_hosted]
+difficulty: beginner
+description: Agent using Ollama for local LLM inference
+demonstrates:
+  - Ollama integration with OpenAI plugin
+  - Local model execution
+  - Self-hosted LLM configuration
+---
+"""
+
 import logging
 from pathlib import Path
 from dotenv import load_dotenv

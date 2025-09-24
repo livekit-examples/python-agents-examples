@@ -1,3 +1,21 @@
+"""
+---
+title: RAG Database Builder
+category: rag
+tags: [annoy_index, sentence_chunking, embeddings_generation, vector_database]
+difficulty: advanced
+description: Builds vector databases for RAG from text documents
+demonstrates:
+  - Annoy index construction and saving
+  - Text chunking with SentenceChunker
+  - OpenAI embeddings generation
+  - Progress tracking with tqdm
+  - Content cleaning and filtering
+  - UUID-based paragraph storage
+  - Factory pattern for builder creation
+---
+"""
+
 import pickle
 import uuid
 import logging

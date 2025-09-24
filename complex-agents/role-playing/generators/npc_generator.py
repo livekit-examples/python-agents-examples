@@ -1,3 +1,20 @@
+"""
+---
+title: NPC Generator
+category: complex-agents
+tags: [rpg, procedural-generation, character-creation, personality-generation, dialogue-system]
+difficulty: advanced
+description: AI-powered NPC generation system with personality, backstory, and dynamic dialogue
+demonstrates:
+  - Dynamic NPC creation with context-aware traits
+  - Parallel content generation for efficiency
+  - YAML rule-based character archetypes
+  - Personality and backstory generation
+  - Dynamic dialogue creation and management
+  - Integration with item generation systems
+---
+"""
+
 import random
 import yaml
 import logging

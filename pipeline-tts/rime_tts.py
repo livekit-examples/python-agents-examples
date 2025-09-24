@@ -1,3 +1,14 @@
+"""
+---
+title: Rime TTS
+category: pipeline-tts
+tags: [pipeline-tts, openai, deepgram]
+difficulty: intermediate
+description: Shows how to use the Rime TTS model.
+demonstrates:
+  - Using the Rime TTS model.
+---
+"""
 from pathlib import Path
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli

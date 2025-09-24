@@ -1,3 +1,16 @@
+"""
+---
+title: MCP Agent
+category: mcp
+tags: [mcp, openai, deepgram]
+difficulty: beginner
+description: Shows how to use a LiveKit Agent as an MCP client.
+demonstrates:
+  - Connecting to a local MCP server as a client.
+  - Connecting to a remote MCP server as a client.
+  - Using a function tool to retrieve data from the MCP server.
+---
+"""
 import logging
 import os
 from dotenv import load_dotenv
@@ -29,18 +42,7 @@ async def entrypoint(ctx: JobContext):
         llm=openai.LLM(model="gpt-4o-mini"),
         tts=openai.TTS(voice="ash"),
         turn_detection=MultilingualModel(),
-        mcp_servers=[
-            mcp.MCPServerHTTP(
-                url=os.environ.get("ZAPIER_MCP_URL"),
-                timeout=10,
-                client_session_timeout_seconds=10,
-            ),
-            mcp.MCPServerHTTP(
-                url="http://localhost:8000/sse",
-                timeout=5,
-                client_session_timeout_seconds=5,
-            ),
-        ],
+        mcp_servers=[mcp.MCPServerHTTP(url="https://shayne.app/mcp",)],
     )
 
     await session.start(agent=MyAgent(), room=ctx.room)

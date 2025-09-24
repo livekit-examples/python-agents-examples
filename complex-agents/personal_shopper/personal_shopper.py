@@ -1,3 +1,21 @@
+"""
+---
+title: Personal Shopper Multi-Agent
+category: complex-agents
+tags: [customer_database, multi_agent_transfer, order_management, customer_identification]
+difficulty: advanced
+description: E-commerce personal shopper with triage, sales, and returns departments
+demonstrates:
+  - Customer identification and database management
+  - Three specialized agents with different responsibilities
+  - Order creation and management with pricing
+  - Order history retrieval for returns
+  - Context-aware agent transfers with personalization
+  - Customer database with order tracking
+  - Persistent customer data across sessions
+---
+"""
+
 import logging
 import os
 from dataclasses import dataclass, field

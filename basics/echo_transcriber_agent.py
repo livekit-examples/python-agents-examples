@@ -1,3 +1,15 @@
+"""
+---
+title: Echo Transcriber Agent
+category: basics
+tags: [echo, transcriber, deepgram, silero]
+difficulty: beginner
+description: Shows how to create an agent that can transcribe audio and echo it back.
+demonstrates:
+  - Transcribing audio
+  - Echoing audio back that's stored in a buffer
+---
+"""
 import logging
 import asyncio
 from pathlib import Path

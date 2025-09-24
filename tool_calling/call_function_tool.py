@@ -1,3 +1,19 @@
+"""
+---
+title: Basic Function Calling
+category: function-calling
+tags: [function-tools, console-output, basic-example, voice-agent]
+difficulty: beginner
+description: Simple demonstration of function calling with a console print function
+demonstrates:
+  - Basic function tool decoration and usage
+  - Function registration with voice agents
+  - Return value handling (None, message) pattern
+  - Simple function execution without parameters
+  - Voice-friendly function descriptions
+---
+"""
+
 ## This is a basic example of how to use function calling.
 ## To test the function, you can ask the agent to print to the console!
 

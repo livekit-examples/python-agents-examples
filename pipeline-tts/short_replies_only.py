@@ -1,3 +1,15 @@
+"""
+---
+title: Short Replies Only
+category: pipeline-tts
+tags: [pipeline-tts, openai, deepgram]
+difficulty: beginner
+description: Shows how to override the default TTS node to only respond with short replies based on the number of chunks.
+demonstrates:
+  - Using the `tts_node` method to override the default TTS node and add custom logic to only respond with short replies.
+  - Using the `session.interrupt` method to interrupt the agent if it's taking too long to respond, and then informing the user with `session.say`
+---
+"""
 from pathlib import Path
 from typing import AsyncIterable
 import logging

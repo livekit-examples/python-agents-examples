@@ -1,5 +1,19 @@
-from dotenv import load_dotenv
+"""
+---
+title: Dynamically Created Avatar
+category: avatars
+tags: [avatar, openai, deepgram]
+difficulty: intermediate
+description: Shows how to create an avatar dynamically in an agent.
+demonstrates:
+  - Making parallel calls to an LLM while speaking to the voice agent
+  - Creating an avatar dynamically in an agent
+  - Creating a new hedra avatar session using a custom image
+  - A function tool that uses a docstring to describe the tool for the LLM to use
+---
+"""
 
+from dotenv import load_dotenv
 from openai import AsyncOpenAI
 from livekit import agents, api
 from livekit.agents import (

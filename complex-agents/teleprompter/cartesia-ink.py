@@ -1,3 +1,20 @@
+"""
+---
+title: Teleprompter Transcription Agent
+category: complex-agents
+tags: [rpc_transcript, cartesia_stt, user_input_transcribed, frontend_communication]
+difficulty: intermediate
+description: Real-time teleprompter that sends transcriptions to frontend via RPC
+demonstrates:
+  - Cartesia STT for transcription
+  - RPC method registration for status checks
+  - Event handler for final transcriptions
+  - Async RPC calls to send transcripts
+  - Frontend communication pattern
+  - Real-time transcript streaming
+---
+"""
+
 # Teleprompter agent that transcribes user speech and sends it to frontend via RPC
 
 import asyncio
@@ -8,9 +25,10 @@ from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.voice import Agent, AgentSession
 from livekit.plugins import cartesia
 
-load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
+load_dotenv(dotenv_path=Path(__file__).parent.parent.parent / '.env')
 
 async def entrypoint(ctx: JobContext):
+    await ctx.connect()
     session = AgentSession()
 
     # Register RPC method for frontend to retrieve transcript data

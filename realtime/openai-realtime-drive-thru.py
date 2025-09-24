@@ -1,3 +1,22 @@
+"""
+---
+title: Drive-Thru Order System with Realtime
+category: realtime
+tags: [order_management, menu_database, combo_handling, order_modifications, userdata_state]
+difficulty: advanced
+description: Complete drive-thru ordering system with OpenAI Realtime
+demonstrates:
+  - Complex order state management with userdata
+  - Menu database with pricing and categories
+  - Combo meal handling and upgrades
+  - Order modification tools (add, remove, modify)
+  - Special requests and customization
+  - Discount code application
+  - Order summary and finalization
+  - Real-time order state printing
+---
+"""
+
 import librosa
 import random, math
 import numpy as np

@@ -1,3 +1,17 @@
+"""
+---
+title: OpenAI LLM Pipeline
+category: pipeline-llm
+tags: [openai, standard_pipeline]
+difficulty: beginner
+description: Basic agent with OpenAI LLM in standard pipeline configuration
+demonstrates:
+  - OpenAI LLM integration
+  - Standard pipeline setup
+  - Basic agent configuration
+---
+"""
+
 import logging
 from pathlib import Path
 from dotenv import load_dotenv

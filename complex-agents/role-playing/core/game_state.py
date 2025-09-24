@@ -1,3 +1,20 @@
+"""
+---
+title: Game State Management
+category: complex-agents
+tags: [rpg, state-management, dataclass, session-data, type-safety]
+difficulty: intermediate
+description: Centralized game state management for RPG sessions with type-safe data structures
+demonstrates:
+  - Dataclass-based state management
+  - Session data persistence across agent switches
+  - Type-safe context handling with generics
+  - Game progression tracking and history
+  - Multi-agent state coordination
+  - Combat state integration
+---
+"""
+
 from dataclasses import dataclass, field
 from typing import Optional, List, TYPE_CHECKING
 from livekit.agents import JobContext, AgentSession

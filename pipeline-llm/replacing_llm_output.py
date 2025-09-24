@@ -1,3 +1,19 @@
+"""
+---
+title: LLM Output Replacement
+category: pipeline-llm
+tags: [deepseek, groq, stream_manipulation, think_tags, output_processing]
+difficulty: intermediate
+description: Replaces Deepseek thinking tags with custom messages for TTS
+demonstrates:
+  - Groq integration with Deepseek model
+  - Real-time stream processing
+  - Text replacement in LLM output
+  - Custom llm_node for output manipulation
+  - Handling model-specific output formats
+---
+"""
+
 # In this example, we replace the <think> tags returned by Deepseek with a custom message,
 # so that the TTS engine doesn't say the <think> tags as part of the response.
 

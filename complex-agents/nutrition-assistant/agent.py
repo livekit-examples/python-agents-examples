@@ -1,3 +1,21 @@
+"""
+---
+title: Nutrition Tracker Assistant
+category: complex-agents
+tags: [sqlite_database, nutrition, food_tracking, rpc_updates, thread_pool]
+difficulty: advanced
+description: Nutrition tracking assistant with SQLite database and real-time updates
+demonstrates:
+  - SQLite database for persistent food tracking
+  - Thread pool executor for non-blocking database operations
+  - Nutritional data calculation and aggregation
+  - RPC updates to frontend for live nutrition display
+  - Daily summaries and food consumption history
+  - Fixed participant identity for testing
+  - Initial data sync on connection
+---
+"""
+
 from typing import Optional
 from dotenv import load_dotenv
 from pathlib import Path

@@ -1,3 +1,20 @@
+"""
+---
+title: Realtime Audio Pitch Shifting
+category: realtime
+tags: [audio_processing, pitch_shift, librosa, realtime_audio_output_node]
+difficulty: advanced
+description: OpenAI Realtime agent with real-time audio pitch shifting
+demonstrates:
+  - Custom realtime_audio_output_node override
+  - Audio stream processing with librosa
+  - Pitch shifting by semitones
+  - AudioByteStream for buffering
+  - Frame-by-frame audio transformation
+  - NumPy audio data manipulation
+---
+"""
+
 import librosa
 import numpy as np
 from typing import AsyncIterable

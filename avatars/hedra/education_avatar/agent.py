@@ -1,3 +1,18 @@
+"""
+---
+title: Education Avatar
+category: avatars
+tags: [avatar, openai, deepgram, hedra]
+difficulty: advanced
+description: Shows how to create an avatar that can help a user learn about the Fall of the Roman Empire using flash cards and quizzes.
+demonstrates:
+  - Creating a new hedra avatar session using a custom image
+  - Using RPC to send messages to the client for flash cards and quizzes using `perform_rpc`
+  - Using `register_rpc_method` to register the RPC methods so that the agent can receive messages from the client
+  - Using UserData to store state for the cards and the quizzes
+  - Using custom data classes to represent the flash cards and quizzes
+---
+"""
 import logging
 import json
 import uuid

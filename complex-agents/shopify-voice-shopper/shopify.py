@@ -1,3 +1,21 @@
+""" 
+---
+title: Shopify Voice Shopping Agent
+category: complex-agents
+tags: [mcp_server, shopify, dynamic_agent_switching, rpc_navigation, fast_llm_response]
+difficulty: advanced
+description: Voice shopping assistant for Shopify stores with MCP server integration
+demonstrates:
+  - MCP server integration for Shopify operations
+  - Dynamic shop switching with agent updates
+  - RPC navigation to frontend browser
+  - Fast LLM for quick acknowledgments
+  - Voice-optimized response formatting
+  - Factory pattern for agent creation
+  - Shop URL handling and validation
+---
+"""
+
 import logging
 import os
 import asyncio

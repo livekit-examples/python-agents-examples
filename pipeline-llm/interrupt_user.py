@@ -1,3 +1,16 @@
+"""
+---
+title: Interrupt User
+category: pipeline-llm
+tags: [pipeline-llm, openai, deepgram]
+difficulty: intermediate
+description: Shows how to interrupt the user if they've spoken too much.
+demonstrates:
+  - Using the `session.say` method to interrupt the user.
+  - Using the `allow_interruptions` parameter to prevent the user from interrupting the agent.
+  - Once the agent has spoken, it will allow the user to interrupt again.
+---
+"""
 # This agent keeps track of the number of sentences the user has spoken
 # and interrupts them if they've said a certain number of sentences.
 # We use session.say() to interrupt the user, and set allow_interruptions=False

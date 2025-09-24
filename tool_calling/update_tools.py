@@ -1,3 +1,19 @@
+"""
+---
+title: Dynamic Tool Updates
+category: function-calling
+tags: [dynamic-tools, tool-updates, runtime-modification, function-composition]
+difficulty: intermediate
+description: Demonstrates dynamically adding function tools to agents at runtime
+demonstrates:
+  - Dynamic function tool creation and addition
+  - Runtime agent tool modification with update_tools
+  - External function wrapping with function_tool decorator
+  - Tool composition and agent enhancement
+  - Combining static and dynamic function tools
+---
+"""
+
 ## This is a basic example of how to use function calling.
 ## To test the function, you can ask the agent to print to the console!
 

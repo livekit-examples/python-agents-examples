@@ -1,3 +1,20 @@
+"""
+---
+title: VAD Metrics
+category: metrics
+tags: [metrics, openai, deepgram]
+difficulty: beginner
+description: Shows how to use the VAD metrics to log metrics to the console.
+demonstrates:
+  - Using the VAD metrics to log metrics to the console.
+  - This includes:
+    - Idle Time
+    - Inference Duration Total
+    - Inference Count
+    - Speech ID
+    - Error
+---
+"""
 import logging
 import asyncio
 from pathlib import Path

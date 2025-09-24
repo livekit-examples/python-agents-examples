@@ -1,3 +1,16 @@
+"""
+---
+title: Diarization
+category: pipeline-stt
+tags: [pipeline-stt, openai, deepgram]
+difficulty: intermediate
+description: Shows how to use the Speechmatics STT model with diarization.
+demonstrates:
+  - Using the Speechmatics STT model with diarization.
+  - Allow speakers to label themselves when they're speaking using function tools.
+  - Using the `stt_node` method to override the default STT node and add custom logic to detect speaker changes.
+---
+"""
 from pathlib import Path
 from dotenv import load_dotenv
 from typing import AsyncIterable, Optional

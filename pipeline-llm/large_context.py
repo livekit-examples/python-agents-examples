@@ -1,3 +1,19 @@
+"""
+---
+title: Large Context Window LLM
+category: pipeline-llm
+tags: [gemini_2_flash, large_context, book_analysis, war_and_peace]
+difficulty: intermediate
+description: Agent using Gemini 2.0 Flash to analyze War and Peace with large context window
+demonstrates:
+  - Loading large text files into LLM context
+  - Google Gemini 2.0 Flash model for large contexts
+  - Book analysis and discussion capabilities
+  - Direct text quotation from context
+  - Custom TTS instructions for literary tone
+---
+"""
+
 import logging
 from pathlib import Path
 from dotenv import load_dotenv

@@ -1,3 +1,15 @@
+"""
+---
+title: Declarative Flow
+category: flows
+tags: [flows, openai, deepgram]
+difficulty: intermediate
+description: Shows how to create a declarative flow using a dictionary of mutliple agents and their transitions.
+demonstrates:
+  - Creating a defined flow of agents using a dictionary of mutliple agents and their transitions.
+  - Using a function to determine the next agent in the flow.
+---
+"""
 import logging
 from dotenv import load_dotenv
 from dataclasses import dataclass, field

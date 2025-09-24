@@ -1,3 +1,19 @@
+"""
+---
+title: Pipeline Translator Agent
+category: translation
+tags: [translation, multilingual, french, elevenlabs, direct-translation]
+difficulty: intermediate
+description: Simple translation pipeline that converts English speech to French
+demonstrates:
+  - Direct language translation workflow
+  - Multilingual TTS configuration with ElevenLabs
+  - Simple translation-focused agent instructions
+  - Clean input-to-output translation pipeline
+  - Voice-to-voice translation system
+---
+"""
+
 import logging
 import os
 from pathlib import Path

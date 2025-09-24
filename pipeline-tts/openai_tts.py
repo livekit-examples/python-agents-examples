@@ -1,3 +1,14 @@
+"""
+---
+title: OpenAI TTS
+category: pipeline-tts
+tags: [pipeline-tts, openai, deepgram]
+difficulty: intermediate
+description: Shows how to use the OpenAI TTS model.
+demonstrates:
+  - Using the OpenAI TTS model.
+---
+"""
 from pathlib import Path
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli
@@ -6,7 +17,7 @@ from livekit.plugins import deepgram, openai, silero
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
-class SimpleAgent(Agent):
+class OpenAITTSAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
@@ -26,7 +37,7 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession()
 
     await session.start(
-        agent=SimpleAgent(),
+        agent=OpenAITTSAgent(),
         room=ctx.room
     )
 

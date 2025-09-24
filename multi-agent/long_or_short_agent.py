@@ -1,3 +1,16 @@
+"""
+---
+title: Long or Short Agent
+category: multi-agent
+tags: [multi-agent, openai, deepgram]
+difficulty: intermediate
+description: Shows how to create a multi-agent that can switch between a long and short agent using a function tool.
+demonstrates:
+  - Creating a multi-agent that can switch between a long and short agent using a function tool.
+  - Using a function tool to change the agent.
+  - Different agents can have different instructions, models, and tools.
+---
+"""
 import logging
 import os
 from pathlib import Path

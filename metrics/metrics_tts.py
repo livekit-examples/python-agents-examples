@@ -1,3 +1,22 @@
+"""
+---
+title: TTS Metrics
+category: metrics
+tags: [metrics, openai, deepgram]
+difficulty: beginner
+description: Shows how to use the TTS metrics to log metrics to the console.
+demonstrates:
+  - Using the TTS metrics to log metrics to the console.
+  - This includes:
+    - TTFB
+    - Duration
+    - Audio Duration
+    - Cancelled
+    - Characters Count
+    - Streamed
+    - Speech ID
+    - Error
+"""
 import logging
 import asyncio
 from pathlib import Path

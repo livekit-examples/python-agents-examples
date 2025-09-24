@@ -1,4 +1,14 @@
-
+"""
+---
+title: Multi-Stage Flow
+category: flows
+tags: [flows, openai, deepgram]
+difficulty: intermediate
+description: Shows how to create a multi-stage flow using a series of agents.
+demonstrates:
+  - Creating a multi-stage flow using a series of agents.
+---
+"""
 import logging
 from dotenv import load_dotenv
 from dataclasses import dataclass, field

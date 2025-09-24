@@ -1,3 +1,14 @@
+"""
+---
+title: Simple Flow
+category: flows
+tags: [flows, openai, deepgram]
+difficulty: beginner
+description: Shows how to create a simple one-way flow using a series of agents.
+demonstrates:
+  - Creating a simple one-way flow using a series of agents that hand off to the next agent in the flow.
+---
+"""
 import logging
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli

@@ -1,3 +1,14 @@
+"""
+---
+title: TTS Node Override
+category: pipeline-tts
+tags: [pipeline-tts, openai, deepgram]
+difficulty: intermediate
+description: Shows how to override the default TTS node to do replacements on the output.
+demonstrates:
+  - Using the `tts_node` method to override the default TTS node and add custom logic to do replacements on the output, like replacing "lol" with "<laughs>".
+---
+"""
 from pathlib import Path
 from typing import AsyncIterable
 import logging

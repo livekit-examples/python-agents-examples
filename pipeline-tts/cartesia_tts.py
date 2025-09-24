@@ -1,3 +1,14 @@
+"""
+---
+title: Cartesia TTS
+category: pipeline-tts
+tags: [pipeline-tts, openai, deepgram]
+difficulty: intermediate
+description: Shows how to use the Cartesia TTS model.
+demonstrates:
+  - Using the Cartesia TTS model.
+---
+"""
 import logging
 import asyncio
 from pathlib import Path

@@ -1,3 +1,17 @@
+"""
+---
+title: Basic Event
+category: events
+tags: [events, openai, deepgram]
+difficulty: beginner
+description: Shows how to use events in an agent to trigger actions.
+demonstrates:
+  - Using events in an agent to trigger actions
+  - Using `on` to register an event listener
+  - Using `off` to unregister an event listener
+  - Using `once` to register an event listener that will only be triggered once
+---
+"""
 import logging
 import os
 from pathlib import Path

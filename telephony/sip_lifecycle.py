@@ -1,3 +1,20 @@
+"""
+---
+title: SIP Lifecycle Management Agent
+category: telephony
+tags: [sip, call-management, participant-handling, call-lifecycle, function-tools]
+difficulty: advanced
+description: Advanced SIP agent demonstrating complete call lifecycle management
+demonstrates:
+  - SIP participant management and addition
+  - Call status tracking and event handling
+  - Room management and deletion
+  - Participant attribute monitoring
+  - Call lifecycle event handlers
+  - Function tools for call operations
+---
+"""
+
 import asyncio
 import logging
 import os

@@ -1,3 +1,14 @@
+"""
+---
+title: Anthropic LLM
+category: pipeline-llm
+tags: [pipeline-llm, openai, deepgram]
+difficulty: intermediate
+description: Shows how to use the Anthropic LLM.
+demonstrates:
+  - Using the Anthropic LLM.
+---
+"""
 import logging
 from pathlib import Path
 from dotenv import load_dotenv

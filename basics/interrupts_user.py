@@ -1,4 +1,15 @@
-# This agent isn't interruptable, so it will keep talking even if the user tries to speak.
+"""
+---
+title: Interrupt User
+category: basics
+tags: [interrupts, openai, deepgram]
+difficulty: beginner
+description: Shows how to interrupt the user if they try to say more than one sentence.
+demonstrates:
+  - Using the `stt_node` to read the user's input in real time
+  - Setting `allow_interruptions` to `False` to prevent the user from interrupting the agent
+---
+"""
 
 from pathlib import Path
 from typing import AsyncIterable, Optional
@@ -16,7 +27,7 @@ load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class UninterruptableAgent(Agent):
+class InterruptUserAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
@@ -69,7 +80,7 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession()
 
     await session.start(
-        agent=UninterruptableAgent(),
+        agent=InterruptUserAgent(),
         room=ctx.room
     )
 

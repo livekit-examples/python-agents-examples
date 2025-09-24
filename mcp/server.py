@@ -1,4 +1,14 @@
-# server.py
+"""
+---
+title: MCP Server
+category: mcp
+tags: [mcp, openai, deepgram]
+difficulty: beginner
+description: Shows how to create an MCP server that can be used to control a LiveKit room.
+demonstrates:
+  - Creating an MCP server that can be used to control a LiveKit room.
+---
+"""
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
 import os

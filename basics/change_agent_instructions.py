@@ -1,3 +1,15 @@
+"""
+---
+title: Change Agent Instructions
+category: basics
+tags: [instructions, openai, deepgram]
+difficulty: beginner
+description: Shows how to change the instructions of an agent.
+demonstrates:
+  - Changing agent instructions after the agent has started using `update_instructions`
+---
+"""
+
 import logging
 import os
 from pathlib import Path

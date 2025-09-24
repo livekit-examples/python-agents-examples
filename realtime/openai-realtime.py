@@ -1,3 +1,18 @@
+"""
+---
+title: Basic OpenAI Realtime Agent
+category: realtime
+tags: [openai_realtime, minimal_setup]
+difficulty: beginner
+description: Minimal OpenAI Realtime model agent setup
+demonstrates:
+  - OpenAI Realtime model basic usage
+  - Minimal agent configuration
+  - Session-based generation
+  - VAD with Silero
+---
+"""
+
 from dotenv import load_dotenv
 from pathlib import Path
 from livekit import agents

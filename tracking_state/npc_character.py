@@ -1,3 +1,20 @@
+"""
+---
+title: NPC Character State Tracking
+category: state-management
+tags: [npc-interaction, state-tracking, rapport-system, agent-switching, conversation-flow]
+difficulty: advanced
+description: Advanced NPC system with dynamic rapport tracking and conversation state management
+demonstrates:
+  - Complex character state tracking with rapport system
+  - Multi-agent conversation flows and switching
+  - Topic-based conversation management
+  - Dynamic response variation based on relationship state
+  - Agent inheritance patterns for character consistency
+  - Session data persistence across interactions
+---
+"""
+
 import logging
 from dotenv import load_dotenv
 from dataclasses import dataclass, field

@@ -1,3 +1,20 @@
+"""
+---
+title: TTS Translator with Gladia STT
+category: translation
+tags: [translation, gladia-stt, multilingual, code-switching, event-handling]
+difficulty: advanced
+description: Advanced translation system using Gladia STT with code switching and event handling
+demonstrates:
+  - Gladia STT integration with multiple languages
+  - Code switching between French and English
+  - Translation event handling and processing
+  - Custom STT configuration with translation capabilities
+  - Event-driven transcription and speech synthesis
+  - Advanced multilingual processing pipeline
+---
+"""
+
 # Transcribes user speech to text, and saves it to a file
 from pathlib import Path
 from dotenv import load_dotenv

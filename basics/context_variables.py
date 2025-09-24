@@ -1,3 +1,15 @@
+"""
+---
+title: Context Variables
+category: basics
+tags: [context, variables, openai, deepgram]
+difficulty: beginner
+description: Shows how to give an agent context about the user using simple variables.
+demonstrates:
+  - Using context variables from a simple dictionary
+---
+"""
+
 import logging
 from pathlib import Path
 from dotenv import load_dotenv

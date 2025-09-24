@@ -1,3 +1,20 @@
+"""
+---
+title: Item Generator
+category: complex-agents
+tags: [rpg, procedural-generation, llm-generation, yaml-configuration, item-creation]
+difficulty: advanced
+description: AI-powered procedural item generation system for RPG games
+demonstrates:
+  - LLM-driven content generation with structured prompts
+  - YAML-based rule configuration for generation
+  - Context-aware item creation based on NPC and location
+  - Automated mechanical property assignment
+  - Fallback systems for generation failures
+  - JSON parsing and validation for generated content
+---
+"""
+
 import json
 import yaml
 import logging

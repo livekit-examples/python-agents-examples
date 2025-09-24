@@ -1,3 +1,19 @@
+"""
+---
+title: Hedra Avatar with Pipeline
+category: avatars
+tags: [hedra, avatar, static_image, pipeline, inworld_tts, multilingual]
+difficulty: intermediate
+description: Visual avatar using Hedra with static image, pipeline architecture, and Inworld TTS
+demonstrates:
+  - Hedra avatar session with static image loading
+  - Pipeline architecture with separate STT/LLM/TTS components
+  - Inworld TTS voice integration
+  - Multilingual turn detection model
+  - Noise cancellation with BVC
+---
+"""
+
 from dotenv import load_dotenv
 
 from livekit import agents

@@ -1,3 +1,15 @@
+"""
+---
+title: Recording Agent
+category: egress
+tags: [recording, openai, deepgram]
+difficulty: intermediate
+description: Shows how to create an agent that can record the input to a room and save it to a file.
+demonstrates:
+  - Using egress to record the input to a room
+---
+"""
+
 import logging
 import os
 from pathlib import Path

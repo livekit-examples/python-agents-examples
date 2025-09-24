@@ -1,3 +1,20 @@
+"""
+---
+title: Base Game Agent
+category: complex-agents
+tags: [rpg, game-state, agent-switching, context-preservation, rpc-communication]
+difficulty: advanced
+description: Base class for RPG game agents with context preservation and state management
+demonstrates:
+  - Agent inheritance patterns for game systems
+  - Chat context preservation across agent switches
+  - Game state integration and management
+  - RPC communication for client updates
+  - Agent lifecycle management with session data
+  - Context truncation and memory management
+---
+"""
+
 import logging
 import json
 from typing import List

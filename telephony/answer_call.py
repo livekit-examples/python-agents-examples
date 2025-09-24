@@ -1,3 +1,19 @@
+"""
+---
+title: Simple Call Answering Agent
+category: telephony
+tags: [telephony, call-handling, basic-agent, voice-interaction]
+difficulty: beginner
+description: Basic agent for handling incoming phone calls with simple conversation
+demonstrates:
+  - Simple telephony agent setup
+  - Basic call handling workflow
+  - Standard STT/LLM/TTS configuration
+  - Automatic greeting generation on entry
+  - Clean agent session lifecycle
+---
+"""
+
 import logging
 from pathlib import Path
 from dotenv import load_dotenv

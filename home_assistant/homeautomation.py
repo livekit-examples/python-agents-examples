@@ -1,3 +1,15 @@
+"""
+---
+title: Home Automation
+category: home-automation
+tags: [home-automation, openai, deepgram]
+difficulty: intermediate
+description: Shows how to create an agent that can control home automation devices.
+demonstrates:
+  - Using function tools to control home automation devices.
+  - Using a wake word to trigger the agent.
+---
+"""
 # pylint: disable=C0114
 import re
 import os

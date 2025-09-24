@@ -1,3 +1,14 @@
+"""
+---
+title: Cerebras LLM
+category: pipeline-llm
+tags: [pipeline-llm, openai, deepgram]
+difficulty: intermediate
+description: Shows how to use the Cerebras LLM.
+demonstrates:
+  - Using the Cerebras LLM.
+---
+"""
 import logging
 from pathlib import Path
 from dotenv import load_dotenv

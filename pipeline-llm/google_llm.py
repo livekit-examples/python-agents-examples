@@ -1,3 +1,14 @@
+"""
+---
+title: Google LLM
+category: pipeline-llm
+tags: [pipeline-llm, openai, deepgram]
+difficulty: intermediate
+description: Shows how to use the Google LLM.
+demonstrates:
+  - Using the Google LLM.
+---
+"""
 import logging
 from pathlib import Path
 from dotenv import load_dotenv

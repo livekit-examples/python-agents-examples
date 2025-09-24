@@ -1,3 +1,20 @@
+"""
+---
+title: Turn-Taking Detection Agent
+category: complex-agents
+tags: [eou_probability, turn_detection, gladia_stt, multilingual, rpc_eou_updates]
+difficulty: advanced
+description: Agent that exposes end-of-utterance probability for turn-taking research
+demonstrates:
+  - Custom turn detector wrapper exposing EOU probability
+  - Real-time EOU probability RPC updates to frontend
+  - Multilingual STT with Gladia
+  - Percentage formatting for tiny probabilities
+  - Session userdata for RPC communication
+  - STT event processing for transcript logging
+---
+"""
+
 import logging
 import os
 import json

@@ -1,3 +1,20 @@
+"""
+---
+title: Warm Handoff Agent
+category: telephony
+tags: [call-transfer, warm-handoff, sip, agent-to-human, function-tools]
+difficulty: intermediate
+description: Agent demonstrating warm handoff functionality to transfer calls to human agents
+demonstrates:
+  - Call transfer to human agents via SIP
+  - Warm handoff implementation patterns
+  - SIP participant creation and management
+  - Function tools for call operations
+  - Multi-participant call handling
+  - Professional call transfer announcements
+---
+"""
+
 import asyncio
 import os
 import uuid

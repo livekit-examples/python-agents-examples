@@ -1,3 +1,19 @@
+"""
+---
+title: Simple Content Filter
+category: pipeline-llm
+tags: [keyword_filtering, offensive_terms, inline_replacement]
+difficulty: beginner
+description: Basic keyword-based content filter with inline replacement
+demonstrates:
+  - Simple keyword filtering approach
+  - Inline content replacement
+  - Custom llm_node override
+  - Static offensive terms list
+  - Stream processing with substitution
+---
+"""
+
 import logging
 from pathlib import Path
 from typing import AsyncIterable, Optional

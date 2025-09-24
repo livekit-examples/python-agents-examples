@@ -1,3 +1,20 @@
+"""
+---
+title: RAG Handler Utility
+category: rag
+tags: [thinking_styles, rag_enrichment, agent_registration, context_injection]
+difficulty: advanced
+description: Reusable RAG handler with thinking styles and agent integration
+demonstrates:
+  - Three thinking styles (none, message, llm)
+  - RAG context retrieval and enrichment
+  - Agent method injection pattern
+  - Function tool registration
+  - Flexible thinking phase handling
+  - Random message selection
+---
+"""
+
 import logging
 import pickle
 import random

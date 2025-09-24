@@ -1,3 +1,21 @@
+"""
+---
+title: D&D Role-Playing Game
+category: complex-agents
+tags: [rpg, game_state, rpc_methods, item_generation, combat_system, npc_interaction]
+difficulty: advanced
+description: Dungeons & Dragons role-playing game with narrator and combat agents
+demonstrates:
+  - Complex game state management
+  - Multiple RPC methods for game queries
+  - Dynamic NPC and item generation
+  - Combat system with initiative tracking
+  - Character creation and stats management
+  - Inventory and equipment system
+  - Voice acting for different NPCs
+---
+"""
+
 import logging
 import json
 from dotenv import load_dotenv

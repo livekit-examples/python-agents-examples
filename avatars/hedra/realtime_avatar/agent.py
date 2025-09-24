@@ -1,3 +1,18 @@
+"""
+---
+title: Hedra Avatar with Realtime
+category: avatars
+tags: [hedra, avatar, static_image, openai_realtime]
+difficulty: intermediate
+description: Visual avatar using Hedra with OpenAI Realtime model integration
+demonstrates:
+  - Hedra avatar session with dynamic image selection
+  - OpenAI Realtime model for low-latency conversation
+  - Minimal agent configuration with realtime model
+  - Avatar participant identity management
+---
+"""
+
 from dotenv import load_dotenv
 
 from livekit import agents

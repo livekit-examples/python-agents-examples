@@ -1,3 +1,20 @@
+"""
+---
+title: Third-Party Metrics Exporter
+category: metrics
+tags: [metrics_export, flask_server, all_metrics_types, async_http, event_handlers]
+difficulty: advanced
+description: Exports all metric types to third-party server via HTTP
+demonstrates:
+  - Complete metrics collection (LLM, STT, TTS, EOU, VAD)
+  - Event handler registration for all metric types
+  - Async HTTP requests to metrics server
+  - JSON serialization of metrics data
+  - Error handling for network requests
+  - Comprehensive metrics tracking
+---
+"""
+
 import logging
 import asyncio
 import requests

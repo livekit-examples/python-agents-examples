@@ -1,5 +1,14 @@
-# Greets the user when they join the room, but doesn't respond to anything else.
-# This agent only has TTS, so it can only speak, not listen or think.
+"""
+---
+title: Only Greet
+category: pipeline-tts
+tags: [pipeline-tts, openai, deepgram]
+difficulty: beginner
+description: Greets the user when they join the room, but doesn't respond to anything else.
+demonstrates:
+  - This agent only has TTS, so it can only speak, not listen or think.
+---
+"""
 
 from pathlib import Path
 from dotenv import load_dotenv

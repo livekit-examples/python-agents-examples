@@ -1,3 +1,21 @@
+"""
+---
+title: Narrator Agent
+category: complex-agents
+tags: [rpg, storytelling, npc-interaction, voice-acting, exploration]
+difficulty: advanced
+description: Main storytelling agent for RPG games with voice acting and world interaction
+demonstrates:
+  - Dynamic storytelling and narrative flow
+  - Multi-voice character portrayal with TTS switching
+  - NPC interaction and dialogue management
+  - World exploration and location transitions
+  - Character creation and progression
+  - Trading and inventory management
+  - Skill check resolution and dice rolling
+---
+"""
+
 import random
 import asyncio
 import logging

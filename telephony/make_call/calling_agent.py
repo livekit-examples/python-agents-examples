@@ -1,3 +1,19 @@
+"""
+---
+title: Outbound Calling Agent
+category: telephony
+tags: [telephony, outbound-calls, survey, ice-cream-preference]
+difficulty: beginner
+description: Agent that makes outbound calls to ask about ice cream preferences
+demonstrates:
+  - Outbound call agent configuration
+  - Goal-oriented conversation flow
+  - Focused questioning strategy
+  - Brief and direct interaction patterns
+  - Automatic greeting generation
+---
+"""
+
 import logging
 import os
 from pathlib import Path

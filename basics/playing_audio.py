@@ -1,3 +1,14 @@
+"""
+---
+title: Playing Audio
+category: basics
+tags: [audio, openai, deepgram]
+difficulty: beginner
+description: Shows how to play audio from a file in an agent.
+demonstrates:
+  - Playing audio from a file
+---
+"""
 import logging
 from pathlib import Path
 import wave
@@ -13,7 +24,7 @@ logger.setLevel(logging.INFO)
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
-class FunctionAgent(Agent):
+class AudioPlayerAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
@@ -56,7 +67,7 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession()
 
     await session.start(
-        agent=FunctionAgent(),
+        agent=AudioPlayerAgent(),
         room=ctx.room
     )
 

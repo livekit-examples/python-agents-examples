@@ -1,17 +1,29 @@
+"""
+---
+title: Listen and Respond
+category: basics
+tags: [listen, respond, openai, deepgram]
+difficulty: beginner
+description: Shows how to create an agent that can listen to the user and respond.
+demonstrates:
+  - This is the most basic agent that can listen to the user and respond. This is a good starting point for any agent.
+---
+"""
+
 import logging
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.voice import Agent, AgentSession
-from livekit.plugins import openai, silero, deepgram
+from livekit.plugins import openai, silero, deepgram, inworld
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
 logger = logging.getLogger("listen-and-respond")
 logger.setLevel(logging.INFO)
 
-class SimpleAgent(Agent):
+class ListenAndRespondAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
@@ -19,7 +31,7 @@ class SimpleAgent(Agent):
             """,
             stt=deepgram.STT(),
             llm=openai.LLM(model="gpt-4o"),
-            tts=openai.TTS(),
+            tts=inworld.TTS(),
             vad=silero.VAD.load()
         )
     
@@ -30,7 +42,7 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession()
 
     await session.start(
-        agent=SimpleAgent(),
+        agent=ListenAndRespondAgent(),
         room=ctx.room
     )
 

@@ -1,5 +1,15 @@
-# This is a simple transcriber that uses the LiveKit SDK to transcribe audio from the microphone.
-# It displays the transcribed text on a Pirate Audio display on a Raspberry Pi Zero 2 W.
+"""
+---
+title: Pi Zero Transcriber
+category: hardware
+tags: [hardware, openai, deepgram]
+difficulty: beginner
+description: Shows how to create a simple transcriber that uses the LiveKit SDK to transcribe audio from the microphone.
+demonstrates:
+  - Using the LiveKit SDK to transcribe audio from the microphone.
+  - Displaying the transcribed text on a Pirate Audio display on a Raspberry Pi Zero 2 W.
+---
+"""
 
 from pathlib import Path
 from dotenv import load_dotenv

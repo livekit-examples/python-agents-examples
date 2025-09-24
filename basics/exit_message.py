@@ -1,3 +1,14 @@
+"""
+---
+title: Exit Message
+category: basics
+tags: [exit, message, openai, deepgram]
+difficulty: beginner
+description: Shows how to use the `on_exit` method to take an action when the agent exits.
+demonstrates:
+  - Use the `on_exit` method to take an action when the agent exits
+---
+"""
 import logging
 import os
 from pathlib import Path

@@ -1,3 +1,20 @@
+"""
+---
+title: IVR Phone System Navigator
+category: complex-agents
+tags: [ivr, dtmf, telephony, sip, participant_attributes, cooldown]
+difficulty: advanced
+description: Agent that navigates phone IVR systems using DTMF codes
+demonstrates:
+  - DTMF code transmission for phone navigation
+  - SIP participant detection and handling
+  - Task extraction from participant attributes
+  - Cooldown mechanism for DTMF presses
+  - Dynamic instruction updates based on task
+  - Function tool for sending DTMF codes
+---
+"""
+
 from __future__ import annotations
 import os
 import time

@@ -1,3 +1,21 @@
+"""
+---
+title: Combat Agent
+category: complex-agents
+tags: [rpg, combat-system, turn-based-combat, npc-ai, function-tools]
+difficulty: advanced
+description: Specialized agent for handling turn-based combat encounters in RPG games
+demonstrates:
+  - Turn-based combat management
+  - Combat action queueing and processing
+  - NPC AI for automated combat turns
+  - Real-time combat state updates via RPC
+  - Experience and loot distribution
+  - Dynamic combat flow with player/NPC interactions
+  - Combat action validation and execution
+---
+"""
+
 import asyncio
 import logging
 import re

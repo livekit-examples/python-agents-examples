@@ -1,13 +1,18 @@
 """
-CRUD RPC Agent Example
-
-This module demonstrates how to handle RPC (Remote Procedure Call) communication 
-with a focus on state management (creating, updating, and reading state).
-
-Key concepts demonstrated:
-1. Handling RPC payloads properly (extracting from RpcInvocationData)
-2. Session data management through simple CRUD operations
-3. Clean state management patterns
+---
+title: RPC State Management Agent
+category: rpc
+tags: [rpc, state-management, crud-operations, session-data, json-handling]
+difficulty: advanced
+description: Agent demonstrating RPC communication with comprehensive CRUD state management
+demonstrates:
+  - RPC payload extraction and JSON parsing
+  - Session-based CRUD operations (Create, Read, Update, Delete)
+  - State management with UUID-based object tracking
+  - RPC method registration and error handling
+  - Function tools integrated with RPC state
+  - Structured error responses and logging
+---
 """
 
 import logging

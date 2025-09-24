@@ -1,3 +1,20 @@
+"""
+---
+title: Survey Calling Agent
+category: telephony
+tags: [surveys, data-collection, csv-handling, automated-calling, metadata-processing]
+difficulty: intermediate
+description: Automated survey calling agent with CSV data management and response recording
+demonstrates:
+  - Survey data collection via phone calls
+  - CSV file integration for response tracking
+  - Metadata-based call configuration
+  - Automated room deletion after completion
+  - Function tools for survey response recording
+  - Professional survey caller persona
+---
+"""
+
 import logging
 import os
 import asyncio

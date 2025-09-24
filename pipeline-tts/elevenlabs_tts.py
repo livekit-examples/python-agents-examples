@@ -1,3 +1,14 @@
+"""
+---
+title: ElevenLabs TTS
+category: pipeline-tts
+tags: [pipeline-tts, openai, deepgram]
+difficulty: intermediate
+description: Shows how to use the ElevenLabs TTS model.
+demonstrates:
+  - Using the ElevenLabs TTS model.
+---
+"""
 from pathlib import Path
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli

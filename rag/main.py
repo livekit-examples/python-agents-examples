@@ -1,5 +1,22 @@
 #!/usr/bin/env python3
 """
+---
+title: RAG Voice Agent
+category: rag
+tags: [annoy_index, vector_search, embeddings, livekit_docs, deduplication]
+difficulty: advanced
+description: RAG-enabled agent with vector search for LiveKit documentation
+demonstrates:
+  - Annoy vector index loading and querying
+  - OpenAI embeddings for semantic search
+  - Result deduplication with seen tracking
+  - Function tool for document search
+  - Paragraph-based context retrieval
+  - Noise cancellation with BVC
+---
+"""
+
+"""
 RAG-enabled voice agent example for LiveKit Agents 1.0
 
 This agent uses the RAG (Retrieval Augmented Generation) plugin to provide

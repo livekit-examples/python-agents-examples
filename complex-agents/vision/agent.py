@@ -1,4 +1,19 @@
-## A multimodal voice assistant with vision capabilities that can see and discuss what users show through their camera using LiveKit's voice agents.
+"""
+---
+title: Vision-Enabled Agent
+category: complex-agents
+tags: [video_stream, grok_vision, x_ai, frame_capture, image_content]
+difficulty: intermediate
+description: Agent with camera vision capabilities using Grok-2 Vision model
+demonstrates:
+  - Video stream processing from remote participants
+  - Frame buffering from video tracks
+  - X.AI Grok-2 Vision model integration
+  - Dynamic video track subscription
+  - Image content injection into chat context
+  - Track publication event handling
+---
+"""
 
 import asyncio
 import logging

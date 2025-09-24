@@ -1,3 +1,20 @@
+"""
+---
+title: LLM-Powered Content Filter
+category: pipeline-llm
+tags: [content_moderation, dual_llm, sentence_buffering, stream_processing]
+difficulty: advanced
+description: Content filter using a separate LLM for real-time moderation decisions
+demonstrates:
+  - Dual LLM setup (main + moderator)
+  - Sentence-level content buffering
+  - Stream processing with moderation checks
+  - Custom llm_node override for filtering
+  - Handling different chunk formats
+  - Real-time content evaluation
+---
+"""
+
 import logging
 from pathlib import Path
 from typing import Optional, Any

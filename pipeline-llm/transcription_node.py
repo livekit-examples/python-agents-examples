@@ -1,3 +1,19 @@
+"""
+---
+title: Transcription Node Modifier
+category: pipeline-llm
+tags: [transcription_modification, word_replacement, emoji_injection]
+difficulty: intermediate
+description: Modifies transcriptions by replacing words with custom versions
+demonstrates:
+  - Custom transcription_node override
+  - Word replacement in transcriptions
+  - Emoji injection in text
+  - Async stream processing for text
+  - Model settings usage
+---
+"""
+
 import logging
 from pathlib import Path
 from typing import AsyncIterable

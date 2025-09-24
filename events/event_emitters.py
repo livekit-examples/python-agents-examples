@@ -1,3 +1,14 @@
+"""
+---
+title: Event Emitters
+category: events
+tags: [events, openai, deepgram]
+difficulty: beginner
+description: Shows how to use event emitters in an agent to trigger actions.
+demonstrates:
+  - Using event emitters in an agent to trigger actions like welcome and farewell messages for the sake of example (even though there are already events for this)
+---
+"""
 import logging
 import os
 from pathlib import Path

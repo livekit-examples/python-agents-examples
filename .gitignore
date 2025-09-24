@@ -7,3 +7,4 @@ __pycache__
 /venv
 .DS_Store
 README_TEMPLATE.md
+in_progress/
