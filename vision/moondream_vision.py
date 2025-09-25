@@ -17,7 +17,6 @@ from dotenv import load_dotenv
 from PIL import Image
 import moondream as md
 import os
-from datetime import datetime
 from livekit import rtc
 from livekit.rtc._proto import video_frame_pb2 as proto_video
 from livekit.agents import JobContext, WorkerOptions, cli, get_job_context
@@ -35,9 +34,6 @@ class VisionAgent(Agent):
         self._latest_frame = None
         self._video_stream = None
         self._tasks = []
-        # Create output directory for saved frames
-        self._output_dir = Path(__file__).parent / "saved_frames"
-        self._output_dir.mkdir(exist_ok=True)
         self._md_model = md.vl(api_key=os.getenv("MOONDREAM_API_KEY"))
         super().__init__(
             instructions="""
