@@ -19,7 +19,7 @@ from livekit import rtc
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.voice import Agent, AgentSession, room_io
 from livekit.agents.vad import VADEventType
-from livekit.plugins import deepgram, silero, noise_cancellation
+from livekit.plugins import silero, noise_cancellation
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
@@ -30,7 +30,7 @@ class EchoTranscriberAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="You are an echo transcriber that listens and repeats audio.",
-            stt=deepgram.STT(),
+            stt="assemblyai/universal-streaming",
             vad=None,
             allow_interruptions=False
         )

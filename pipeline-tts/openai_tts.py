@@ -24,9 +24,9 @@ class OpenAITTSAgent(Agent):
                 You are a helpful assistant communicating through voice. You're helping me test ... yourself ... since you're the AI agent. 
                 Don't use any unpronouncable characters.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=openai.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
     

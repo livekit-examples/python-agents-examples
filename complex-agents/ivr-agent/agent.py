@@ -16,7 +16,6 @@ demonstrates:
 """
 
 from __future__ import annotations
-import os
 import time
 import asyncio
 import logging
@@ -24,7 +23,7 @@ from dataclasses import dataclass
 from typing import Annotated, Optional
 from pathlib import Path
 from dotenv import load_dotenv
-from livekit import rtc, api
+from livekit import rtc
 from livekit import agents
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.llm import function_tool
@@ -126,9 +125,9 @@ async def entrypoint(ctx: JobContext):
         # Create and start the agent session
         session = AgentSession(
             userdata=userdata,
-            stt=deepgram.STT(),
-            llm=openai.LLM(),
-            tts=cartesia.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load(),
             min_endpointing_delay=0.75
         )

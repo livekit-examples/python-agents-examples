@@ -19,11 +19,11 @@ from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.llm import function_tool
 from livekit.agents.voice import Agent, AgentSession
-from livekit.plugins import openai, silero, deepgram, inworld
+from livekit.plugins import silero, inworld
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
-logger = logging.getLogger("listen-and-respond")
+logger = logging.getLogger("say-in-voice")
 logger.setLevel(logging.INFO)
 
 class SayPhraseInVoiceAgent(Agent):
@@ -32,8 +32,8 @@ class SayPhraseInVoiceAgent(Agent):
             instructions="""
                 You are an agent that can say phrases in different voices.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
             tts=inworld.TTS(voice="Ashley"),
             vad=silero.VAD.load()
         )

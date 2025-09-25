@@ -2,7 +2,7 @@
 ---
 title: STT Metrics
 category: metrics
-tags: [metrics, openai, deepgram]
+tags: [metrics, openai, assemblyai]
 difficulty: beginner
 description: Shows how to use the STT metrics to log metrics to the console.
 demonstrates:
@@ -25,7 +25,7 @@ from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.metrics import STTMetrics, EOUMetrics
 from livekit.agents.voice import Agent, AgentSession
 from livekit.agents.voice.room_io import RoomInputOptions
-from livekit.plugins import deepgram, openai, silero
+from livekit.plugins import silero
 from rich.console import Console
 from rich.table import Table
 from rich import box
@@ -44,9 +44,9 @@ class STTMetricsAgent(Agent):
             instructions="""
                 You are a helpful agent.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=openai.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
         

@@ -14,7 +14,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.voice import Agent, AgentSession
-from livekit.plugins import deepgram, openai
+from livekit.plugins import silero
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
@@ -29,9 +29,11 @@ async def entrypoint(ctx: JobContext):
     await session.start(
         agent=Agent(
             instructions="You are a helpful assistant that repeats what the user says.",
-            stt=deepgram.STT(),
-            tts=openai.TTS(),
-            allow_interruptions=False
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
+            allow_interruptions=False,
+            vad=silero.VAD.load()
         ),
         room=ctx.room
     )

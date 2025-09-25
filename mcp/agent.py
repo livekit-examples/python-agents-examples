@@ -2,7 +2,7 @@
 ---
 title: MCP Agent
 category: mcp
-tags: [mcp, openai, deepgram]
+tags: [mcp, openai, assemblyai]
 difficulty: beginner
 description: Shows how to use a LiveKit Agent as an MCP client.
 demonstrates:
@@ -12,11 +12,10 @@ demonstrates:
 ---
 """
 import logging
-import os
 from dotenv import load_dotenv
 from pathlib import Path
 from livekit.agents import Agent, AgentSession, JobContext, WorkerOptions, cli, mcp
-from livekit.plugins import deepgram, openai, silero
+from livekit.plugins import silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 logger = logging.getLogger("mcp-agent")
@@ -38,9 +37,9 @@ class MyAgent(Agent):
 async def entrypoint(ctx: JobContext):
     session = AgentSession(
         vad=silero.VAD.load(),
-        stt=deepgram.STT(model="nova-3", language="multi"),
-        llm=openai.LLM(model="gpt-4o-mini"),
-        tts=openai.TTS(voice="ash"),
+        stt="assemblyai/universal-streaming",
+        llm="azure/gpt-4o-mini",
+        tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
         turn_detection=MultilingualModel(),
         mcp_servers=[mcp.MCPServerHTTP(url="https://shayne.app/mcp",)],
     )

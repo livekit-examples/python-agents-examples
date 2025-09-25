@@ -15,26 +15,22 @@ demonstrates:
 ---
 """
 
-# Transcribes user speech to text, and saves it to a file
 from pathlib import Path
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.voice import Agent, AgentSession
-from livekit.plugins import rime, elevenlabs, silero
+from livekit.plugins import elevenlabs, silero, gladia
 import sys
 
 sys.path.append(str(Path(__file__).parent.parent))
-from launch_demos.livekit_plugins_gladia import stt
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
 async def entrypoint(ctx: JobContext):
     session = AgentSession()
     
-    # Process transcription events - let the agent say what it receives
     @session.on("user_input_transcribed")
     def on_transcript(event):
-        # Log the full event object to see all available metadata
         print(f"Transcript event: {event}")
         if event.is_final:
             print(f"Final transcript: {event.transcript}")
@@ -43,7 +39,7 @@ async def entrypoint(ctx: JobContext):
     await session.start(
         agent=Agent(
             instructions="You are a helpful assistant that speaks what the user says in English.",
-            stt=stt.STT(
+            stt=gladia.STT(
                 languages=["fr", "en"],  # Support French and English input
                 code_switching=True,
                 sample_rate=16000,
@@ -58,7 +54,8 @@ async def entrypoint(ctx: JobContext):
             tts=elevenlabs.TTS(
                 model="eleven_multilingual_v2"
             ),
-            allow_interruptions=False
+            allow_interruptions=False,
+            vad=silero.VAD.load()
         ),
         room=ctx.room
     )

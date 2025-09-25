@@ -24,7 +24,6 @@ from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.llm import function_tool
 from livekit.agents.voice import Agent, AgentSession, RunContext
 from livekit.plugins import cartesia, deepgram, openai, silero
-from livekit.plugins import noise_cancellation
 
 from utils import load_prompt
 
@@ -113,9 +112,9 @@ class TriageAgent(BaseAgent):
     def __init__(self) -> None:
         super().__init__(
             instructions=load_prompt('triage_prompt.yaml'),
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o-mini"),
-            tts=cartesia.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
 

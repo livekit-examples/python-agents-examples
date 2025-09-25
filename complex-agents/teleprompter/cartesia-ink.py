@@ -72,7 +72,7 @@ async def entrypoint(ctx: JobContext):
     await session.start(
         agent=Agent(
             instructions="You are a teleprompter assistant that transcribes user speech. Focus on accurate real-time transcription.",
-            stt=cartesia.STT()
+            stt="assemblyai/universal-streaming"
         ),
         room=ctx.room
     )

@@ -256,7 +256,7 @@ class AvatarAgent(Agent):
                 Keep your speaking turns short, only one or two sentences. We want the
                 student to do most of the speaking.
             """,
-            stt=deepgram.STT(),
+            stt="assemblyai/universal-streaming",
             llm=openai.LLM(model="gpt-4o"),
             tts=inworld.TTS(
                 voice="Hades"

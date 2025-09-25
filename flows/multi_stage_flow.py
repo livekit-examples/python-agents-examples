@@ -2,7 +2,7 @@
 ---
 title: Multi-Stage Flow
 category: flows
-tags: [flows, openai, deepgram]
+tags: [flows, openai, assemblyai]
 difficulty: intermediate
 description: Shows how to create a multi-stage flow using a series of agents.
 demonstrates:
@@ -19,12 +19,12 @@ from pydantic import Field
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.llm import function_tool
 from livekit.agents.voice import Agent, AgentSession
-from livekit.plugins import deepgram, openai, cartesia, silero
+from livekit.plugins import silero
 from livekit import api
 
 # Load environment and configure logger
 load_dotenv()
-logger = logging.getLogger("complex-flow")
+logger = logging.getLogger("multi-stage-flow")
 logger.setLevel(logging.INFO)
 
 # Define enums for the choices at each stage
@@ -58,9 +58,9 @@ class BaseAgent(Agent):
         self.job_context = job_context
         super().__init__(
             instructions=instructions,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=cartesia.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
 

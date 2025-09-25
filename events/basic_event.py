@@ -2,7 +2,7 @@
 ---
 title: Basic Event
 category: events
-tags: [events, openai, deepgram]
+tags: [events, openai, assemblyai]
 difficulty: beginner
 description: Shows how to use events in an agent to trigger actions.
 demonstrates:
@@ -13,17 +13,16 @@ demonstrates:
 ---
 """
 import logging
-import os
 from pathlib import Path
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.voice import Agent, AgentSession
-from livekit.plugins import openai, silero, deepgram
+from livekit.plugins import silero
 from livekit.rtc import EventEmitter
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
-logger = logging.getLogger("listen-and-respond")
+logger = logging.getLogger("basic-event")
 logger.setLevel(logging.INFO)
 
 class SimpleAgent(Agent):
@@ -32,9 +31,9 @@ class SimpleAgent(Agent):
             instructions="""
                 You are a helpful agent. When the user speaks, you listen and respond.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=openai.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
         self.emitter.on('greet', self.greet)

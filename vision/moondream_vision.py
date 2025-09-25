@@ -22,7 +22,7 @@ from livekit.rtc._proto import video_frame_pb2 as proto_video
 from livekit.agents import JobContext, WorkerOptions, cli, get_job_context
 from livekit.agents.llm import function_tool, ImageContent, ChatContext, ChatMessage
 from livekit.agents.voice import Agent, AgentSession, RunContext
-from livekit.plugins import deepgram, openai, silero, rime
+from livekit.plugins import silero
 
 logger = logging.getLogger("vision-agent")
 logger.setLevel(logging.INFO)
@@ -40,9 +40,9 @@ class VisionAgent(Agent):
                 You are an assistant communicating through voice with vision capabilities.
                 You will be given a description of an image, and you can talk to the user about the images that are being shown.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(),
-            tts=rime.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
 

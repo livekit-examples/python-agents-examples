@@ -15,12 +15,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.voice import Agent, AgentSession
-from livekit.plugins import openai, silero, deepgram
+from livekit.plugins import silero
 from livekit.agents.llm import function_tool
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
-logger = logging.getLogger("listen-and-respond")
+logger = logging.getLogger("exit-message")
 logger.setLevel(logging.INFO)
 
 class GoodbyeAgent(Agent):
@@ -30,9 +30,9 @@ class GoodbyeAgent(Agent):
                 You are a helpful agent.
                 When the user wants to stop talking to you, use the end_session function to close the session.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=openai.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
 

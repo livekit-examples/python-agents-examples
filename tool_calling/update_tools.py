@@ -38,9 +38,9 @@ class AddFunctionAgent(Agent):
                 You are a helpful assistant communicating through voice. Don't use any unpronouncable characters.
                 Note: If asked to print to the console, use the `print_to_console` function.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=openai.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
 

@@ -24,7 +24,7 @@ from livekit.plugins import openai, silero, deepgram, elevenlabs
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
-logger = logging.getLogger("listen-and-respond")
+logger = logging.getLogger("pipeline-translator")
 logger.setLevel(logging.INFO)
 
 class SimpleAgent(Agent):

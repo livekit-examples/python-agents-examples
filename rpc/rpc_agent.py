@@ -25,7 +25,7 @@ from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli, RoomOutputOptions
 from livekit.agents.voice import Agent, AgentSession, RunContext
 from livekit.agents.llm import function_tool
-from livekit.plugins import openai, silero, deepgram
+from livekit.plugins import silero
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
@@ -122,9 +122,9 @@ class RPCStateAgent(Agent):
                 - list_notes: List all available notes
                 - delete_note: Delete a note by ID
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=openai.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
 

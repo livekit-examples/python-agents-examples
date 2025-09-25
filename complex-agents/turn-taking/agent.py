@@ -25,12 +25,12 @@ from dataclasses import dataclass
 from livekit import rtc
 from livekit.agents import JobContext, WorkerOptions, cli, llm
 from livekit.agents.voice import Agent, AgentSession
-from livekit.plugins import openai, silero, gladia
+from livekit.plugins import silero, gladia
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
-logger = logging.getLogger("listen-and-respond")
+logger = logging.getLogger("turn-taking")
 logger.setLevel(logging.INFO)
 
 @dataclass
@@ -109,11 +109,9 @@ class SimpleAgent(Agent):
             instructions="""
                 You are a helpful agent. When the user speaks, you listen and respond.
             """,
-            stt=gladia.STT(
-                languages=["en", "fr", "de", "pt", "zh", "ja", "ko", "id", "ru", "nl", "tr", "es", "it"]
-            ),
-            llm=openai.LLM(model="gpt-4o-mini"),
-            tts=openai.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load(),
             turn_detection=self.custom_turn_detector
         )
@@ -147,8 +145,8 @@ async def entrypoint(ctx: JobContext):
         stt=gladia.STT(
             languages=["en", "fr", "de", "pt", "zh", "ja", "ko", "id", "ru", "nl", "tr", "es", "it"]
         ),
-        llm=openai.LLM(model="gpt-4o"),
-        tts=openai.TTS(),
+        llm="azure/gpt-4o-mini",
+        tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
         turn_detection=CustomTurnDetector(userdata),
     )
 

@@ -16,10 +16,10 @@ from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.llm import function_tool
 from livekit.agents.voice import Agent, AgentSession, RunContext
-from livekit.plugins import deepgram, openai, silero
+from livekit.plugins import silero
 from livekit import rtc
 
-logger = logging.getLogger("function-calling")
+logger = logging.getLogger("playing-audio")
 logger.setLevel(logging.INFO)
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
@@ -31,9 +31,9 @@ class AudioPlayerAgent(Agent):
                 You are a helpful assistant communicating through voice. Don't use any unpronouncable characters.
                 If asked to play audio, use the `play_audio_file` function.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=openai.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
 

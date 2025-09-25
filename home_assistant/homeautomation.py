@@ -2,7 +2,7 @@
 ---
 title: Home Automation
 category: home-automation
-tags: [home-automation, openai, deepgram]
+tags: [home-automation, openai, assemblyai]
 difficulty: intermediate
 description: Shows how to create an agent that can control home automation devices.
 demonstrates:
@@ -23,12 +23,12 @@ from livekit import rtc
 from livekit.agents import JobContext, WorkerOptions, cli
 from livekit.agents.voice import Agent, AgentSession
 from livekit.agents.voice.agent_activity import StopResponse
-from livekit.plugins import openai, deepgram, silero
+from livekit.plugins import silero
 from livekit.agents.llm import function_tool
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
-logger = logging.getLogger("listen-and-respond")
+logger = logging.getLogger("home-automation")
 logger.setLevel(logging.INFO)
 
 WAKE_WORD = "hey casa"
@@ -43,9 +43,9 @@ class SimpleAgent(Agent):
                 You can list available devices and control them by turning them on or off.
                 When asked about devices, first list what's available and then help control them.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(),
-            tts=openai.TTS(),
+            stt="assemblyai/universal-streaming",
+            llm="azure/gpt-4o-mini",
+            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )  
         self.wake_word_detected = False
