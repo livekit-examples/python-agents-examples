@@ -14,6 +14,7 @@ import os
 import logging
 import asyncio
 import json
+import re
 from pathlib import Path
 from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli, metrics
@@ -22,7 +23,6 @@ from livekit.agents.llm import ChatContext, ChatMessage
 from livekit.plugins import openai, silero, deepgram
 from livekit.agents.telemetry import set_tracer_provider
 from typing import List
-import re
 
 load_dotenv(dotenv_path=Path(__file__).parent.parent.parent / '.env')
 usage_collector = metrics.UsageCollector()
@@ -56,15 +56,39 @@ class NoteTakingAssistant:
         self.transcriptions: List[str] = []
         self.current_notes: str = ""
         self.note_update_task = None
-        # Buffer for accumulating transcription fragments
-        self.transcript_buffer: str = ""
+        # Keep a running copy of the full transcript text
+        self.full_transcript: str = ""
+        # Remember the last transcription snippet sent to the frontend to avoid duplicates
+        self._last_transcription_sent: str = ""
         # Create LLM instance once with Cerebras
         self.llm = openai.LLM.with_cerebras(model="gpt-oss-120b")
         # Store context for RPC communication
         self.ctx = ctx
-    
-    async def update_notes(self, new_transcription: str):
-        """Send transcription to Cerebras and update notes"""
+
+    def build_display_transcript(self, partial: str | None = None, max_sentences: int = 3) -> str:
+        """Return a trimmed transcript preview for the frontend."""
+        segments: List[str] = []
+        if self.full_transcript.strip():
+            segments.append(self.full_transcript.strip())
+        if partial and partial.strip():
+            segments.append(partial.strip())
+
+        combined = " ".join(segments).strip()
+        if not combined:
+            return ""
+
+        sentences = [match.group().strip() for match in re.finditer(r'[^.!?]+[.!?]?', combined)]
+        if not sentences:
+            sentences = [combined]
+
+        recent = sentences[-max_sentences:]
+        return " ".join(recent).strip()
+
+    async def update_notes(self, transcript: str):
+        """Send the full transcript to Cerebras and update notes"""
+        if not transcript.strip():
+            logger.info("Skipping note update because transcript is empty")
+            return
         try:
             # Send to LLM for processing
             prompt = f"""
@@ -72,8 +96,8 @@ class NoteTakingAssistant:
                 Current Notes:
                 {self.current_notes if self.current_notes else "(No notes yet)"}
 
-                New Transcription:
-                {new_transcription}
+                Transcript So Far:
+                {transcript}
 
                 Instructions:
                 You should try to track:
@@ -92,6 +116,7 @@ class NoteTakingAssistant:
                 - Your job is exclusively to capture what has been discussed, not keep track of what SHOULD be discussed.
                 - Only ever add information that is explicitly discussed in the transcription.
                 - Keep the notes organized and structured
+                - Return the complete set of notes. If no update is required, repeat the existing notes verbatim.
 
                 Updated Notes:
             """
@@ -158,12 +183,19 @@ class NoteTakingAssistant:
             logger.error(f"Error sending notes via RPC: {e}")
     
     async def send_transcription_to_frontend(self, transcription: str):
-        """Send individual transcription to frontend via RPC"""
+        """Send the current transcript to frontend via RPC"""
+        if not transcription:
+            return
+        if transcription == self._last_transcription_sent:
+            return
+        previous_sent = self._last_transcription_sent
+        self._last_transcription_sent = transcription
         try:
             # Get remote participants
             remote_participants = list(self.ctx.room.remote_participants.values())
             if not remote_participants:
                 logger.info("No remote participants found to send transcription")
+                self._last_transcription_sent = previous_sent
                 return
             
             # Send to the first remote participant (the frontend)
@@ -180,6 +212,7 @@ class NoteTakingAssistant:
             )
             logger.info(f"Sent transcription to frontend: {transcription[:50]}...")
         except Exception as e:
+            self._last_transcription_sent = previous_sent
             logger.error(f"Error sending transcription via RPC: {e}")
     
     async def generate_diagnosis(self, notes: str) -> str:
@@ -244,64 +277,45 @@ async def entrypoint(ctx: JobContext):
         instructions="""
             You are a note-taking assistant.
         """,
-        stt=deepgram.STT(),
+        stt=deepgram.STTv2(eager_eot_threshold=0.5),
         vad=silero.VAD.load()
-    )
+        )
 
     # Create note-taking assistant
     note_assistant = NoteTakingAssistant(ctx)
 
     @session.on("user_input_transcribed")
     def on_transcript(transcript):
+        logger.info(f"Transcript received: {transcript}")
+        fragment = transcript.transcript.strip()
+        if not fragment:
+            return
+
         if transcript.is_final:
-            # Add to buffer with a space for note processing
-            if note_assistant.transcript_buffer:
-                note_assistant.transcript_buffer += " " + transcript.transcript
+            note_assistant.transcriptions.append(fragment)
+            if note_assistant.full_transcript:
+                note_assistant.full_transcript = f"{note_assistant.full_transcript} {fragment}"
             else:
-                note_assistant.transcript_buffer = transcript.transcript
-            
-            # Send the current buffer state to frontend for display
-            asyncio.create_task(note_assistant.send_transcription_to_frontend(note_assistant.transcript_buffer))
-                
-            logger.info(f"Fragment received: {transcript.transcript}")
-            
-            # Count sentences in buffer (looking for . ! ? endings)
-            sentence_endings = re.findall(r'[.!?]+', note_assistant.transcript_buffer)
-            
-            # If we have at least 3 sentences, process the buffer for notes
-            if len(sentence_endings) >= 3:
-                # Find the position after the third sentence ending
-                sentence_count = 0
-                last_pos = 0
-                for match in re.finditer(r'[.!?]+', note_assistant.transcript_buffer):
-                    sentence_count += 1
-                    if sentence_count == 3:
-                        last_pos = match.end()
-                        break
-                
-                # Extract the three sentences
-                three_sentences = note_assistant.transcript_buffer[:last_pos].strip()
-                
-                # Keep the remainder in the buffer
-                note_assistant.transcript_buffer = note_assistant.transcript_buffer[last_pos:].strip()
-                
-                # Add the three sentences to transcriptions history
-                note_assistant.transcriptions.append(three_sentences)
-                logger.info(f"Processing for notes: {three_sentences}")
-                
-                # Send the remaining buffer to frontend (or empty string if nothing left)
-                asyncio.create_task(note_assistant.send_transcription_to_frontend(
-                    note_assistant.transcript_buffer if note_assistant.transcript_buffer else ""
-                ))
-                
-                # Cancel any pending note update task
-                if note_assistant.note_update_task and not note_assistant.note_update_task.done():
-                    note_assistant.note_update_task.cancel()
-                
-                # Schedule new note update with the three sentences
-                note_assistant.note_update_task = asyncio.create_task(
-                    note_assistant.update_notes(three_sentences)
-                )
+                note_assistant.full_transcript = fragment
+
+            display_text = note_assistant.build_display_transcript()
+            asyncio.create_task(
+                note_assistant.send_transcription_to_frontend(display_text)
+            )
+
+            logger.info(f"Transcript updated: {fragment}")
+
+            if note_assistant.note_update_task and not note_assistant.note_update_task.done():
+                note_assistant.note_update_task.cancel()
+
+            note_assistant.note_update_task = asyncio.create_task(
+                note_assistant.update_notes(note_assistant.full_transcript)
+            )
+        else:
+            display_text = note_assistant.build_display_transcript(partial=fragment)
+            asyncio.create_task(
+                note_assistant.send_transcription_to_frontend(display_text)
+            )
     
     @session.on("metrics_collected")
     def _on_metrics_collected(ev: MetricsCollectedEvent):
