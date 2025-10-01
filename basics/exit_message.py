@@ -31,7 +31,7 @@ class GoodbyeAgent(Agent):
                 When the user wants to stop talking to you, use the end_session function to close the session.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )

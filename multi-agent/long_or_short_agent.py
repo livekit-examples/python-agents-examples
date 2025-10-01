@@ -31,7 +31,7 @@ class ShortAgent(Agent):
                 You are a helpful agent. When the user speaks, you listen and respond. Be as brief as possible. Arguably too brief.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
@@ -51,7 +51,7 @@ class LongAgent(Agent):
                 You are a helpful agent. When the user speaks, you listen and respond in overly verbose, flowery, obnoxiously detailed sentences.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )

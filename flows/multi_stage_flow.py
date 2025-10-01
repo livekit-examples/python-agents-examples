@@ -31,11 +31,11 @@ logger.setLevel(logging.INFO)
 class Stage1Choice(str, Enum):
     OPTION_A = "A"
     OPTION_B = "B"
-    
+
 class Stage2Choice(str, Enum):
     OPTION_X = "X"
     OPTION_Y = "Y"
-    
+
 class Stage3Choice(str, Enum):
     OPTION_M = "M"
     OPTION_N = "N"
@@ -59,7 +59,7 @@ class BaseAgent(Agent):
         super().__init__(
             instructions=instructions,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )

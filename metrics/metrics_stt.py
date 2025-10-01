@@ -45,17 +45,17 @@ class STTMetricsAgent(Agent):
                 You are a helpful agent.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
-        
+
         def stt_wrapper(metrics: STTMetrics):
             asyncio.create_task(self.on_stt_metrics_collected(metrics))
-            
+
         def eou_wrapper(metrics: EOUMetrics):
             asyncio.create_task(self.on_eou_metrics_collected(metrics))
-            
+
         self.stt.on("metrics_collected", stt_wrapper)
         self.stt.on("eou_metrics_collected", eou_wrapper)
 
@@ -67,12 +67,12 @@ class STTMetricsAgent(Agent):
             show_header=True,
             header_style="bold cyan"
         )
-        
+
         table.add_column("Metric", style="bold green")
         table.add_column("Value", style="yellow")
-        
+
         timestamp = datetime.fromtimestamp(metrics.timestamp).strftime('%Y-%m-%d %H:%M:%S')
-        
+
         table.add_row("Type", str(metrics.type))
         table.add_row("Label", str(metrics.label))
         table.add_row("Request ID", str(metrics.request_id))
@@ -82,7 +82,7 @@ class STTMetricsAgent(Agent):
         table.add_row("Error", str(metrics.error))
         table.add_row("Streamed", "✓" if metrics.streamed else "✗")
         table.add_row("Audio Duration", f"[white]{metrics.audio_duration:.4f}[/white]s")
-        
+
         console.print("\n")
         console.print(table)
         console.print("\n")
@@ -95,12 +95,12 @@ class STTMetricsAgent(Agent):
             show_header=True,
             header_style="bold cyan"
         )
-        
+
         table.add_column("Metric", style="bold green")
         table.add_column("Value", style="yellow")
-        
+
         timestamp = datetime.fromtimestamp(metrics.timestamp).strftime('%Y-%m-%d %H:%M:%S')
-        
+
         table.add_row("Type", str(metrics.type))
         table.add_row("Label", str(metrics.label))
         table.add_row("Timestamp", timestamp)
@@ -108,7 +108,7 @@ class STTMetricsAgent(Agent):
         table.add_row("Transcription Delay", f"[white]{metrics.transcription_delay:.4f}[/white]s")
         table.add_row("Speech ID", str(metrics.speech_id))
         table.add_row("Error", str(metrics.error))
-        
+
         console.print("\n")
         console.print(table)
         console.print("\n")

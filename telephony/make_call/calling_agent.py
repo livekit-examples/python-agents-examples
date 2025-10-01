@@ -31,17 +31,17 @@ class SimpleAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
-                You are calling someone on the phone. Your goal is to know if they prefer 
-                chocolate or vanilla ice cream. That's the only question you should ask, and 
-                you should get right to the point. Say something like "Hello, I'm calling to 
+                You are calling someone on the phone. Your goal is to know if they prefer
+                chocolate or vanilla ice cream. That's the only question you should ask, and
+                you should get right to the point. Say something like "Hello, I'm calling to
                 ask you a question about ice cream. Do you prefer chocolate or vanilla?"
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
-    
+
     async def on_enter(self):
         self.session.generate_reply()
 

@@ -21,15 +21,15 @@ class OpenAITTSAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
-                You are a helpful assistant communicating through voice. You're helping me test ... yourself ... since you're the AI agent. 
+                You are a helpful assistant communicating through voice. You're helping me test ... yourself ... since you're the AI agent.
                 Don't use any unpronouncable characters.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
-    
+
     async def on_enter(self):
         await self.session.say(f"Hi there! Is there anything I can help you with?")
 

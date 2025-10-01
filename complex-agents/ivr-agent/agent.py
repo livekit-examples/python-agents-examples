@@ -78,15 +78,15 @@ class NavigatorAgent(Agent):
     ) -> None:
         """Called when you need to send a DTMF code to the phone number for the current step."""
         current_time = time.time()
-        
+
         # Check if enough time has passed since last press (3 second cooldown)
         if current_time - context.userdata.last_dtmf_press < 3:
             logger.info("DTMF code rejected due to cooldown")
             return None
-            
+
         logger.info(f"Sending DTMF code {code} to the phone number for the current step.")
         context.userdata.last_dtmf_press = current_time
-        
+
         room = context.userdata.ctx.room
 
         await room.local_participant.publish_dtmf(
@@ -126,7 +126,7 @@ async def entrypoint(ctx: JobContext):
         session = AgentSession(
             userdata=userdata,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load(),
             min_endpointing_delay=0.75

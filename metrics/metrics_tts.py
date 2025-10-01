@@ -45,14 +45,14 @@ class TTSMetricsAgent(Agent):
                 You are a helpful agent.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
-        
+
         def sync_wrapper(metrics: TTSMetrics):
             asyncio.create_task(self.on_metrics_collected(metrics))
-            
+
         self.tts.on("metrics_collected", sync_wrapper)
 
     async def on_metrics_collected(self, metrics: TTSMetrics) -> None:
@@ -63,12 +63,12 @@ class TTSMetricsAgent(Agent):
             show_header=True,
             header_style="bold cyan"
         )
-        
+
         table.add_column("Metric", style="bold green")
         table.add_column("Value", style="yellow")
-        
+
         timestamp = datetime.fromtimestamp(metrics.timestamp).strftime('%Y-%m-%d %H:%M:%S')
-        
+
         table.add_row("Type", str(metrics.type))
         table.add_row("Label", str(metrics.label))
         table.add_row("Request ID", str(metrics.request_id))
@@ -81,7 +81,7 @@ class TTSMetricsAgent(Agent):
         table.add_row("Streamed", "✓" if metrics.streamed else "✗")
         table.add_row("Speech ID", str(metrics.speech_id))
         table.add_row("Error", str(metrics.error))
-        
+
         console.print("\n")
         console.print(table)
         console.print("\n")

@@ -28,18 +28,18 @@ class ContextAgent(Agent):
             You are a helpful agent. The user's name is {name}.
             They are {age} years old and live in {city}.
         """
-        
+
         if context_vars:
             instructions = instructions.format(**context_vars)
-            
+
         super().__init__(
             instructions=instructions,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
-    
+
     async def on_enter(self):
         self.session.generate_reply()
 

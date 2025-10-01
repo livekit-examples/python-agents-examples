@@ -110,7 +110,7 @@ class SimpleAgent(Agent):
                 You are a helpful agent. When the user speaks, you listen and respond.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load(),
             turn_detection=self.custom_turn_detector
@@ -145,7 +145,7 @@ async def entrypoint(ctx: JobContext):
         stt=gladia.STT(
             languages=["en", "fr", "de", "pt", "zh", "ja", "ko", "id", "ru", "nl", "tr", "es", "it"]
         ),
-        llm="azure/gpt-4o-mini",
+        llm="openai/gpt-4.1-mini",
         tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
         turn_detection=CustomTurnDetector(userdata),
     )

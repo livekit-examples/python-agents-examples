@@ -50,7 +50,7 @@ class FunctionAgent(Agent):
                 - Use this `print_to_console` tool if the users asks you, or if you are just needing to print to the console for any reason.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )

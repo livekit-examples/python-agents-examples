@@ -255,7 +255,7 @@ class AvatarAgent(Agent):
                 student to do most of the speaking.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts=elevenlabs.TTS(
                 voice_id="21m00Tcm4TlvDq8ikWAM"
             ),

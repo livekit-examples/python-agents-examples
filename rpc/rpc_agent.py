@@ -61,11 +61,11 @@ class UserSessionData:
     """Store user session data with CRUD operations."""
     # Dictionary to store data objects by their ID
     data_objects: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    
+
     def create_object(self, object_type: str, object_data: Dict[str, Any]) -> str:
         """Create a new data object with auto-generated ID."""
         object_id = str(uuid.uuid4())
-        
+
         # Create a container with metadata and the actual data
         data_container = {
             "id": object_id,
@@ -73,16 +73,16 @@ class UserSessionData:
             "created_at": "2025-05-02T09:00:00Z",  # would normally use datetime.now().isoformat()
             "data": object_data
         }
-        
+
         # Store in the data dictionary. You could put this in longer term storage
         # if you were building a real production application
         self.data_objects[object_id] = data_container
         return object_id
-    
+
     def read_object(self, object_id: str) -> Optional[Dict[str, Any]]:
         """Read a data object by ID."""
         return self.data_objects.get(object_id)
-    
+
     def update_object(self, object_id: str, update_data: Dict[str, Any]) -> bool:
         """Update a data object by ID."""
         if object_id in self.data_objects:
@@ -91,14 +91,14 @@ class UserSessionData:
             self.data_objects[object_id]["updated_at"] = "2025-05-02T09:30:00Z"  # would normally use datetime.now()
             return True
         return False
-    
+
     def delete_object(self, object_id: str) -> bool:
         """Delete a data object by ID."""
         if object_id in self.data_objects:
             del self.data_objects[object_id]
             return True
         return False
-    
+
     def list_objects(self, object_type: Optional[str] = None) -> Dict[str, Dict[str, Any]]:
         """List all objects, optionally filtered by type."""
         if object_type:
@@ -112,9 +112,9 @@ class RPCStateAgent(Agent):
             instructions="""
                 You are an agent that manages state through RPC calls
                 and also through function calls.
-                
+
                 You can create, read, update, and delete data objects.
-                
+
                 Available functions:
                 - create_note: Create a new note
                 - update_note: Update an existing note
@@ -123,7 +123,7 @@ class RPCStateAgent(Agent):
                 - delete_note: Delete a note by ID
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
@@ -137,100 +137,100 @@ class RPCStateAgent(Agent):
             content: The content of the note
         """
         userdata = context.userdata
-        
+
         # Create note data
         note_data = {
             "title": title,
             "content": content
         }
-        
+
         # Store the note in session state
         note_id = userdata.create_object("note", note_data)
-        
+
         return f"Created note '{title}' with ID: {note_id}"
 
     @function_tool
     async def read_note(self, context: RunContext[UserSessionData], note_id: str):
         """Read a note by its ID.
-        
+
         Args:
             note_id: The ID of the note to read
         """
         userdata = context.userdata
-        
+
         # Read the note from session state
         note = userdata.read_object(note_id)
-        
+
         if not note:
             return f"Note with ID {note_id} not found."
-        
+
         note_data = note["data"]
         return f"Note: {note_data['title']}\n\n{note_data['content']}"
 
     @function_tool
-    async def update_note(self, context: RunContext[UserSessionData], 
+    async def update_note(self, context: RunContext[UserSessionData],
                          note_id: str, title: Optional[str], content: Optional[str]):
         """Update a note by its ID.
-        
+
         Args:
             note_id: The ID of the note to update
             title: New title for the note (can be null to keep existing)
             content: New content for the note (can be null to keep existing)
         """
         userdata = context.userdata
-        
+
         # Prepare update data
         update_data = {}
         if title is not None:
             update_data["title"] = title
         if content is not None:
             update_data["content"] = content
-            
+
         if not update_data:
             return "No updates provided."
-        
+
         # Update the note
         success = userdata.update_object(note_id, update_data)
-        
+
         if not success:
             return f"Note with ID {note_id} not found."
-        
+
         return f"Updated note with ID: {note_id}"
 
     @function_tool
     async def list_notes(self, context: RunContext[UserSessionData]):
         """List all notes currently stored in the session."""
         userdata = context.userdata
-        
+
         # Get all notes
         notes = userdata.list_objects("note")
-        
+
         if not notes:
             return "No notes found."
-        
+
         # Format the response
         response = "Available notes:\n\n"
         for note_id, note in notes.items():
             note_data = note["data"]
             response += f"- {note_data['title']} (ID: {note_id})\n"
-            
+
         return response
 
     @function_tool
     async def delete_note(self, context: RunContext[UserSessionData], note_id: str):
         """Delete a note by its ID.
-        
+
         Args:
             note_id: The ID of the note to delete
         """
         userdata = context.userdata
-        
+
         # Delete the note
         success = userdata.delete_object(note_id)
-        
+
         if not success:
             return f"Note with ID {note_id} not found."
-        
+
         return f"Deleted note with ID: {note_id}"
 
 
@@ -240,14 +240,14 @@ async def entrypoint(ctx: JobContext):
 
     # Create user session data - this is the shared state container
     userdata = UserSessionData()
-    
+
     # Create the agent session with userdata
     # This makes the userdata available to the LLM through the RunContext
     # Note the generic type parameter [UserSessionData] which tells the
     # agent session what type of data to expect
     session = AgentSession[UserSessionData](userdata=userdata)
     agent = RPCStateAgent()
-    
+
     # How session data flows to the LLM:
     # 1. We create userdata and pass it to AgentSession
     # 2. The agent session makes this userdata available to function tools via RunContext
@@ -269,12 +269,12 @@ async def entrypoint(ctx: JobContext):
     # ====== RPC Handler for Client State Operations ======
     """
     RPC handler for managing state operations through RPC calls.
-    
+
     This handler processes CRUD operations (Create, Read, Update, Delete, List)
     on data objects stored in the agent's session state.
-    
+
     Example payloads for each operation:
-    
+
     1. CREATE operation:
     ```json
     {
@@ -286,7 +286,7 @@ async def entrypoint(ctx: JobContext):
         }
     }
     ```
-    
+
     2. READ operation:
     ```json
     {
@@ -295,7 +295,7 @@ async def entrypoint(ctx: JobContext):
         "object_id": "550e8400-e29b-41d4-a716-446655440000"
     }
     ```
-    
+
     3. UPDATE operation:
     ```json
     {
@@ -308,7 +308,7 @@ async def entrypoint(ctx: JobContext):
         }
     }
     ```
-    
+
     4. DELETE operation:
     ```json
     {
@@ -317,7 +317,7 @@ async def entrypoint(ctx: JobContext):
         "object_id": "550e8400-e29b-41d4-a716-446655440000"
     }
     ```
-    
+
     5. LIST operation:
     ```json
     {
@@ -325,41 +325,41 @@ async def entrypoint(ctx: JobContext):
         "object_type": "note"
     }
     ```
-    
+
     Each operation returns a structured JSON response with status, message, and
     operation-specific data (e.g., created object ID, read object data, etc.).
     """
     async def handle_client_state_operation(rpc_data):
         try:
             logger.info(f"Received client state operation: {rpc_data}")
-            
+
             # Extract payload from RpcInvocationData object
             payload_str = rpc_data.payload
             logger.info(f"Extracted payload string: {payload_str}")
-            
+
             # Parse the JSON payload
             payload = json.loads(payload_str) if isinstance(payload_str, str) else payload_str
             logger.info(f"Parsed payload data: {payload}")
-            
+
             # Extract operation details
             operation = payload.get("operation", "unknown")
             object_type = payload.get("object_type", "unknown")
             object_id = payload.get("object_id")
             object_data = payload.get("data", {})
-            
+
             result = {
                 "status": "success",
                 "operation": operation,
                 "message": ""
             }
-            
+
             # Process the operation
             if operation == "create":
                 # Create a new object
                 new_id = userdata.create_object(object_type, object_data)
                 result["object_id"] = new_id
                 result["message"] = f"Created {object_type} with ID: {new_id}"
-                
+
             elif operation == "read":
                 # Read an object
                 if not object_id:
@@ -373,7 +373,7 @@ async def entrypoint(ctx: JobContext):
                     else:
                         result["status"] = "error"
                         result["message"] = f"Object with ID {object_id} not found"
-                
+
             elif operation == "update":
                 # Update an object
                 if not object_id:
@@ -386,7 +386,7 @@ async def entrypoint(ctx: JobContext):
                     else:
                         result["status"] = "error"
                         result["message"] = f"Object with ID {object_id} not found"
-                
+
             elif operation == "delete":
                 # Delete an object
                 if not object_id:
@@ -399,20 +399,20 @@ async def entrypoint(ctx: JobContext):
                     else:
                         result["status"] = "error"
                         result["message"] = f"Object with ID {object_id} not found"
-                
+
             elif operation == "list":
                 # List objects
                 objects = userdata.list_objects(object_type if object_type != "unknown" else None)
                 result["objects"] = objects
                 result["count"] = len(objects)
                 result["message"] = f"Listed {len(objects)} {object_type} objects"
-                
+
             else:
                 result["status"] = "error"
                 result["message"] = f"Unknown operation: {operation}"
-            
+
             return json.dumps(result)
-            
+
         except json.JSONDecodeError as e:
             logger.error(f"JSON parsing error for payload: {e}")
             return json.dumps({"status": "error", "message": f"Invalid JSON: {str(e)}"})

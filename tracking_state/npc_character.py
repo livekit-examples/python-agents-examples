@@ -46,7 +46,7 @@ class BaseAgent(Agent):
         super().__init__(
             instructions=instructions,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
@@ -54,7 +54,7 @@ class BaseAgent(Agent):
     @function_tool
     async def adjust_rapport(self, delta: int) -> int:
         """
-        Adjust the NPC's rapport score by delta and return the new score. 
+        Adjust the NPC's rapport score by delta and return the new score.
         A score of -100 is the lowest, and means they will tell you to leave.
         A score of 100 is the highest, and means they will be very friendly.
         """

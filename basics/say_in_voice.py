@@ -33,7 +33,7 @@ class SayPhraseInVoiceAgent(Agent):
                 You are an agent that can say phrases in different voices.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts=inworld.TTS(voice="Ashley"),
             vad=silero.VAD.load()
         )

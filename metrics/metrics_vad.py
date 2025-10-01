@@ -43,14 +43,14 @@ class VADMetricsAgent(Agent):
                 You are a helpful agent.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
 
         def sync_wrapper(event: vad.VADEvent):
             asyncio.create_task(self.on_vad_event(event))
-            
+
         self.vad.on("metrics_collected", sync_wrapper)
 
     async def on_vad_event(self, event: vad.VADEvent):
@@ -61,12 +61,12 @@ class VADMetricsAgent(Agent):
             show_header=True,
             header_style="bold cyan"
         )
-        
+
         table.add_column("Metric", style="bold green")
         table.add_column("Value", style="yellow")
-        
+
         timestamp = datetime.fromtimestamp(event.timestamp).strftime('%Y-%m-%d %H:%M:%S')
-        
+
         table.add_row("Type", str(event.type))
         table.add_row("Timestamp", timestamp)
         table.add_row("Idle Time", f"[white]{event.idle_time:.4f}[/white]s")
@@ -74,7 +74,7 @@ class VADMetricsAgent(Agent):
         table.add_row("Inference Count", str(event.inference_count))
         table.add_row("Speech ID", str(event.speech_id))
         table.add_row("Error", str(event.error))
-        
+
         console.print("\n")
         console.print(table)
         console.print("\n")

@@ -27,12 +27,12 @@ class UninterruptableAgent(Agent):
                 You are a helpful assistant communicating through voice who is not interruptable.
             """,
             stt="assemblyai/universal-streaming",
-            llm="azure/gpt-4o-mini",
+            llm="openai/gpt-4.1-mini",
             tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
             allow_interruptions=False,
             vad=silero.VAD.load()
         )
-    
+
     async def on_enter(self):
         self.session.generate_reply(user_input="Say something somewhat long and boring so I can test if you're interruptable.")
 

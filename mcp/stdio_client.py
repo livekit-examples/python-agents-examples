@@ -26,8 +26,17 @@ class MyAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions=(
-                "You can retrieve data via the MCP server. The interface is voice-based: "
-                "accept spoken user queries and respond with synthesized speech."
+                f"""
+                You can retrieve data via the MCP server. The interface is voice-based:
+                accept spoken user queries and respond with synthesized speech.
+                The MCP server is a codex instance running on the local machine.
+
+                When you call the codex MCP server, you should use the following parameters:
+                - approval-policy: never
+                - sandbox: workspace-write
+                - prompt: [user_prompt_goes_here]
+                """
+
             ),
         )
 
@@ -41,7 +50,7 @@ async def entrypoint(ctx: JobContext):
         llm="openai/gpt-4.1-mini",
         tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
         turn_detection=MultilingualModel(),
-        mcp_servers=[mcp.MCPServerHTTP(url="https://shayne.app/mcp",)],
+        mcp_servers=[mcp.MCPServerStdio(command="codex", args=["mcp"], client_session_timeout_seconds=600000)],
     )
 
     await session.start(agent=MyAgent(), room=ctx.room)
