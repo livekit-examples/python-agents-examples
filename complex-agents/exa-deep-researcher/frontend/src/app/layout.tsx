@@ -13,12 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EXA Deep Researcher - Voice AI Research Assistant",
+  title: "Exa + LiveKit Deep Researcher - Voice AI Research Assistant",
   description: "Autonomous deep research agent with iterative planning, real-time UI updates via RPC streaming, and intelligent query clarification. Demonstrates how voice agents can conduct comprehensive multi-step research workflows.",
-  keywords: ["voice AI", "research assistant", "EXA", "LiveKit", "deep research", "AI agent"],
+  keywords: ["voice AI", "research assistant", "Exa", "LiveKit", "deep research", "AI agent"],
   authors: [{ name: "LiveKit" }],
   openGraph: {
-    title: "EXA Deep Researcher",
+    title: "Exa + LiveKit Deep Researcher",
     description: "Voice AI Research Assistant - Autonomous deep research with real-time updates",
     type: "website",
   },

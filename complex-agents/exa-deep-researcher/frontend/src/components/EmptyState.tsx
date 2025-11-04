@@ -177,7 +177,7 @@ export function EmptyState() {
             rel="noopener noreferrer"
             className="text-fg3 hover:text-fgAccent1 underline transition-colors"
           >
-            EXA Docs
+            Exa Docs
           </a>
           <span className="text-separator2">•</span>
           <a

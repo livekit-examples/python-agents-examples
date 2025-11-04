@@ -61,7 +61,7 @@ export default function Home() {
             {/* Title */}
             <div className="flex flex-col items-center gap-2 text-center">
               <h1 className="text-xl font-semibold text-fg0">
-                EXA Deep Researcher
+                Exa + LiveKit Deep Researcher
               </h1>
               <p className="text-sm text-fg3">Voice AI Research Assistant</p>
               <p className="text-xs text-fg4 leading-relaxed mt-2 max-w-sm">
@@ -93,7 +93,7 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="text-fg3 hover:text-fgAccent1 underline transition-colors"
               >
-                EXA Docs
+                Exa Docs
               </a>
               <span className="text-separator2">•</span>
               <a
@@ -194,7 +194,7 @@ function HeaderControls() {
   return (
     <div className="border-b border-separator1 bg-bg1 px-6 py-3 flex items-center justify-between">
       <div className="flex items-center gap-4">
-        <h1 className="text-xl font-bold text-fg0">EXA Deep Researcher</h1>
+        <h1 className="text-xl font-bold text-fg0">Exa + LiveKit Deep Researcher</h1>
         <div className="h-4 w-px bg-separator2" />
         <span className="text-sm text-fg3">Voice AI Research Assistant</span>
       </div>

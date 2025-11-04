@@ -1,6 +1,6 @@
-# EXA Deep Researcher Frontend
+# Exa Deep Researcher Frontend
 
-This is a web interface for the [EXA Deep Researcher](../) agent built with [LiveKit Agents](https://docs.livekit.io/agents). It provides a real-time voice interface with visual research progress tracking using the [LiveKit JavaScript SDK](https://github.com/livekit/client-sdk-js).
+This is a web interface for the [Exa Deep Researcher](../) agent built with [LiveKit Agents](https://docs.livekit.io/agents). It provides a real-time voice interface with visual research progress tracking using the [LiveKit JavaScript SDK](https://github.com/livekit/client-sdk-js).
 
 This template is built with Next.js and is free for you to use or modify as you see fit.
 
