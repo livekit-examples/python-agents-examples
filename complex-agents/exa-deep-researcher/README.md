@@ -211,24 +211,6 @@ For CI/CD deployment with GitHub Actions, see the [LiveKit Cloud Deployment Guid
 
 ## Usage
 
-### Voice Commands
-
-**Start Research:**
-
-- "Research the impact of CRISPR on gene therapy"
-- "I need information about quantum computing applications"
-- "Find me recent studies on AI in healthcare"
-
-**With Filters:**
-
-- "Research climate change, but only from nature.com and science.org"
-- "Look up blockchain technology, excluding any crypto news sites"
-
-**Cancel Research:**
-
-- "Cancel the current research"
-- "Stop researching"
-
 ### Example Interaction
 
 ```
@@ -273,71 +255,6 @@ Agent: "Research complete! Key findings: The National Ignition Facility
    - Contents with livecrawl options
    - Find similar pages
 
-### Research Workflow
-
-```
-User Query
-    ↓
-Write Brief & Title
-    ↓
-Decompose into Subtopics (Supervisor)
-    ↓
-For Each Subtopic:
-    - EXA Search
-    - Fetch Contents (batched)
-    - Extract Citations
-    - Synthesize Notes
-    ↓
-Periodic Compression (token management)
-    ↓
-Generate Final Report
-    ↓
-Save to reports/YYYY-MM-DD_HHMMSS_title.md
-    ↓
-Speak Compact Summary
-```
-
-### RPC Contract (Agent → UI)
-
-The agent communicates with the frontend using RPC messages:
-
-**Status Updates** (`exa.research/status`):
-
-```typescript
-{
-  requestId: string
-  phase: "briefing" | "researching" | "compressing" | "reporting"
-  title: string
-  message: string
-  progressPct?: number
-  stats: { results?: number, sourcesFetched?: number, domains?: number }
-  ts: number
-}
-```
-
-**Research Notes** (`exa.research/notes`):
-
-```typescript
-{
-  requestId: string;
-  subtopic: string;
-  summaryMarkdown: string;
-  citations: Array<{ id; url; title; quote; publishedAt? }>;
-  ts: number;
-}
-```
-
-**Report Ready** (`exa.research/reportReady`):
-
-```typescript
-{
-  requestId: string;
-  reportTitle: string;
-  sizeBytes: number;
-  numSources: number;
-}
-```
-
 ### Voice Policy
 
 **Spoken Output:**
@@ -354,27 +271,6 @@ The agent communicates with the frontend using RPC messages:
 - Real-time progress timeline
 - Source content with on-demand fetching
 - Clickable citations with quotes
-
-## Output Files
-
-Reports are saved to `complex-agents/exa-deep-researcher/reports/`:
-
-```
-reports/
-├── 2025-01-31_143022_CRISPR_Gene_Therapy.md
-├── 2025-01-31_150815_Quantum_Computing_Applications.md
-└── 2025-01-31_163401_Fusion_Energy_Developments.md
-```
-
-Each report includes:
-
-- Title and generation timestamp
-- Executive summary
-- Key findings with citations
-- Supporting evidence
-- Alternative perspectives
-- Conclusions
-- Full source list
 
 ## Customization
 

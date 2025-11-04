@@ -1,6 +1,6 @@
 version: '1.0'
 description: Index of all LiveKit Agent examples with metadata
-total_examples: 104
+total_examples: 105
 examples:
 - file_path: avatars/hedra/dynamically_created_avatar/agent.py
   title: Dynamically Created Avatar
@@ -233,6 +233,24 @@ examples:
   - Setting allow_interruptions=False in agent configuration
   - Testing interruption handling behavior
   - Agent-initiated conversation with on_enter
+- file_path: complex-agents/exa-deep-researcher/agent.py
+  title: EXA Deep Researcher
+  category: complex-agents
+  tags:
+  - exa
+  - research
+  - voice_controlled
+  - background_jobs
+  - rpc_streaming
+  difficulty: advanced
+  description: Voice-controlled deep research agent using EXA for web intelligence
+  demonstrates:
+  - Voice-only control with two function tools
+  - Single background research job with state management
+  - EXA API integration for search and content fetching
+  - RPC streaming to UI for status, notes, and reports
+  - Token-aware compression and concurrency control
+  - Cited final reports saved to disk
 - file_path: complex-agents/jeopardy/benchmark_agent.py
   title: Jeopardy Agent
   category: benchmarking
