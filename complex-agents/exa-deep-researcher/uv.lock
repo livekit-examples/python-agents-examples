@@ -507,6 +507,7 @@ dependencies = [
     { name = "exa-py" },
     { name = "livekit-agents", extra = ["turn-detector"] },
     { name = "livekit-plugins-noise-cancellation" },
+    { name = "livekit-plugins-silero" },
     { name = "livekit-plugins-turn-detector" },
     { name = "python-dotenv" },
 ]
@@ -522,6 +523,7 @@ requires-dist = [
     { name = "exa-py", specifier = ">=1.0.0" },
     { name = "livekit-agents", extras = ["turn-detector"], specifier = "~=1.2" },
     { name = "livekit-plugins-noise-cancellation", specifier = "~=0.2" },
+    { name = "livekit-plugins-silero", specifier = ">=0.6.8" },
     { name = "livekit-plugins-turn-detector", specifier = ">=0.1.0" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
 ]
@@ -1138,6 +1140,21 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/90/2e/cf86f21b338c6571b95e18bd9d96b33d64bf2fb1123f796cc7033bda821d/livekit_plugins_noise_cancellation-0.2.5-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:47050db446693e1a260339f5c45b025cd2b6030516a80e976d90ebaa4eef687c", size = 70218295, upload-time = "2025-06-30T14:49:49.304Z" },
     { url = "https://files.pythonhosted.org/packages/c7/b8/2f7a56b1c15220988fb4ac3e73483cf611a7547ab16b867b25d373eddbc7/livekit_plugins_noise_cancellation-0.2.5-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:535e510d92e0a36e33f60c2ddd4de0da3cbfd21fe02d767f5839b421b5bea9fb", size = 73324763, upload-time = "2025-06-30T14:49:54.032Z" },
     { url = "https://files.pythonhosted.org/packages/9f/4d/37be8da861607f392d07bb0f1c6b57c635db249095084abcbfaaaab6d7b5/livekit_plugins_noise_cancellation-0.2.5-py3-none-win_amd64.whl", hash = "sha256:5879d28120a6b47a7d557832d9432683710987f79e9b514171898be36534380b", size = 65757107, upload-time = "2025-06-30T14:49:59.053Z" },
+]
+
+[[package]]
+name = "livekit-plugins-silero"
+version = "1.2.17"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "livekit-agents" },
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "numpy", version = "2.3.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "onnxruntime" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b7/4f/ae76b7a970ea7b4d9d87ea8059729572aa30d3a516e89b23f83d9a78c4c1/livekit_plugins_silero-1.2.17.tar.gz", hash = "sha256:9dcc8cd044b356b33ab6132c4cd176c9f740f84b473f959f520e2bf9005b75b9", size = 1955223, upload-time = "2025-10-29T15:46:26.904Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ce/ce/33736834a730ed9ce8ad2b10f7f910fa8a7e772f3df9f7ef624bb11b7ad4/livekit_plugins_silero-1.2.17-py3-none-any.whl", hash = "sha256:ab2e7316f16ab6cc523b8b0ee878a128948ba5c60b21a81410f9d907bcd5f398", size = 3903308, upload-time = "2025-10-29T15:46:25.284Z" },
 ]
 
 [[package]]
