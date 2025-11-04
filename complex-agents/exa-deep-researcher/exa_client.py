@@ -6,11 +6,7 @@ import asyncio
 import logging
 from typing import List, Optional
 from exa_py import Exa
-
-try:
-    from .schemas import EXASearchParams, EXAContentOptions, EXAResult, EXAContent
-except ImportError:
-    from schemas import EXASearchParams, EXAContentOptions, EXAResult, EXAContent
+from agent.schemas import EXASearchParams, EXAContentOptions, EXAResult, EXAContent
 
 logger = logging.getLogger("exa-client")
 logger.setLevel(logging.INFO)
