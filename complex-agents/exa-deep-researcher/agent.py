@@ -6,7 +6,7 @@ tags: [exa, research, voice_controlled, background_jobs, rpc_streaming]
 difficulty: advanced
 description: Voice-controlled deep research agent using EXA for web intelligence
 demonstrates:
-  - Voice-only control with two function tools
+  - Voice-only control
   - Single background research job with state management
   - EXA API integration for search and content fetching
   - RPC streaming to UI for status, notes, and reports

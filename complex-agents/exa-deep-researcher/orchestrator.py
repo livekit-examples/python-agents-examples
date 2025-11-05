@@ -10,6 +10,7 @@ import logging
 from typing import Optional, List, Dict, Callable
 
 from livekit.agents import JobContext
+from livekit.agents.llm import LLM
 
 from agent.schemas import JobState, ResearchNote, EXAResult
 from agent.exa_client import EXAClient
@@ -47,7 +48,7 @@ class ResearchOrchestrator:
         self,
         ctx: JobContext,
         exa_client: EXAClient,
-        llm,
+        llm: LLM,
         status_callback: Optional[Callable] = None,
         notes_callback: Optional[Callable] = None,
         report_callback: Optional[Callable] = None,
