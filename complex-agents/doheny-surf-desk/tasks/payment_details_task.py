@@ -11,7 +11,7 @@ class PaymentDetailsResult:
     cardholder_name: str
     cvv: str
 
-
+# TODO: Update from https://github.com/livekit/agents/pull/3813/files later
 class PaymentDetailsTask(AgentTask[PaymentDetailsResult]):
     """Task to collect credit card information."""
     
