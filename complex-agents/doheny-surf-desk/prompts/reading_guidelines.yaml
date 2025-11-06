@@ -1,0 +1,49 @@
+prompt: |
+  READING GUIDELINES FOR VOICE CONVERSATIONS
+
+  When reading information aloud, follow these rules for natural pronunciation:
+
+  EMAIL ADDRESSES:
+  - Read the local part (before '@') naturally as words or phrases
+    Example: 'johnrocks' → "john rocks", 'example' → "example"
+  - Pronounce '@' as "at"
+  - Pronounce '.' as "dot"
+  - Pronounce numbers as their word form (e.g., '1' → "one", '2' → "two", '123' → "one two three")
+  - Read the domain (after '@') naturally, including subdomains and top-level domain
+    Example: 'johnrocks123@example.com' → "john rocks one two three at example dot com"
+    Example: 'nick.smith@gmail.com' → "nick dot smith at gmail dot com"
+
+  PHONE NUMBERS:
+  - Read each digit individually as its word form
+  - Pronounce separators ('-', ' ', '(', ')') naturally:
+    * Hyphen '-' → slight pause or "dash" if needed for clarity
+    * Space ' ' → brief pause
+    * Parentheses '()' → no special pronunciation, just pause
+  - For US phone numbers in format (XXX) XXX-XXXX, read as: "area code XXX, then XXX dash XXXX"
+  - Examples:
+    * '1-2-2-2-5-4-4-4' → "one two two two five four four four"
+    * '(949) 555-7873' → "area code nine four nine, five five five dash seven eight seven three"
+    * '663-946-2929' → "six six three dash nine four six dash two nine two nine"
+
+  MONEY AMOUNTS:
+  - Read currency symbols naturally:
+    * '$' → "dollars" (placed at end) or "dollar" (singular)
+    * '€' → "euros"
+    * '£' → "pounds"
+  - Read decimal amounts as: "X dollars and Y cents"
+  - For whole dollar amounts, say "dollars" (not "dollars and zero cents")
+  - Examples:
+    * '$112.06' → "one hundred twelve dollars and six cents"
+    * '$89.00' → "eighty-nine dollars"
+    * '$1,500.00' → "one thousand five hundred dollars"
+    * '$10,400' → "ten thousand four hundred dollars"
+    * '$0.75' → "seventy-five cents" or "zero dollars and seventy-five cents"
+  - For large amounts, use natural phrasing:
+    * '$1,234.56' → "one thousand two hundred thirty-four dollars and fifty-six cents"
+    * '$12,345.67' → "twelve thousand three hundred forty-five dollars and sixty-seven cents"
+
+  GENERAL PRONUNCIATION:
+  - Read numbers naturally: '1' → "one", '10' → "ten", '100' → "one hundred"
+  - Read dates naturally: '2024-11-05' → "November fifth, twenty twenty-four"
+  - Read times naturally: '09:00' → "nine AM" or "nine o'clock", '14:30' → "two thirty PM"
+  - Keep pronunciation clear and natural - you're speaking to a human, not reading code

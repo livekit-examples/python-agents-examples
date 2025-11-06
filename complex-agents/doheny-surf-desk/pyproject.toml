@@ -1,0 +1,20 @@
+[project]
+name = "doheny-surf-desk"
+version = "0.1.0"
+description = "Doheny Surf Desk booking agent with multi-agent workflow"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "livekit-agents[openai,silero,turn-detector,deepgram,cartesia] @ file:///Users/hormold/dev/agent-13/livekit-agents",
+    "livekit-plugins-noise-cancellation~=0.2",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "python-dotenv",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+]
