@@ -28,7 +28,7 @@ async def compress_notes(
     to compress/consolidate multiple notes into a more concise format while preserving
     key information. This helps manage token limits in subsequent LLM calls.
     
-    Called periodically during research (after 2+ notes are collected).
+    Called periodically during research (when 4+ notes are collected).
     
     Args:
         llm: LLM instance for compression

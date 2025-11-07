@@ -30,10 +30,13 @@ This template is built with Next.js and is free for you to use or modify as you 
    LIVEKIT_URL=wss://your-project.livekit.cloud
    LIVEKIT_API_KEY=your_api_key
    LIVEKIT_API_SECRET=your_api_secret
+   
+   # Optional - Environment (for dev/prod separation)
+   DEV=1                    # Set DEV to any value to use dev agent name (exa-deep-researcher-dev)
    ```
 
    > [!NOTE]
-   > These are the only credentials needed. The agent uses LiveKit's AI Gateway for all inference.
+   > **Dev/Prod Separation**: Set `DEV` to any value to match your Python agent's environment. This ensures both frontend and agent use the same agent name (`exa-deep-researcher-dev` for dev, `exa-deep-researcher` for prod).
 
 3. Run the development server:
 

@@ -6,6 +6,10 @@ function generateRoomName(): string {
   return `exa-research-${Math.random().toString(36).substring(2, 11)}`;
 }
 
+function getAgentName(): string {
+  return process.env.DEV ? "exa-deep-researcher-dev" : "exa-deep-researcher";
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { identity } = await request.json();
@@ -25,6 +29,13 @@ export async function POST(request: NextRequest) {
     }
 
     const roomName = generateRoomName();
+    const agentName = getAgentName();
+
+    console.log(
+      `[Token API] Using agent name: ${agentName} (DEV=${
+        process.env.DEV || "not set"
+      })`
+    );
 
     const at = new AccessToken(livekitApiKey, livekitApiSecret, {
       identity: identity || "user",
@@ -33,7 +44,7 @@ export async function POST(request: NextRequest) {
     const roomConfig = new RoomConfiguration({
       agents: [
         new RoomAgentDispatch({
-          agentName: "exa-deep-researcher",
+          agentName: agentName,
         }),
       ],
     });

@@ -10,8 +10,7 @@ from datetime import datetime
 
 from agent.schemas import EXASearchParams, EXAContentOptions, ResearchNote
 from agent.exa_client import EXAClient
-from agent.utils import fetch_contents_in_batches, execute_llm_chat
-from agent.prompts import generate_search_query_prompt
+from agent.utils import fetch_contents_in_batches
 from .synthesizer import synthesize_findings
 
 logger = logging.getLogger("subtopic-research")
@@ -93,32 +92,9 @@ class ResearchSubtopic:
                 {"subtopic": subtopic}
             )
         
-        # Generate contextualized search queries using LLM
-        query_prompt = generate_search_query_prompt(subtopic, original_query, research_brief)
-        queries_response = await execute_llm_chat(
-            llm=self.llm,
-            system_prompt="You are a search query generator. Return only valid JSON.",
-            user_prompt=query_prompt,
-            parse_json=True,
-            extract_json=True,
-            conversation_history=conversation_history
-        )
-        
-        search_queries = []
-        if isinstance(queries_response, list):
-            search_queries = [str(q) for q in queries_response[:3]]
-        elif isinstance(queries_response, dict) and "queries" in queries_response:
-            search_queries = queries_response["queries"][:3]
-        
-        if not search_queries:
-            logger.warning(f"Failed to generate search queries, using subtopic: {subtopic}")
-            search_queries = [subtopic]
-        
-        logger.info(f"Generated search queries: {search_queries}")
-        
-        primary_query = search_queries[0] if search_queries else subtopic
+        # Use subtopic directly as search query (subtopics are generated as search-ready queries)
         search_params = EXASearchParams(
-            query=primary_query,
+            query=subtopic,
             num_results=self.max_results_per_search,
             use_autoprompt=None
         )

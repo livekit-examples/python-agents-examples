@@ -285,6 +285,12 @@ You respond with JSON indicating your decision. The system will automatically ex
 <Crucial Reminders>
 - You respond with JSON, not tool calls: {{"action": "research_topic" | "research_complete", "topic": "...", "reason": "..."}}
 - When specifying a topic, make it clear, specific, and self-contained
+- **CRITICAL: Topic Format for Search**
+  - The topic you specify MUST be formatted as a ready-to-use search query for EXA (a semantic search engine)
+  - Include the main subject/entity from the research brief in EVERY topic
+  - If the entity name is ambiguous, add disambiguating terms (e.g., "Tesla Inc." not "Tesla")
+  - Make topics specific enough to avoid generic results (3-10 words)
+  - Examples: "Tesla Inc. battery technology innovations", "Apple Inc. international market expansion"
 - Don't use acronyms or abbreviations unless they're clearly defined in the context
 - Only ask for topics needed to answer the overall research question
 - If findings comprehensively cover all key aspects, use "research_complete"
@@ -624,7 +630,18 @@ Respond with valid JSON in this exact format:
 Guidelines:
 - Include 3-5 subtopics that are specific and focused
 - Each subtopic should represent a distinct research angle
-- Keep subtopics concise but descriptive (5-10 words each)"""
+- Keep subtopics concise but descriptive (5-10 words each)
+
+**CRITICAL: Subtopic Format for Search**
+- Each subtopic MUST be formatted as a ready-to-use search query for EXA (a semantic search engine)
+- Include the main subject/entity from the original question in EVERY subtopic
+- If the entity name is ambiguous (e.g., "Tesla" could mean the company OR Nikola Tesla the inventor), add disambiguating terms like "Inc.", "company", "corporation", specific products, or time context
+- Make subtopics specific enough to avoid generic results and prevent confusion with similarly-named entities
+- Focus on finding authoritative sources (news, academic, official sites)
+- Examples:
+  * Good: "Tesla Inc. battery technology innovations", "Tesla company autopilot development history"
+  * Bad: "Tesla patents" (ambiguous - could be Nikola Tesla inventor or Tesla company)
+- Subtopics will be used directly as search queries, so format them accordingly"""
 
 
 def generate_search_query_prompt(subtopic: str, original_query: str, research_brief: str) -> str:

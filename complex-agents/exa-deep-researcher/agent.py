@@ -20,6 +20,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional, Annotated
 from dataclasses import dataclass, field
+import os
 
 from dotenv import load_dotenv
 from pydantic import Field
@@ -48,6 +49,13 @@ logger = logging.getLogger("exa-deep-researcher")
 logger.setLevel(logging.INFO)
 
 load_dotenv()
+
+
+def get_agent_name() -> str:
+    """Get agent name based on environment (dev or prod)"""
+    if os.getenv("DEV"):
+        return "exa-deep-researcher-dev"
+    return "exa-deep-researcher"
 
 
 @dataclass
@@ -304,8 +312,8 @@ async def entrypoint(ctx: JobContext):
         userdata=userdata,
         vad=silero.VAD.load(),
         stt="assemblyai/universal-streaming",
-        llm="qwen/qwen3-235b-a22b-instruct",
-        tts="cartesia/sonic-3:a167e0f3-df7e-4d52-a9c3-f949145efdab",
+        llm="deepseek-ai/deepseek-v3",
+        tts="inworld/inworld-tts-1:Ashley",
         turn_detection=MultilingualModel(),
     )
     
@@ -319,4 +327,6 @@ async def entrypoint(ctx: JobContext):
 
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(agent_name='exa-deep-researcher', entrypoint_fnc=entrypoint))
+    agent_name = get_agent_name()
+    logger.info(f"Starting agent with name: {agent_name}")
+    cli.run_app(WorkerOptions(agent_name=agent_name, entrypoint_fnc=entrypoint))

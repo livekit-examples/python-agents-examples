@@ -113,7 +113,7 @@ flowchart TD
 - **Autonomous Clarification**: LLM evaluates if quick search results match user intent before expensive deep research
 - **Supervisor Pattern**: Iterative loop where an LLM continuously evaluates findings and decides what to research next
 - **Parallel Processing**: EXA content fetching happens in batches (configurable concurrency)
-- **Smart Compression**: After 2+ notes, compress to manage token limits
+- **Smart Compression**: After 4+ notes, compress to manage token limits (optional for 2-3 notes)
 - **Real-time Streaming**: All progress streams to UI via RPC while voice updates are rate-limited
 
 ## Prerequisites
@@ -148,6 +148,9 @@ flowchart TD
    LIVEKIT_API_KEY=your_livekit_api_key
    LIVEKIT_API_SECRET=your_livekit_api_secret
 
+   # Optional - Environment (for dev/prod separation)
+   DEV=1                    # Set DEV to any value to use dev agent name (exa-deep-researcher-dev)
+
    # Optional - Research Configuration
    EXA_MAX_ITERATIONS=3            # Max research subtopics (default: 3)
    EXA_DEFAULT_MAX_RESULTS=10      # Results per search (default: 10)
@@ -155,7 +158,7 @@ flowchart TD
    ```
 
 > [!NOTE]
-> This agent uses LiveKit's AI Gateway for inference (LLM, STT, TTS). No separate OpenAI or Cartesia API keys are required.
+> **Dev/Prod Separation**: Set `DEV` to any value in your `.env` file to use the dev agent name (`exa-deep-researcher-dev`). This allows you to run dev and prod agents simultaneously without conflicts. The same variable should be set in both Python agent and frontend `.env.local` files.
 
 ## Running the Agent
 

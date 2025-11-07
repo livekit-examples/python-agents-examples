@@ -37,7 +37,7 @@ class ResearchOrchestrator:
     1. Clarification (optional) - asks user to clarify ambiguous queries
     2. Briefing - creates a research plan from the query
     3. Research Loop - iteratively researches topics until comprehensive
-    4. Compression - periodically compresses notes to manage tokens
+    4. Compression - periodically compresses notes to manage tokens (when 4+ notes)
     5. Reporting - generates final comprehensive report
     
     The research uses an "iterative supervisor" pattern where an LLM supervisor
@@ -173,7 +173,7 @@ class ResearchOrchestrator:
         1. Asks an LLM supervisor to evaluate current findings
         2. Decides what topic to research next (preferring planned topics if provided)
         3. Researches the chosen topic
-        4. Compresses notes periodically to manage token usage
+        4. Compresses notes periodically (when 4+ notes) to manage token usage
         5. Repeats until supervisor says "complete" or max iterations reached
         
         Returns:
@@ -246,6 +246,11 @@ Guidelines:
 - **PREFER topics from the "Planned Topics" list** - use the EXACT wording from planned topics when possible
 - If research is comprehensive and covers all key aspects, use "research_complete"
 - If there are important gaps, use "research_topic" with a specific, focused topic
+- **CRITICAL: Topic Format for Search**
+  - The topic you specify MUST be formatted as a ready-to-use search query for EXA
+  - Include the main subject/entity from the research brief in EVERY topic
+  - If the entity name is ambiguous, add disambiguating terms (e.g., "Tesla Inc." not "Tesla")
+  - Make topics specific enough to avoid generic results (3-10 words)
 - Don't repeat topics we've already researched
 - Maximum {self.max_concurrent_research_units} topics can be researched in parallel"""
 
@@ -299,7 +304,9 @@ Guidelines:
             )
             notes.append(note)
             
-            if len(notes) >= 2:
+            # Compress notes when we have 4+ to manage token limits
+            # For 2-3 notes, compression is optional and may not be worth the LLM call
+            if len(notes) >= 4:
                 compressed_context = await compress_notes(
                     llm=self.llm,
                     request_id=request_id,
