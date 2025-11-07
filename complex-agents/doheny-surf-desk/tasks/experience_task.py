@@ -83,3 +83,4 @@ Wait for explicit user confirmation."""
             spot_recommendation=self._recommendation
         ))
 
+
