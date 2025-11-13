@@ -580,15 +580,12 @@ Moondream Vision Agent
 - **Mix and match**: Many examples use interchangeable components (LLM, STT, TTS, VAD)
 - **Check metadata**: Each file includes YAML frontmatter with detailed information
 - **Read the index**: Browse `docs/index.yaml` for a complete structured catalog
-- **Join the community**: Get help and share your builds on [Discord](https://livekit.io/community)
 
 ## Resources
 
 - **[LiveKit Agents Documentation](https://docs.livekit.io/agents/)** - Comprehensive guides and API reference
 - **[LiveKit Agents GitHub](https://github.com/livekit/agents)** - SDK source code and issues
 - **[LiveKit Cloud](https://cloud.livekit.io)** - Managed infrastructure for production
-- **[Discord Community](https://livekit.io/community)** - Get help and connect with other developers
-
 ---
 
 <div align="center">
