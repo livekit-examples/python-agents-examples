@@ -18,7 +18,7 @@ import logging
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli
+from livekit.agents import JobContext, WorkerOptions, cli, inference
 from livekit.agents.voice import Agent, AgentSession
 from livekit.plugins import openai, silero, deepgram, elevenlabs
 
@@ -35,11 +35,9 @@ class SimpleAgent(Agent):
                 Every message you receive, translate it directly into French.
                 Do not respond with anything else but the translation.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=elevenlabs.TTS(
-                model="eleven_multilingual_v2"
-            ),
+            stt=inference.STT(model="assemblyai/universal-streaming:en"),
+            llm=inference.LLM(model="openai/gpt-4.1-mini"),
+            tts=inference.TTS(model="cartesia/sonic-3:9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
             vad=silero.VAD.load()
         )
     
