@@ -31,10 +31,10 @@ class Assistant(Agent):
 
 async def entrypoint(ctx: agents.JobContext):
     session = AgentSession(
-        llm=google.beta.realtime.RealtimeModel(
+        llm=google.realtime.RealtimeModel(
             model="gemini-2.5-flash-native-audio-preview-09-2025",
-            proactivity=True,
-            enable_affective_dialog=True
+            voice="Puck",
+            temperature=0.8,
         ),
         vad=silero.VAD.load()
     )
@@ -47,7 +47,7 @@ async def entrypoint(ctx: agents.JobContext):
         ),
     )
 
-    await session.generate_reply()
+    await session.generate_reply(instructions="Start by offering assistance")
 
 if __name__ == "__main__":
     agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))
