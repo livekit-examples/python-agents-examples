@@ -2,11 +2,11 @@
 
 # LiveKit Agents Examples
 
-<p><strong>53 production-ready examples showcasing the power of LiveKit Agents</strong></p>
+<p><strong>48 production-ready examples showcasing the power of LiveKit Agents</strong></p>
 
 [![LiveKit Agents](https://img.shields.io/badge/LiveKit-Agents-00ADD8?style=flat-square)](https://docs.livekit.io/agents/)
 [![Python](https://img.shields.io/badge/Python-3.10+-blue?style=flat-square)](https://www.python.org/)
-[![Examples](https://img.shields.io/badge/Examples-53-green?style=flat-square)](#examples)
+[![Examples](https://img.shields.io/badge/Examples-48-green?style=flat-square)](#examples)
 
 <p>
   <a href="#getting-started">Getting Started</a> •
@@ -61,7 +61,7 @@ ELEVENLABS_API_KEY=your_elevenlabs_key
 
 ```bash
 # Speak to a English -> French translator
-python translators/pipeline_translator.py console
+python translation/pipeline_translator.py console
 ```
 
 ---
@@ -117,27 +117,9 @@ Shows how to create a tavus avatar that can help a user learn about the Fall of 
 </details>
 
 <details open>
-<summary><h3>Complex Agents (18 examples)</h3></summary>
+<summary><h3>Gaming & RPG (7 examples)</h3></summary>
 
-#### [Base Game Agent](complex-agents/role-playing/agents/base_agent.py)
-<kbd>advanced</kbd>
-
-Base class for RPG game agents with context preservation and state management
-
-**Key concepts:** `rpg` `game-state` `agent-switching` `context-preservation` `rpc-communication`
-
----
-
-#### [Combat Agent](complex-agents/role-playing/agents/combat_agent.py)
-<kbd>advanced</kbd>
-
-Specialized agent for handling turn-based combat encounters in RPG games
-
-**Key concepts:** `rpg` `combat-system` `turn-based-combat` `npc-ai` `function-tools`
-
----
-
-#### [D&D Role-Playing Game](complex-agents/role-playing/agent.py)
+#### [D&D Role-Playing Game](gaming/agent.py)
 <kbd>advanced</kbd>
 
 Dungeons & Dragons role-playing game with narrator and combat agents
@@ -146,70 +128,25 @@ Dungeons & Dragons role-playing game with narrator and combat agents
 
 ---
 
-#### [EXA Deep Researcher](complex-agents/exa-deep-researcher/agent.py)
+#### [Base Game Agent](gaming/agents/base_agent.py)
 <kbd>advanced</kbd>
 
-Voice-controlled deep research agent using EXA for web intelligence
+Base class for RPG game agents with context preservation and state management
 
-**Key concepts:** `exa` `research` `voice_controlled` `background_jobs` `rpc_streaming`
-
----
-
-#### [Game State Management](complex-agents/role-playing/core/game_state.py)
-<kbd>intermediate</kbd>
-
-Centralized game state management for RPG sessions with type-safe data structures
-
-**Key concepts:** `rpg` `state-management` `dataclass` `session-data` `type-safety`
+**Key concepts:** `rpg` `game-state` `agent-switching` `context-preservation` `rpc-communication`
 
 ---
 
-#### [IVR Phone System Navigator](complex-agents/ivr-agent/agent.py)
+#### [Combat Agent](gaming/agents/combat_agent.py)
 <kbd>advanced</kbd>
 
-Agent that navigates phone IVR systems using DTMF codes
+Specialized agent for handling turn-based combat encounters in RPG games
 
-**Key concepts:** `ivr` `dtmf` `telephony` `sip` `participant_attributes`
-
----
-
-#### [Item Generator](complex-agents/role-playing/generators/item_generator.py)
-<kbd>advanced</kbd>
-
-AI-powered procedural item generation system for RPG games
-
-**Key concepts:** `rpg` `procedural-generation` `llm-generation` `yaml-configuration` `item-creation`
+**Key concepts:** `rpg` `combat-system` `turn-based-combat` `npc-ai` `function-tools`
 
 ---
 
-#### [Job Application Form Agent](complex-agents/nova-sonic/form_agent.py)
-<kbd>advanced</kbd>
-
-Interactive interview agent for job applications with AWS Realtime
-
-**Key concepts:** `aws_realtime` `form_filling` `rpc_frontend` `interview` `structured_data`
-
----
-
-#### [Medical Office Triage System](complex-agents/medical_office_triage/triage.py)
-<kbd>advanced</kbd>
-
-Multi-agent medical triage system with specialized departments
-
-**Key concepts:** `multi_agent` `agent_transfer` `medical` `context_preservation` `chat_history`
-
----
-
-#### [NPC Generator](complex-agents/role-playing/generators/npc_generator.py)
-<kbd>advanced</kbd>
-
-AI-powered NPC generation system with personality, backstory, and dynamic dialogue
-
-**Key concepts:** `rpg` `procedural-generation` `character-creation` `personality-generation` `dialogue-system`
-
----
-
-#### [Narrator Agent](complex-agents/role-playing/agents/narrator_agent.py)
+#### [Narrator Agent](gaming/agents/narrator_agent.py)
 <kbd>advanced</kbd>
 
 Main storytelling agent for RPG games with voice acting and world interaction
@@ -218,25 +155,37 @@ Main storytelling agent for RPG games with voice acting and world interaction
 
 ---
 
-#### [Note Taking Assistant](complex-agents/note-taking-assistant/agent.py)
+#### [Game State Management](gaming/core/game_state.py)
 <kbd>intermediate</kbd>
 
-Shows how to use the Note Taking Assistant.
+Centralized game state management for RPG sessions with type-safe data structures
 
-**Key concepts:** `complex-agents` `cerebras` `deepgram`
+**Key concepts:** `rpg` `state-management` `dataclass` `session-data` `type-safety`
 
 ---
 
-#### [Nutrition Tracker Assistant](complex-agents/nutrition-assistant/agent.py)
+#### [Item Generator](gaming/generators/item_generator.py)
 <kbd>advanced</kbd>
 
-Nutrition tracking assistant with SQLite database and real-time updates
+AI-powered procedural item generation system for RPG games
 
-**Key concepts:** `sqlite_database` `nutrition` `food_tracking` `rpc_updates` `thread_pool`
+**Key concepts:** `rpg` `procedural-generation` `llm-generation` `yaml-configuration` `item-creation`
 
 ---
 
-#### [Personal Shopper Multi-Agent](complex-agents/personal_shopper/personal_shopper.py)
+#### [NPC Generator](gaming/generators/npc_generator.py)
+<kbd>advanced</kbd>
+
+AI-powered NPC generation system with personality, backstory, and dynamic dialogue
+
+**Key concepts:** `rpg` `procedural-generation` `character-creation` `personality-generation` `dialogue-system`
+
+</details>
+
+<details>
+<summary><h3>E-commerce (2 examples)</h3></summary>
+
+#### [Personal Shopper Multi-Agent](ecommerce/personal-shopper/personal_shopper.py)
 <kbd>advanced</kbd>
 
 E-commerce personal shopper with triage, sales, and returns departments
@@ -245,85 +194,79 @@ E-commerce personal shopper with triage, sales, and returns departments
 
 ---
 
-#### [Shopify Voice Shopping Agent](complex-agents/shopify-voice-shopper/shopify.py)
+#### [Shopify Voice Shopping Agent](ecommerce/shopify-shopper/shopify.py)
 <kbd>advanced</kbd>
 
 Voice shopping assistant for Shopify stores with MCP server integration
 
 **Key concepts:** `mcp_server` `shopify` `dynamic_agent_switching` `rpc_navigation` `fast_llm_response`
 
+</details>
+
+<details>
+<summary><h3>Healthcare (2 examples)</h3></summary>
+
+#### [Medical Office Triage System](healthcare/medical-triage/triage.py)
+<kbd>advanced</kbd>
+
+Multi-agent medical triage system with specialized departments
+
+**Key concepts:** `multi_agent` `agent_transfer` `medical` `context_preservation` `chat_history`
+
 ---
 
-#### [Teleprompter Transcription Agent](complex-agents/teleprompter/cartesia-ink.py)
+#### [Nutrition Tracker Assistant](healthcare/nutrition-assistant/agent.py)
+<kbd>advanced</kbd>
+
+Nutrition tracking assistant with SQLite database and real-time updates
+
+**Key concepts:** `sqlite_database` `nutrition` `food_tracking` `rpc_updates` `thread_pool`
+
+</details>
+
+<details>
+<summary><h3>Productivity (3 examples)</h3></summary>
+
+#### [Job Application Form Agent](productivity/forms/form_agent.py)
+<kbd>advanced</kbd>
+
+Interactive interview agent for job applications with AWS Realtime
+
+**Key concepts:** `aws_realtime` `form_filling` `rpc_frontend` `interview` `structured_data`
+
+---
+
+#### [Note Taking Assistant](productivity/note-taking/agent.py)
+<kbd>intermediate</kbd>
+
+Shows how to use the Note Taking Assistant.
+
+**Key concepts:** `complex-agents` `cerebras` `deepgram`
+
+---
+
+#### [Teleprompter Transcription Agent](productivity/teleprompter/cartesia-ink.py)
 <kbd>intermediate</kbd>
 
 Real-time teleprompter that sends transcriptions to frontend via RPC
 
 **Key concepts:** `rpc_transcript` `cartesia_stt` `user_input_transcribed` `frontend_communication`
 
----
-
-#### [Turn-Taking Detection Agent](complex-agents/turn-taking/agent.py)
-<kbd>advanced</kbd>
-
-Agent that exposes end-of-utterance probability for turn-taking research
-
-**Key concepts:** `eou_probability` `turn_detection` `gladia_stt` `multilingual` `rpc_eou_updates`
-
----
-
-#### [Vision-Enabled Agent](complex-agents/vision/agent.py)
-<kbd>intermediate</kbd>
-
-Agent with camera vision capabilities using Grok-2 Vision model
-
-**Key concepts:** `video_stream` `grok_vision` `x_ai` `frame_capture` `image_content`
-
 </details>
 
 <details>
-<summary><h3>Drive-Thru System (4 examples)</h3></summary>
+<summary><h3>Research & Testing (7 examples)</h3></summary>
 
-#### [Drive-Thru Agent Test Suite](complex-agents/drive-thru/test_agent.py)
+#### [EXA Deep Researcher](research/exa-deep-researcher/agent.py)
 <kbd>advanced</kbd>
 
-Comprehensive test suite for drive-thru ordering agent
+Voice-controlled deep research agent using EXA for web intelligence
 
-**Key concepts:** `pytest` `agent_testing` `run_result` `judge_llm` `mock_tools`
-
----
-
-#### [Drive-Thru Order Management Tools](complex-agents/drive-thru/tools/management_tools.py)
-<kbd>intermediate</kbd>
-
-Order management tools for drive-thru system
-
-**Key concepts:** `order_tools` `rpc_integration` `checkout_flow`
+**Key concepts:** `exa` `research` `voice_controlled` `background_jobs` `rpc_streaming`
 
 ---
 
-#### [Drive-Thru Order Placement Tools](complex-agents/drive-thru/tools/order_tools.py)
-<kbd>advanced</kbd>
-
-Dynamic tool builders for different order types in drive-thru system
-
-**Key concepts:** `dynamic_tool_generation` `combo_meals` `enum_validation` `size_handling`
-
----
-
-#### [Drive-Thru Session Setup](complex-agents/drive-thru/session_setup.py)
-<kbd>intermediate</kbd>
-
-Session setup utilities for drive-thru ordering system
-
-**Key concepts:** `session_management` `userdata_initialization` `background_audio_setup`
-
-</details>
-
-<details>
-<summary><h3>Research & Testing (5 examples)</h3></summary>
-
-#### [EXA Deep Researcher Agent Test Suite](complex-agents/exa-deep-researcher/tests/test_agent.py)
+#### [EXA Deep Researcher Agent Test Suite](research/exa-deep-researcher-test.py)
 <kbd>advanced</kbd>
 
 Test suite for EXA Deep Researcher agent with clarification flow testing
@@ -332,25 +275,16 @@ Test suite for EXA Deep Researcher agent with clarification flow testing
 
 ---
 
-#### [Basic Agent Test Starter](complex-agents/testing/start_test.py)
-<kbd>beginner</kbd>
-
-Simple starting point for testing voice agents with basic greeting validation
-
-**Key concepts:** `pytest` `basic-testing` `getting-started` `agent-greeting`
-
----
-
-#### [Comprehensive Agent Testing](complex-agents/testing/agent_test.py)
+#### [Turn-Taking Detection Agent](research/turn-taking/agent.py)
 <kbd>advanced</kbd>
 
-Complete test suite for voice agents with fixtures, mocks, and conversation flows
+Agent that exposes end-of-utterance probability for turn-taking research
 
-**Key concepts:** `pytest` `agent-testing` `function-mocking` `conversation-testing` `fixtures`
+**Key concepts:** `eou_probability` `turn_detection` `gladia_stt` `multilingual` `rpc_eou_updates`
 
 ---
 
-#### [Function Calling Test Agent](complex-agents/testing/agent.py)
+#### [Function Calling Test Agent](testing/agent.py)
 <kbd>beginner</kbd>
 
 Testing agent with single print_to_console function
@@ -359,7 +293,25 @@ Testing agent with single print_to_console function
 
 ---
 
-#### [Testing Test](complex-agents/testing/testing_test.py)
+#### [Comprehensive Agent Testing](testing/agent_test.py)
+<kbd>advanced</kbd>
+
+Complete test suite for voice agents with fixtures, mocks, and conversation flows
+
+**Key concepts:** `pytest` `agent-testing` `function-mocking` `conversation-testing` `fixtures`
+
+---
+
+#### [Basic Agent Test Starter](testing/start_test.py)
+<kbd>beginner</kbd>
+
+Simple starting point for testing voice agents with basic greeting validation
+
+**Key concepts:** `pytest` `basic-testing` `getting-started` `agent-greeting`
+
+---
+
+#### [Testing Test](testing/testing_test.py)
 <kbd>beginner</kbd>
 
 Duplicate test file demonstrating basic agent testing patterns
@@ -380,7 +332,7 @@ Shows how to create a simple transcriber that uses the LiveKit SDK to transcribe
 
 ---
 
-#### [Home Automation](home_assistant/homeautomation.py)
+#### [Home Automation](home-automation/homeautomation.py)
 <kbd>intermediate</kbd>
 
 Shows how to create an agent that can control home automation devices.
@@ -392,7 +344,7 @@ Shows how to create an agent that can control home automation devices.
 <details>
 <summary><h3>LLM Pipeline Customization (4 examples)</h3></summary>
 
-#### [Interrupt User](pipeline-llm/interrupt_user.py)
+#### [Interrupt User](llm-pipeline/interrupt_user.py)
 <kbd>intermediate</kbd>
 
 Shows how to interrupt the user if they've spoken too much.
@@ -401,16 +353,7 @@ Shows how to interrupt the user if they've spoken too much.
 
 ---
 
-#### [LLM Output Replacement](pipeline-llm/replacing_llm_output.py)
-<kbd>intermediate</kbd>
-
-Replaces Deepseek thinking tags with custom messages for TTS
-
-**Key concepts:** `deepseek` `groq` `stream_manipulation` `think_tags` `output_processing`
-
----
-
-#### [LLM-Powered Content Filter](pipeline-llm/llm_powered_content_filter.py)
+#### [LLM-Powered Content Filter](llm-pipeline/llm_powered_content_filter.py)
 <kbd>advanced</kbd>
 
 Content filter using a separate LLM for real-time moderation decisions
@@ -419,7 +362,16 @@ Content filter using a separate LLM for real-time moderation decisions
 
 ---
 
-#### [Simple Content Filter](pipeline-llm/simple_content_filter.py)
+#### [LLM Output Replacement](llm-pipeline/replacing_llm_output.py)
+<kbd>intermediate</kbd>
+
+Replaces Deepseek thinking tags with custom messages for TTS
+
+**Key concepts:** `deepseek` `groq` `stream_manipulation` `think_tags` `output_processing`
+
+---
+
+#### [Simple Content Filter](llm-pipeline/simple_content_filter.py)
 <kbd>beginner</kbd>
 
 Basic keyword-based content filter with inline replacement
@@ -431,7 +383,7 @@ Basic keyword-based content filter with inline replacement
 <details>
 <summary><h3>TTS & Audio (4 examples)</h3></summary>
 
-#### [ElevenLabs Change Language](pipeline-tts/changing_language/elevenlabs_change_language.py)
+#### [ElevenLabs Change Language](tts-audio/elevenlabs_change_language.py)
 <kbd>intermediate</kbd>
 
 Shows how to use the ElevenLabs TTS model to change the language of the agent.
@@ -440,7 +392,7 @@ Shows how to use the ElevenLabs TTS model to change the language of the agent.
 
 ---
 
-#### [Only Greet](pipeline-tts/only_greet.py)
+#### [Only Greet](tts-audio/only_greet.py)
 <kbd>beginner</kbd>
 
 Greets the user when they join the room, but doesn't respond to anything else.
@@ -449,7 +401,7 @@ Greets the user when they join the room, but doesn't respond to anything else.
 
 ---
 
-#### [PlayAI TTS](pipeline-tts/playai_tts.py)
+#### [PlayAI TTS](tts-audio/playai_tts.py)
 <kbd>intermediate</kbd>
 
 Shows how to use the PlayAI TTS model.
@@ -458,7 +410,7 @@ Shows how to use the PlayAI TTS model.
 
 ---
 
-#### [TTS Comparison](pipeline-tts/tts_comparison/tts_comparison.py)
+#### [TTS Comparison](tts-audio/tts_comparison.py)
 <kbd>intermediate</kbd>
 
 Switches between different TTS providers using function tools.
@@ -491,26 +443,35 @@ Reusable RAG handler with thinking styles and agent integration
 <details>
 <summary><h3>RPC & State Management (2 examples)</h3></summary>
 
-#### [RPC State Management Agent](rpc/rpc_agent.py)
-<kbd>advanced</kbd>
-
-Agent demonstrating RPC communication with comprehensive CRUD state management
-
-**Key concepts:** `rpc` `state-management` `crud-operations` `session-data` `json-handling`
-
----
-
-#### [NPC Character State Tracking](tracking_state/npc_character.py)
+#### [NPC Character State Tracking](rpc-state/npc_character.py)
 <kbd>advanced</kbd>
 
 Advanced NPC system with dynamic rapport tracking and conversation state management
 
 **Key concepts:** `npc-interaction` `state-tracking` `rapport-system` `agent-switching` `conversation-flow`
 
+---
+
+#### [RPC State Management Agent](rpc-state/rpc_agent.py)
+<kbd>advanced</kbd>
+
+Agent demonstrating RPC communication with comprehensive CRUD state management
+
+**Key concepts:** `rpc` `state-management` `crud-operations` `session-data` `json-handling`
+
 </details>
 
 <details>
-<summary><h3>Telephony (3 examples)</h3></summary>
+<summary><h3>Telephony (4 examples)</h3></summary>
+
+#### [IVR Phone System Navigator](telephony/ivr-agent/agent.py)
+<kbd>advanced</kbd>
+
+Agent that navigates phone IVR systems using DTMF codes
+
+**Key concepts:** `ivr` `dtmf` `telephony` `sip` `participant_attributes`
+
+---
 
 #### [SIP Lifecycle Management Agent](telephony/sip_lifecycle.py)
 <kbd>advanced</kbd>
@@ -542,7 +503,7 @@ Agent demonstrating warm handoff functionality to transfer calls to human agents
 <details>
 <summary><h3>Translation (2 examples)</h3></summary>
 
-#### [Pipeline Translator Agent](translators/pipeline_translator.py)
+#### [Pipeline Translator Agent](translation/pipeline_translator.py)
 <kbd>intermediate</kbd>
 
 Simple translation pipeline that converts English speech to French
@@ -551,7 +512,7 @@ Simple translation pipeline that converts English speech to French
 
 ---
 
-#### [TTS Translator with Gladia STT](translators/tts_translator.py)
+#### [TTS Translator with Gladia STT](translation/tts_translator.py)
 <kbd>advanced</kbd>
 
 Advanced translation system using Gladia STT with code switching and event handling
@@ -561,7 +522,16 @@ Advanced translation system using Gladia STT with code switching and event handl
 </details>
 
 <details>
-<summary><h3>Vision (1 example)</h3></summary>
+<summary><h3>Vision (2 examples)</h3></summary>
+
+#### [Vision-Enabled Agent](vision/grok-vision/agent.py)
+<kbd>intermediate</kbd>
+
+Agent with camera vision capabilities using Grok-2 Vision model
+
+**Key concepts:** `video_stream` `grok_vision` `x_ai` `frame_capture` `image_content`
+
+---
 
 #### [Moondream Vision Agent](vision/moondream_vision.py)
 <kbd>intermediate</kbd>
@@ -586,6 +556,7 @@ Moondream Vision Agent
 - **[LiveKit Agents Documentation](https://docs.livekit.io/agents/)** - Comprehensive guides and API reference
 - **[LiveKit Agents GitHub](https://github.com/livekit/agents)** - SDK source code and issues
 - **[LiveKit Cloud](https://cloud.livekit.io)** - Managed infrastructure for production
+
 ---
 
 <div align="center">

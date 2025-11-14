@@ -1,6 +1,6 @@
 version: '1.0'
 description: Index of all LiveKit Agent examples with metadata
-total_examples: 53
+total_examples: 48
 examples:
 - file_path: avatars/hedra/dynamically_created_avatar/agent.py
   title: Dynamically Created Avatar
@@ -83,9 +83,46 @@ examples:
   - Using `register_rpc_method` to register the RPC methods so that the agent can receive messages from the client
   - Using UserData to store state for the cards and the quizzes
   - Using custom data classes to represent the flash cards and quizzes
-- file_path: complex-agents/role-playing/agents/base_agent.py
+- file_path: ecommerce/personal-shopper/personal_shopper.py
+  title: Personal Shopper Multi-Agent
+  category: ecommerce
+  tags:
+  - customer_database
+  - multi_agent_transfer
+  - order_management
+  - customer_identification
+  difficulty: advanced
+  description: E-commerce personal shopper with triage, sales, and returns departments
+  demonstrates:
+  - Customer identification and database management
+  - Three specialized agents with different responsibilities
+  - Order creation and management with pricing
+  - Order history retrieval for returns
+  - Context-aware agent transfers with personalization
+  - Customer database with order tracking
+  - Persistent customer data across sessions
+- file_path: ecommerce/shopify-shopper/shopify.py
+  title: Shopify Voice Shopping Agent
+  category: ecommerce
+  tags:
+  - mcp_server
+  - shopify
+  - dynamic_agent_switching
+  - rpc_navigation
+  - fast_llm_response
+  difficulty: advanced
+  description: Voice shopping assistant for Shopify stores with MCP server integration
+  demonstrates:
+  - MCP server integration for Shopify operations
+  - Dynamic shop switching with agent updates
+  - RPC navigation to frontend browser
+  - Fast LLM for quick acknowledgments
+  - Voice-optimized response formatting
+  - Factory pattern for agent creation
+  - Shop URL handling and validation
+- file_path: gaming/agents/base_agent.py
   title: Base Game Agent
-  category: complex-agents
+  category: gaming
   tags:
   - rpg
   - game-state
@@ -101,9 +138,9 @@ examples:
   - RPC communication for client updates
   - Agent lifecycle management with session data
   - Context truncation and memory management
-- file_path: complex-agents/role-playing/agents/combat_agent.py
+- file_path: gaming/agents/combat_agent.py
   title: Combat Agent
-  category: complex-agents
+  category: gaming
   tags:
   - rpg
   - combat-system
@@ -120,9 +157,9 @@ examples:
   - Experience and loot distribution
   - Dynamic combat flow with player/NPC interactions
   - Combat action validation and execution
-- file_path: complex-agents/role-playing/agent.py
+- file_path: gaming/agent.py
   title: D&D Role-Playing Game
-  category: complex-agents
+  category: gaming
   tags:
   - rpg
   - game_state
@@ -140,45 +177,9 @@ examples:
   - Character creation and stats management
   - Inventory and equipment system
   - Voice acting for different NPCs
-- file_path: complex-agents/drive-thru/drivethru_agent.py
-  title: Drive-Thru Order Agent
-  category: complex-agents
-  tags:
-  - ordering_system
-  - modular_tools
-  - rpc_handlers
-  - background_audio
-  - state_management
-  difficulty: advanced
-  description: Restaurant drive-thru ordering system with modular tools and order management
-  demonstrates:
-  - Modular tool organization for menu items
-  - Dynamic tool generation based on menu data
-  - Order state management with add/remove/list operations
-  - Background audio playback during session
-  - RPC handler registration for external control
-  - Structured userdata for session state
-- file_path: complex-agents/exa-deep-researcher/agent.py
-  title: EXA Deep Researcher
-  category: complex-agents
-  tags:
-  - exa
-  - research
-  - voice_controlled
-  - background_jobs
-  - rpc_streaming
-  difficulty: advanced
-  description: Voice-controlled deep research agent using EXA for web intelligence
-  demonstrates:
-  - Voice-only control
-  - Single background research job with state management
-  - EXA API integration for search and content fetching
-  - RPC streaming to UI for status, notes, and reports
-  - Token-aware compression and concurrency control
-  - Cited final reports saved to disk
-- file_path: complex-agents/role-playing/core/game_state.py
+- file_path: gaming/core/game_state.py
   title: Game State Management
-  category: complex-agents
+  category: gaming
   tags:
   - rpg
   - state-management
@@ -194,28 +195,9 @@ examples:
   - Game progression tracking and history
   - Multi-agent state coordination
   - Combat state integration
-- file_path: complex-agents/ivr-agent/agent.py
-  title: IVR Phone System Navigator
-  category: complex-agents
-  tags:
-  - ivr
-  - dtmf
-  - telephony
-  - sip
-  - participant_attributes
-  - cooldown
-  difficulty: advanced
-  description: Agent that navigates phone IVR systems using DTMF codes
-  demonstrates:
-  - DTMF code transmission for phone navigation
-  - SIP participant detection and handling
-  - Task extraction from participant attributes
-  - Cooldown mechanism for DTMF presses
-  - Dynamic instruction updates based on task
-  - Function tool for sending DTMF codes
-- file_path: complex-agents/role-playing/generators/item_generator.py
+- file_path: gaming/generators/item_generator.py
   title: Item Generator
-  category: complex-agents
+  category: gaming
   tags:
   - rpg
   - procedural-generation
@@ -231,46 +213,9 @@ examples:
   - Automated mechanical property assignment
   - Fallback systems for generation failures
   - JSON parsing and validation for generated content
-- file_path: complex-agents/nova-sonic/form_agent.py
-  title: Job Application Form Agent
-  category: complex-agents
-  tags:
-  - aws_realtime
-  - form_filling
-  - rpc_frontend
-  - interview
-  - structured_data
-  difficulty: advanced
-  description: Interactive interview agent for job applications with AWS Realtime
-  demonstrates:
-  - AWS Realtime model integration
-  - Structured form data collection
-  - RPC communication with frontend for live updates
-  - Multi-section interview process
-  - Field validation and capitalization
-  - Application status tracking
-  - Frontend form highlighting and updates
-- file_path: complex-agents/medical_office_triage/triage.py
-  title: Medical Office Triage System
-  category: complex-agents
-  tags:
-  - multi_agent
-  - agent_transfer
-  - medical
-  - context_preservation
-  - chat_history
-  difficulty: advanced
-  description: Multi-agent medical triage system with specialized departments
-  demonstrates:
-  - Multiple specialized agents (triage, support, billing)
-  - Agent-to-agent transfer with context preservation
-  - Chat history truncation and management
-  - Shared userdata across agent transfers
-  - Room attribute updates for agent tracking
-  - YAML prompt loading for agent instructions
-- file_path: complex-agents/role-playing/generators/npc_generator.py
+- file_path: gaming/generators/npc_generator.py
   title: NPC Generator
-  category: complex-agents
+  category: gaming
   tags:
   - rpg
   - procedural-generation
@@ -286,9 +231,9 @@ examples:
   - Personality and backstory generation
   - Dynamic dialogue creation and management
   - Integration with item generation systems
-- file_path: complex-agents/role-playing/agents/narrator_agent.py
+- file_path: gaming/agents/narrator_agent.py
   title: Narrator Agent
-  category: complex-agents
+  category: gaming
   tags:
   - rpg
   - storytelling
@@ -305,20 +250,39 @@ examples:
   - Character creation and progression
   - Trading and inventory management
   - Skill check resolution and dice rolling
-- file_path: complex-agents/note-taking-assistant/agent.py
-  title: Note Taking Assistant
-  category: complex-agents
+- file_path: hardware/pi-zero-transcriber/pi_zero_transcriber.py
+  title: Pi Zero Transcriber
+  category: hardware
   tags:
-  - complex-agents
-  - cerebras
+  - hardware
+  - openai
   - deepgram
-  difficulty: intermediate
-  description: Shows how to use the Note Taking Assistant.
+  difficulty: beginner
+  description: Shows how to create a simple transcriber that uses the LiveKit SDK to transcribe audio from the microphone.
   demonstrates:
-  - Using the Note Taking Assistant.
-- file_path: complex-agents/nutrition-assistant/agent.py
+  - Using the LiveKit SDK to transcribe audio from the microphone.
+  - Displaying the transcribed text on a Pirate Audio display on a Raspberry Pi Zero 2 W.
+- file_path: healthcare/medical-triage/triage.py
+  title: Medical Office Triage System
+  category: healthcare
+  tags:
+  - multi_agent
+  - agent_transfer
+  - medical
+  - context_preservation
+  - chat_history
+  difficulty: advanced
+  description: Multi-agent medical triage system with specialized departments
+  demonstrates:
+  - Multiple specialized agents (triage, support, billing)
+  - Agent-to-agent transfer with context preservation
+  - Chat history truncation and management
+  - Shared userdata across agent transfers
+  - Room attribute updates for agent tracking
+  - YAML prompt loading for agent instructions
+- file_path: healthcare/nutrition-assistant/agent.py
   title: Nutrition Tracker Assistant
-  category: complex-agents
+  category: healthcare
   tags:
   - sqlite_database
   - nutrition
@@ -335,197 +299,7 @@ examples:
   - Daily summaries and food consumption history
   - Fixed participant identity for testing
   - Initial data sync on connection
-- file_path: complex-agents/personal_shopper/personal_shopper.py
-  title: Personal Shopper Multi-Agent
-  category: complex-agents
-  tags:
-  - customer_database
-  - multi_agent_transfer
-  - order_management
-  - customer_identification
-  difficulty: advanced
-  description: E-commerce personal shopper with triage, sales, and returns departments
-  demonstrates:
-  - Customer identification and database management
-  - Three specialized agents with different responsibilities
-  - Order creation and management with pricing
-  - Order history retrieval for returns
-  - Context-aware agent transfers with personalization
-  - Customer database with order tracking
-  - Persistent customer data across sessions
-- file_path: complex-agents/shopify-voice-shopper/shopify.py
-  title: Shopify Voice Shopping Agent
-  category: complex-agents
-  tags:
-  - mcp_server
-  - shopify
-  - dynamic_agent_switching
-  - rpc_navigation
-  - fast_llm_response
-  difficulty: advanced
-  description: Voice shopping assistant for Shopify stores with MCP server integration
-  demonstrates:
-  - MCP server integration for Shopify operations
-  - Dynamic shop switching with agent updates
-  - RPC navigation to frontend browser
-  - Fast LLM for quick acknowledgments
-  - Voice-optimized response formatting
-  - Factory pattern for agent creation
-  - Shop URL handling and validation
-- file_path: complex-agents/teleprompter/cartesia-ink.py
-  title: Teleprompter Transcription Agent
-  category: complex-agents
-  tags:
-  - rpc_transcript
-  - cartesia_stt
-  - user_input_transcribed
-  - frontend_communication
-  difficulty: intermediate
-  description: Real-time teleprompter that sends transcriptions to frontend via RPC
-  demonstrates:
-  - Cartesia STT for transcription
-  - RPC method registration for status checks
-  - Event handler for final transcriptions
-  - Async RPC calls to send transcripts
-  - Frontend communication pattern
-  - Real-time transcript streaming
-- file_path: complex-agents/turn-taking/agent.py
-  title: Turn-Taking Detection Agent
-  category: complex-agents
-  tags:
-  - eou_probability
-  - turn_detection
-  - gladia_stt
-  - multilingual
-  - rpc_eou_updates
-  difficulty: advanced
-  description: Agent that exposes end-of-utterance probability for turn-taking research
-  demonstrates:
-  - Custom turn detector wrapper exposing EOU probability
-  - Real-time EOU probability RPC updates to frontend
-  - Multilingual STT with Gladia
-  - Percentage formatting for tiny probabilities
-  - Session userdata for RPC communication
-  - STT event processing for transcript logging
-- file_path: complex-agents/vision/agent.py
-  title: Vision-Enabled Agent
-  category: complex-agents
-  tags:
-  - video_stream
-  - grok_vision
-  - x_ai
-  - frame_capture
-  - image_content
-  difficulty: intermediate
-  description: Agent with camera vision capabilities using Grok-2 Vision model
-  demonstrates:
-  - Video stream processing from remote participants
-  - Frame buffering from video tracks
-  - X.AI Grok-2 Vision model integration
-  - Dynamic video track subscription
-  - Image content injection into chat context
-  - Track publication event handling
-- file_path: complex-agents/drive-thru/test_agent.py
-  title: Drive-Thru Agent Test Suite
-  category: drive-thru
-  tags:
-  - pytest
-  - agent_testing
-  - run_result
-  - judge_llm
-  - mock_tools
-  difficulty: advanced
-  description: Comprehensive test suite for drive-thru ordering agent
-  demonstrates:
-  - Agent testing with pytest
-  - RunResult expectations and assertions
-  - LLM judge for intent verification
-  - Tool mocking for error simulation
-  - Order flow testing scenarios
-  - Conversation context testing
-  - ChatContext manipulation
-- file_path: complex-agents/drive-thru/tools/management_tools.py
-  title: Drive-Thru Order Management Tools
-  category: drive-thru
-  tags:
-  - order_tools
-  - rpc_integration
-  - checkout_flow
-  difficulty: intermediate
-  description: Order management tools for drive-thru system
-  demonstrates:
-  - Order removal with validation
-  - Order listing and formatting
-  - Checkout completion flow
-  - RPC integration for UI updates
-  - Error handling with ToolError
-  - Order total calculation
-- file_path: complex-agents/drive-thru/tools/order_tools.py
-  title: Drive-Thru Order Placement Tools
-  category: drive-thru
-  tags:
-  - dynamic_tool_generation
-  - combo_meals
-  - enum_validation
-  - size_handling
-  difficulty: advanced
-  description: Dynamic tool builders for different order types in drive-thru system
-  demonstrates:
-  - Dynamic function tool generation
-  - Enum validation from menu items
-  - Complex parameter schemas with Pydantic
-  - Size validation and error handling
-  - Combo meal configuration
-  - Happy meal ordering
-  - Regular item ordering
-  - Price and details tracking
-- file_path: complex-agents/drive-thru/session_setup.py
-  title: Drive-Thru Session Setup
-  category: drive-thru
-  tags:
-  - session_management
-  - userdata_initialization
-  - background_audio_setup
-  difficulty: intermediate
-  description: Session setup utilities for drive-thru ordering system
-  demonstrates:
-  - Userdata initialization with menu items
-  - Session configuration with agent configs
-  - Background audio player setup
-  - Database integration for menu loading
-  - Max tool steps configuration
-- file_path: complex-agents/exa-deep-researcher/tests/test_agent.py
-  title: EXA Deep Researcher Agent Test Suite
-  category: exa-deep-researcher
-  tags:
-  - pytest
-  - agent_testing
-  - run_result
-  - judge_llm
-  - mock_tools
-  - clarification
-  difficulty: advanced
-  description: Test suite for EXA Deep Researcher agent with clarification flow testing
-  demonstrates:
-  - Agent testing with pytest
-  - RunResult expectations and assertions
-  - LLM judge for intent verification
-  - Tool mocking for EXA client
-  - Clarification flow testing
-  - Multiple conversation turns
-- file_path: hardware/pi-zero-transcriber/pi_zero_transcriber.py
-  title: Pi Zero Transcriber
-  category: hardware
-  tags:
-  - hardware
-  - openai
-  - deepgram
-  difficulty: beginner
-  description: Shows how to create a simple transcriber that uses the LiveKit SDK to transcribe audio from the microphone.
-  demonstrates:
-  - Using the LiveKit SDK to transcribe audio from the microphone.
-  - Displaying the transcribed text on a Pirate Audio display on a Raspberry Pi Zero 2 W.
-- file_path: home_assistant/homeautomation.py
+- file_path: home-automation/homeautomation.py
   title: Home Automation
   category: home-automation
   tags:
@@ -537,9 +311,9 @@ examples:
   demonstrates:
   - Using function tools to control home automation devices.
   - Using a wake word to trigger the agent.
-- file_path: pipeline-llm/interrupt_user.py
+- file_path: llm-pipeline/interrupt_user.py
   title: Interrupt User
-  category: pipeline-llm
+  category: llm-pipeline
   tags:
   - pipeline-llm
   - openai
@@ -550,9 +324,9 @@ examples:
   - Using the `session.say` method to interrupt the user.
   - Using the `allow_interruptions` parameter to prevent the user from interrupting the agent.
   - Once the agent has spoken, it will allow the user to interrupt again.
-- file_path: pipeline-llm/replacing_llm_output.py
+- file_path: llm-pipeline/replacing_llm_output.py
   title: LLM Output Replacement
-  category: pipeline-llm
+  category: llm-pipeline
   tags:
   - deepseek
   - groq
@@ -567,9 +341,9 @@ examples:
   - Text replacement in LLM output
   - Custom llm_node for output manipulation
   - Handling model-specific output formats
-- file_path: pipeline-llm/llm_powered_content_filter.py
+- file_path: llm-pipeline/llm_powered_content_filter.py
   title: LLM-Powered Content Filter
-  category: pipeline-llm
+  category: llm-pipeline
   tags:
   - content_moderation
   - dual_llm
@@ -584,9 +358,9 @@ examples:
   - Custom llm_node override for filtering
   - Handling different chunk formats
   - Real-time content evaluation
-- file_path: pipeline-llm/simple_content_filter.py
+- file_path: llm-pipeline/simple_content_filter.py
   title: Simple Content Filter
-  category: pipeline-llm
+  category: llm-pipeline
   tags:
   - keyword_filtering
   - offensive_terms
@@ -599,52 +373,53 @@ examples:
   - Custom llm_node override
   - Static offensive terms list
   - Stream processing with substitution
-- file_path: pipeline-tts/changing_language/elevenlabs_change_language.py
-  title: ElevenLabs Change Language
-  category: pipeline-tts
+- file_path: productivity/forms/form_agent.py
+  title: Job Application Form Agent
+  category: productivity
   tags:
-  - pipeline-tts
-  - openai
+  - aws_realtime
+  - form_filling
+  - rpc_frontend
+  - interview
+  - structured_data
+  difficulty: advanced
+  description: Interactive interview agent for job applications with AWS Realtime
+  demonstrates:
+  - AWS Realtime model integration
+  - Structured form data collection
+  - RPC communication with frontend for live updates
+  - Multi-section interview process
+  - Field validation and capitalization
+  - Application status tracking
+  - Frontend form highlighting and updates
+- file_path: productivity/note-taking/agent.py
+  title: Note Taking Assistant
+  category: productivity
+  tags:
+  - complex-agents
+  - cerebras
   - deepgram
   difficulty: intermediate
-  description: Shows how to use the ElevenLabs TTS model to change the language of the agent.
+  description: Shows how to use the Note Taking Assistant.
   demonstrates:
-  - Using the `tts.update_options` method to change the language of the agent.
-  - Allowing agents to self-update their own options using function tools.
-- file_path: pipeline-tts/only_greet.py
-  title: Only Greet
-  category: pipeline-tts
+  - Using the Note Taking Assistant.
+- file_path: productivity/teleprompter/cartesia-ink.py
+  title: Teleprompter Transcription Agent
+  category: productivity
   tags:
-  - pipeline-tts
-  - openai
-  - deepgram
-  difficulty: beginner
-  description: Greets the user when they join the room, but doesn't respond to anything else.
-  demonstrates:
-  - This agent only has TTS, so it can only speak, not listen or think.
-- file_path: pipeline-tts/playai_tts.py
-  title: PlayAI TTS
-  category: pipeline-tts
-  tags:
-  - pipeline-tts
-  - openai
-  - deepgram
+  - rpc_transcript
+  - cartesia_stt
+  - user_input_transcribed
+  - frontend_communication
   difficulty: intermediate
-  description: Shows how to use the PlayAI TTS model.
+  description: Real-time teleprompter that sends transcriptions to frontend via RPC
   demonstrates:
-  - Using the PlayAI TTS model.
-- file_path: pipeline-tts/tts_comparison/tts_comparison.py
-  title: TTS Comparison
-  category: pipeline-tts
-  tags:
-  - pipeline-tts
-  - openai
-  - deepgram
-  difficulty: intermediate
-  description: Switches between different TTS providers using function tools.
-  demonstrates:
-  - Using function tools to switch between different TTS providers.
-  - Each function tool returns a new agent with the same instructions, but with a different TTS provider.
+  - Cartesia STT for transcription
+  - RPC method registration for status checks
+  - Event handler for final transcriptions
+  - Async RPC calls to send transcripts
+  - Frontend communication pattern
+  - Real-time transcript streaming
 - file_path: rag/rag_db_builder.py
   title: RAG Database Builder
   category: rag
@@ -680,27 +455,130 @@ examples:
   - Function tool registration
   - Flexible thinking phase handling
   - Random message selection
-- file_path: rpc/rpc_agent.py
-  title: RPC State Management Agent
-  category: rpc
+- file_path: testing/start_test.py
+  title: Basic Agent Test Starter
+  category: research
   tags:
-  - rpc
-  - state-management
-  - crud-operations
-  - session-data
-  - json-handling
-  difficulty: advanced
-  description: Agent demonstrating RPC communication with comprehensive CRUD state management
+  - pytest
+  - basic-testing
+  - getting-started
+  - agent-greeting
+  difficulty: beginner
+  description: Simple starting point for testing voice agents with basic greeting validation
   demonstrates:
-  - RPC payload extraction and JSON parsing
-  - Session-based CRUD operations (Create, Read, Update, Delete)
-  - State management with UUID-based object tracking
-  - RPC method registration and error handling
-  - Function tools integrated with RPC state
-  - Structured error responses and logging
-- file_path: tracking_state/npc_character.py
+  - Basic pytest setup for agent testing
+  - Environment configuration for testing
+  - Simple agent session creation
+  - Basic greeting behavior testing
+  - LLM-based response validation
+- file_path: testing/agent_test.py
+  title: Comprehensive Agent Testing
+  category: research
+  tags:
+  - pytest
+  - agent-testing
+  - function-mocking
+  - conversation-testing
+  - fixtures
+  difficulty: advanced
+  description: Complete test suite for voice agents with fixtures, mocks, and conversation flows
+  demonstrates:
+  - Comprehensive pytest fixtures for agent testing
+  - Function tool mocking and validation
+  - Conversation flow and context testing
+  - Error handling and edge case coverage
+  - Parameterized testing for multiple scenarios
+  - Class-based test organization with shared setup
+- file_path: research/exa-deep-researcher/agent.py
+  title: EXA Deep Researcher
+  category: research
+  tags:
+  - exa
+  - research
+  - voice_controlled
+  - background_jobs
+  - rpc_streaming
+  difficulty: advanced
+  description: Voice-controlled deep research agent using EXA for web intelligence
+  demonstrates:
+  - Voice-only control
+  - Single background research job with state management
+  - EXA API integration for search and content fetching
+  - RPC streaming to UI for status, notes, and reports
+  - Token-aware compression and concurrency control
+  - Cited final reports saved to disk
+- file_path: research/exa-deep-researcher-test.py
+  title: EXA Deep Researcher Agent Test Suite
+  category: research
+  tags:
+  - pytest
+  - agent_testing
+  - run_result
+  - judge_llm
+  - mock_tools
+  - clarification
+  difficulty: advanced
+  description: Test suite for EXA Deep Researcher agent with clarification flow testing
+  demonstrates:
+  - Agent testing with pytest
+  - RunResult expectations and assertions
+  - LLM judge for intent verification
+  - Tool mocking for EXA client
+  - Clarification flow testing
+  - Multiple conversation turns
+- file_path: testing/agent.py
+  title: Function Calling Test Agent
+  category: research
+  tags:
+  - function_calling
+  - console_print
+  - agent_session_config
+  difficulty: beginner
+  description: Testing agent with single print_to_console function
+  demonstrates:
+  - Basic function tool implementation
+  - Console printing functionality
+  - Custom agent instructions
+  - Agent-level STT/LLM/TTS/VAD configuration
+  - on_enter event handler
+  - Returning tuples from function tools
+- file_path: testing/testing_test.py
+  title: Testing Test
+  category: research
+  tags:
+  - pytest
+  - test-validation
+  - duplicate-test
+  - agent-greeting
+  difficulty: beginner
+  description: Duplicate test file demonstrating basic agent testing patterns
+  demonstrates:
+  - Basic pytest async test structure
+  - Agent session lifecycle management
+  - Environment variable loading for tests
+  - Simple greeting validation pattern
+  - LLM judge pattern for response evaluation
+- file_path: research/turn-taking/agent.py
+  title: Turn-Taking Detection Agent
+  category: research
+  tags:
+  - eou_probability
+  - turn_detection
+  - gladia_stt
+  - multilingual
+  - rpc_eou_updates
+  difficulty: advanced
+  description: Agent that exposes end-of-utterance probability for turn-taking research
+  demonstrates:
+  - Custom turn detector wrapper exposing EOU probability
+  - Real-time EOU probability RPC updates to frontend
+  - Multilingual STT with Gladia
+  - Percentage formatting for tiny probabilities
+  - Session userdata for RPC communication
+  - STT event processing for transcript logging
+- file_path: rpc-state/npc_character.py
   title: NPC Character State Tracking
-  category: state-management
+  category: rpc-state
   tags:
   - npc-interaction
   - state-tracking
@@ -716,6 +594,43 @@ examples:
   - Dynamic response variation based on relationship state
   - Agent inheritance patterns for character consistency
   - Session data persistence across interactions
+- file_path: rpc-state/rpc_agent.py
+  title: RPC State Management Agent
+  category: rpc-state
+  tags:
+  - rpc
+  - state-management
+  - crud-operations
+  - session-data
+  - json-handling
+  difficulty: advanced
+  description: Agent demonstrating RPC communication with comprehensive CRUD state management
+  demonstrates:
+  - RPC payload extraction and JSON parsing
+  - Session-based CRUD operations (Create, Read, Update, Delete)
+  - State management with UUID-based object tracking
+  - RPC method registration and error handling
+  - Function tools integrated with RPC state
+  - Structured error responses and logging
+- file_path: telephony/ivr-agent/agent.py
+  title: IVR Phone System Navigator
+  category: telephony
+  tags:
+  - ivr
+  - dtmf
+  - telephony
+  - sip
+  - participant_attributes
+  - cooldown
+  difficulty: advanced
+  description: Agent that navigates phone IVR systems using DTMF codes
+  demonstrates:
+  - DTMF code transmission for phone navigation
+  - SIP participant detection and handling
+  - Task extraction from participant attributes
+  - Cooldown mechanism for DTMF presses
+  - Dynamic instruction updates based on task
+  - Function tool for sending DTMF codes
 - file_path: telephony/sip_lifecycle.py
   title: SIP Lifecycle Management Agent
   category: telephony
@@ -770,73 +685,7 @@ examples:
   - Function tools for call operations
   - Multi-participant call handling
   - Professional call transfer announcements
-- file_path: complex-agents/testing/start_test.py
-  title: Basic Agent Test Starter
-  category: testing
-  tags:
-  - pytest
-  - basic-testing
-  - getting-started
-  - agent-greeting
-  difficulty: beginner
-  description: Simple starting point for testing voice agents with basic greeting validation
-  demonstrates:
-  - Basic pytest setup for agent testing
-  - Environment configuration for testing
-  - Simple agent session creation
-  - Basic greeting behavior testing
-  - LLM-based response validation
-- file_path: complex-agents/testing/agent_test.py
-  title: Comprehensive Agent Testing
-  category: testing
-  tags:
-  - pytest
-  - agent-testing
-  - function-mocking
-  - conversation-testing
-  - fixtures
-  difficulty: advanced
-  description: Complete test suite for voice agents with fixtures, mocks, and conversation flows
-  demonstrates:
-  - Comprehensive pytest fixtures for agent testing
-  - Function tool mocking and validation
-  - Conversation flow and context testing
-  - Error handling and edge case coverage
-  - Parameterized testing for multiple scenarios
-  - Class-based test organization with shared setup
-- file_path: complex-agents/testing/agent.py
-  title: Function Calling Test Agent
-  category: testing
-  tags:
-  - function_calling
-  - console_print
-  - agent_session_config
-  difficulty: beginner
-  description: Testing agent with single print_to_console function
-  demonstrates:
-  - Basic function tool implementation
-  - Console printing functionality
-  - Custom agent instructions
-  - Agent-level STT/LLM/TTS/VAD configuration
-  - on_enter event handler
-  - Returning tuples from function tools
-- file_path: complex-agents/testing/testing_test.py
-  title: Testing Test
-  category: testing
-  tags:
-  - pytest
-  - test-validation
-  - duplicate-test
-  - agent-greeting
-  difficulty: beginner
-  description: Duplicate test file demonstrating basic agent testing patterns
-  demonstrates:
-  - Basic pytest async test structure
-  - Agent session lifecycle management
-  - Environment variable loading for tests
-  - Simple greeting validation pattern
-  - LLM judge pattern for response evaluation
-- file_path: translators/pipeline_translator.py
+- file_path: translation/pipeline_translator.py
   title: Pipeline Translator Agent
   category: translation
   tags:
@@ -853,7 +702,7 @@ examples:
   - Simple translation-focused agent instructions
   - Clean input-to-output translation pipeline
   - Voice-to-voice translation system
-- file_path: translators/tts_translator.py
+- file_path: translation/tts_translator.py
   title: TTS Translator with Gladia STT
   category: translation
   tags:
@@ -871,6 +720,52 @@ examples:
   - Custom STT configuration with translation capabilities
   - Event-driven transcription and speech synthesis
   - Advanced multilingual processing pipeline
+- file_path: tts-audio/elevenlabs_change_language.py
+  title: ElevenLabs Change Language
+  category: tts-audio
+  tags:
+  - pipeline-tts
+  - openai
+  - deepgram
+  difficulty: intermediate
+  description: Shows how to use the ElevenLabs TTS model to change the language of the agent.
+  demonstrates:
+  - Using the `tts.update_options` method to change the language of the agent.
+  - Allowing agents to self-update their own options using function tools.
+- file_path: tts-audio/only_greet.py
+  title: Only Greet
+  category: tts-audio
+  tags:
+  - pipeline-tts
+  - openai
+  - deepgram
+  difficulty: beginner
+  description: Greets the user when they join the room, but doesn't respond to anything else.
+  demonstrates:
+  - This agent only has TTS, so it can only speak, not listen or think.
+- file_path: tts-audio/playai_tts.py
+  title: PlayAI TTS
+  category: tts-audio
+  tags:
+  - pipeline-tts
+  - openai
+  - deepgram
+  difficulty: intermediate
+  description: Shows how to use the PlayAI TTS model.
+  demonstrates:
+  - Using the PlayAI TTS model.
+- file_path: tts-audio/tts_comparison.py
+  title: TTS Comparison
+  category: tts-audio
+  tags:
+  - pipeline-tts
+  - openai
+  - deepgram
+  difficulty: intermediate
+  description: Switches between different TTS providers using function tools.
+  demonstrates:
+  - Using function tools to switch between different TTS providers.
+  - Each function tool returns a new agent with the same instructions, but with a different TTS provider.
 - file_path: vision/moondream_vision.py
   title: Moondream Vision Agent
   category: vision
@@ -881,3 +776,21 @@ examples:
   description: Moondream Vision Agent
   demonstrates:
   - Adding vision capabilities to an agent when the LLM does not have vision capabilities
+- file_path: vision/grok-vision/agent.py
+  title: Vision-Enabled Agent
+  category: vision
+  tags:
+  - video_stream
+  - grok_vision
+  - x_ai
+  - frame_capture
+  - image_content
+  difficulty: intermediate
+  description: Agent with camera vision capabilities using Grok-2 Vision model
+  demonstrates:
+  - Video stream processing from remote participants
+  - Frame buffering from video tracks
+  - X.AI Grok-2 Vision model integration
+  - Dynamic video track subscription
+  - Image content injection into chat context
+  - Track publication event handling
