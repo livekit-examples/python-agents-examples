@@ -1,17 +1,11 @@
 """Observer agent for parallel guardrail monitoring."""
 import logging
-import sys
 import asyncio
 import json
-from pathlib import Path
 from livekit.agents import ConversationItemAddedEvent
 from typing_extensions import TypedDict
-from livekit import rtc
-from livekit.agents.llm import ChatContext, ChatMessage
-from livekit.plugins import openai
+from livekit.agents.llm import ChatContext
 
-# Add parent directory to path for imports
-sys.path.append(str(Path(__file__).parent.parent))
 from utils import load_prompt
 
 logger = logging.getLogger("doheny-surf-desk.observer")
@@ -38,7 +32,7 @@ class ObserverAgent:
     guardrail detection instead of simple keyword matching.
     """
     
-    def __init__(self, session, llm=None):
+    def __init__(self, session, llm):
         """Initialize the observer agent.
         
         Args:
@@ -47,7 +41,7 @@ class ObserverAgent:
         """
         self.session = session
         self.instructions = load_prompt('observer_prompt.yaml')
-        self.llm = llm or openai.LLM(model="gpt-4o-mini")
+        self.llm = llm
         self.conversation_history = []
         self.hints_sent = []
         self.last_eval_transcript_count = 0
@@ -106,37 +100,17 @@ class ObserverAgent:
             
             userdata = self.session.userdata
             userdata_summary = self._format_userdata_summary(userdata)
-            eval_prompt = f"""You are a safety observer for a surf school booking system.
-
-Analyze the following conversation excerpt and identify if any of these issues are present:
-
-1. MINOR DETECTION: Customer is under 18 years old
-2. INJURY MENTION: Customer mentions injuries, medical conditions, or physical limitations
-3. WEATHER CONCERNS: Discussion of dangerous weather/surf conditions
-4. SKILL MISMATCH: Beginner wanting advanced surf spots (Trestles)
-5. VIP CUSTOMER: Customer's name is Jack (case-insensitive) - special 50% discount promotion
-
-Conversation excerpt:
-{conversation_text}
-
-Current user data: {userdata_summary}
-
-Only flag issues that are clearly present in the conversation.
-Provide a brief explanation in the details field.
-
-CRITICAL: Return ONLY raw JSON, no markdown, no code blocks, no explanations.
-Return your response as a JSON object with these exact fields:
-{{
-  "minor_detected": true/false,
-  "injury_mentioned": true/false,
-  "weather_concern": true/false,
-  "skill_mismatch": true/false,
-  "jack_detected": true/false,
-  "details": "brief explanation"
-}}
-
-Example valid response:
-{{"minor_detected": false, "injury_mentioned": false, "weather_concern": false, "skill_mismatch": false, "jack_detected": true, "details": "Customer name is Jack - eligible for VIP discount"}}"""
+            
+            # Format the pre-loaded instructions with current context
+            try:
+                eval_prompt = self.instructions.format(
+                    conversation_text=conversation_text,
+                    userdata_summary=userdata_summary
+                )
+            except KeyError as e:
+                logger.error(f"Missing key in prompt formatting: {e}")
+                # Fallback to basic prompt if formatting fails
+                eval_prompt = f"Analyze this conversation: {conversation_text}"
 
             chat_ctx = ChatContext()
             chat_ctx.add_message(role="user", content=eval_prompt)
@@ -144,7 +118,7 @@ Example valid response:
             response_text = ""
             async with self.llm.chat(chat_ctx=chat_ctx) as stream:
                 async for chunk in stream:
-                    if chunk.delta.content:
+                    if chunk.delta and chunk.delta.content:
                         response_text += chunk.delta.content
             
             if not response_text:
@@ -235,7 +209,7 @@ Example valid response:
         details = eval_result.get('details', '')
         
         if eval_result.get('minor_detected') and 'minor_detected' not in self.hints_sent:
-            logger.warning("[OBSERVER] 🚨 MINOR DETECTED - sending hint")
+            logger.warning("[OBSERVER] MINOR DETECTED - sending hint")
             await self._send_guardrail_hint(
                 severity="CRITICAL",
                 trigger="Minor detected",
@@ -248,7 +222,7 @@ Example valid response:
             self.hints_sent.append('minor_detected')
         
         if eval_result.get('injury_mentioned') and 'injury_mentioned' not in self.hints_sent:
-            logger.warning("[OBSERVER] ⚠️ INJURY MENTIONED")
+            logger.warning("[OBSERVER] INJURY MENTIONED")
             await self._send_guardrail_hint(
                 severity="WARNING",
                 trigger="Injury/medical condition detected",
@@ -261,7 +235,7 @@ Example valid response:
             self.hints_sent.append('injury_mentioned')
         
         if eval_result.get('weather_concern') and 'weather_concern' not in self.hints_sent:
-            logger.warning("[OBSERVER] WEATHER CONCERN - sending WARNING guardrail hint")
+            logger.warning("[OBSERVER] WEATHER CONCERN")
             await self._send_guardrail_hint(
                 severity="WARNING",
                 trigger="Weather/surf conditions concern",
@@ -274,7 +248,7 @@ Example valid response:
             self.hints_sent.append('weather_concern')
         
         if eval_result.get('skill_mismatch') and 'skill_mismatch' not in self.hints_sent:
-            logger.warning("[OBSERVER] SKILL MISMATCH - sending WARNING guardrail hint")
+            logger.warning("[OBSERVER] SKILL MISMATCH")
             await self._send_guardrail_hint(
                 severity="WARNING",
                 trigger="Skill/location mismatch",
@@ -286,8 +260,9 @@ Example valid response:
             )
             self.hints_sent.append('skill_mismatch')
         
+        # Pretty stupid, but just for demo purposes
         if eval_result.get('jack_detected') and 'jack_discount' not in self.hints_sent:
-            logger.warning("[OBSERVER] 🎉 VIP CUSTOMER DETECTED (Jack) - sending discount offer")
+            logger.warning("[OBSERVER] VIP CUSTOMER DETECTED (Jack)")
             await self._send_guardrail_hint(
                 severity="INFO",
                 trigger="VIP Customer - Jack",

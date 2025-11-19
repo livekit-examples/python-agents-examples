@@ -1,7 +1,39 @@
 """Mock tide and weather condition tools."""
 import random
-from datetime import datetime, timedelta
 from typing import Dict, List
+import aiohttp
+import asyncio
+from livekit.agents.llm.tool_context import ToolError
+
+# Doheny Beach is in Dana Point, California (love this place!)
+DANA_POINT_LATITUDE = 33.4670
+DANA_POINT_LONGITUDE = -117.6981
+
+async def get_weather_forecast(
+    forecast_days: float
+) -> str:
+    url = "https://api.open-meteo.com/v1/forecast?daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_sum,precipitation_probability_max,wind_speed_10m_max&timezone=auto"
+    payload = {
+        "latitude": DANA_POINT_LATITUDE,
+        "longitude": DANA_POINT_LONGITUDE,
+        "temperature_unit": "fahrenheit",
+        "forecast_days": forecast_days,
+    }
+
+    try:
+        session = aiohttp.ClientSession()
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with session.get(url, timeout=timeout, params=payload) as resp:
+            body = await resp.text()
+            if resp.status >= 400:
+                raise ToolError(f"error: HTTP {resp.status}: {body}")
+            return body
+    except ToolError:
+        raise
+    except (aiohttp.ClientError, asyncio.TimeoutError) as e:
+        raise ToolError(f"error: {e!s}") from e
+    finally:
+        await session.close()
 
 
 def get_tide_schedule(date: str, spot: str) -> Dict:

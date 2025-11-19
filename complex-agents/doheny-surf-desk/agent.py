@@ -17,12 +17,11 @@ demonstrates:
 ---
 """
 import logging
-from pathlib import Path
 from dotenv import load_dotenv
 
 from livekit.agents import ConversationItemAddedEvent, JobContext, WorkerOptions, cli, RoomInputOptions
 from livekit.agents.voice import AgentSession
-from livekit.plugins import silero, noise_cancellation
+from livekit.plugins import silero, noise_cancellation, openai
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 
@@ -86,29 +85,23 @@ async def entrypoint(ctx: JobContext):
         turn_detection=MultilingualModel(),
     )
 
-    @session.on("conversation_item_added")
-    def on_conversation_item_added(item: ConversationItemAddedEvent):
-        logger.info(f"{item.item.role}: {item.item.content}")
-    
     # Start the observer agent in parallel
-    # Note: Observer monitors and injects hints into active agent's context
-    observer = await start_observer(session)
-    logger.info("Observer agent launched in parallel with context injection")
+    # We will use another LLM for the observer agent (gpt-5 or any other thinking LLM, smarter but slower)
+    # We can use anyother thinking LLM here. This is not realtime, so it's not a problem.
+    # Otherwise we can share the same from main session.
+    # This is why you need OPENAI_API_KEY in your .env file also.
+    llm = openai.LLM(model="gpt-5")
+    await start_observer(session, llm)
     
     # Start the session with FrontDeskAgent
     logger.info("Starting session with FrontDeskAgent")
     await session.start(
-        agent=frontdesk_agent,
+        agent=frontdesk_agent, # You can change the starting agent here to debug some specific part of the workflow
         room=ctx.room,
         room_input_options=RoomInputOptions(
             noise_cancellation=noise_cancellation.BVC(),
         ),
     )
-    
-    # Observer runs in background via session event listeners
-    # No need to await it separately - it will clean up when session ends
-    logger.info("Session completed")
-
 
 if __name__ == "__main__":
     cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))

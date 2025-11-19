@@ -422,8 +422,11 @@ name = "doheny-surf-desk"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "livekit-agents", extra = ["cartesia", "deepgram", "openai", "silero", "turn-detector"] },
+    { name = "livekit-agents" },
     { name = "livekit-plugins-noise-cancellation" },
+    { name = "livekit-plugins-openai" },
+    { name = "livekit-plugins-silero" },
+    { name = "livekit-plugins-turn-detector" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "python-dotenv" },
@@ -438,8 +441,11 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "livekit-agents", extras = ["openai", "silero", "turn-detector", "deepgram", "cartesia"], directory = "../../../../../agent-13/livekit-agents" },
-    { name = "livekit-plugins-noise-cancellation", specifier = "~=0.2" },
+    { name = "livekit-agents", specifier = ">=1.3.2" },
+    { name = "livekit-plugins-noise-cancellation", specifier = "~=0.2.5" },
+    { name = "livekit-plugins-openai", specifier = ">=1.3.2" },
+    { name = "livekit-plugins-silero", specifier = ">=1.3.2" },
+    { name = "livekit-plugins-turn-detector", specifier = ">=1.3.2" },
     { name = "pytest", specifier = ">=8.4.2" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "pytest-asyncio", specifier = ">=1.2.0" },
@@ -879,7 +885,7 @@ wheels = [
 
 [[package]]
 name = "livekit"
-version = "1.0.18"
+version = "1.0.19"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
@@ -887,18 +893,19 @@ dependencies = [
     { name = "protobuf" },
     { name = "types-protobuf" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a2/53/373c8c7dba2a6cd0fc07597da44172304e87ffab6eebf3c05447bddf053e/livekit-1.0.18.tar.gz", hash = "sha256:665c041459e5e124db2d35b20fe4f170ea75156d6831d7dd1f9d40aeef127358", size = 312250, upload-time = "2025-11-04T00:00:45.175Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4a/45/37880a2ccc1dfdf51a0653a6a9591bd22ed54fc2a351a640cbb45a7c6f47/livekit-1.0.19.tar.gz", hash = "sha256:1617162fe42ae2d3b18745ef0e40a15bcab7bd27aef6e6f47787f03865f55b07", size = 312287, upload-time = "2025-11-13T07:18:19.134Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/71/c5/1510868123ec9c77ac7a44ab82f486c464a5b6fa4beaa386f4429259ef72/livekit-1.0.18-py3-none-macosx_10_9_x86_64.whl", hash = "sha256:21089a02ae1f6c479dd9da03af6f6324062cfcb8ff179c6dfcc81a15dae3b853", size = 11052357, upload-time = "2025-11-04T00:00:33.672Z" },
-    { url = "https://files.pythonhosted.org/packages/42/90/6770d9088ecd60030381c3e6f25708e19e08cf211fc63911951d79b2e115/livekit-1.0.18-py3-none-macosx_11_0_arm64.whl", hash = "sha256:730b1935970a27128ccfb69f5393110d0e5d089d9d90a08ec0f8bb0653a8427f", size = 9815983, upload-time = "2025-11-04T00:00:35.977Z" },
-    { url = "https://files.pythonhosted.org/packages/f7/81/1d4580b4a78cebf9676fb079ca928d5dd0ca4ad5fece2470fcbca437053a/livekit-1.0.18-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:4a67911db46a2a86bb46f44877486a9b65baf6fffeb2953309bf1d7f9e6c2233", size = 11285760, upload-time = "2025-11-04T00:00:38.084Z" },
-    { url = "https://files.pythonhosted.org/packages/f1/94/2d52269235bdd6d6f13a7bb312d652cc09863fe095a28732e987a0a1174d/livekit-1.0.18-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:91d669facd7e5b306bac54c2f5e25212d638c1165a9e1a141e139fd86cba1d98", size = 12599533, upload-time = "2025-11-04T00:00:40.591Z" },
-    { url = "https://files.pythonhosted.org/packages/07/a1/1b02462e2db29894b67208386cbd86d5c765f5134907ed384b3796a8b536/livekit-1.0.18-py3-none-win_amd64.whl", hash = "sha256:c6a2984d8d391f59a27b1d8dfad01a48c8ae9f34805ad6bf9e9a76177dd5f5ed", size = 11715740, upload-time = "2025-11-04T00:00:43.135Z" },
+    { url = "https://files.pythonhosted.org/packages/23/37/3d00ce2ee6be91bc5368e81b9d542d1699c40290605092012d425bb16ec1/livekit-1.0.19-py3-none-macosx_10_9_x86_64.whl", hash = "sha256:ee1eccf6d23444ef7f70fcd6b577bbf0e5b112773546079f21d75c1de40e8a7f", size = 11052368, upload-time = "2025-11-13T07:18:08.727Z" },
+    { url = "https://files.pythonhosted.org/packages/58/08/558b1ff1cdef41cdd03be585f5d30518bfbf9a61b59c887516ac296870ca/livekit-1.0.19-py3-none-macosx_11_0_arm64.whl", hash = "sha256:efc0ec1f8ce9e53e94a0f9f5b0982bf5a28e8ef9360416b7e0ab06c129ec8fa4", size = 9815994, upload-time = "2025-11-13T07:18:10.977Z" },
+    { url = "https://files.pythonhosted.org/packages/15/de/33e24274348da3d4746226783386c5a7232e7be12f40a1bc4c5183ff92e4/livekit-1.0.19-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:d4e72a39c74a9c93cd928c2dfb19ec1d0212a33938afcc6b72f0fa08bc0cc6b8", size = 11285770, upload-time = "2025-11-13T07:18:13.188Z" },
+    { url = "https://files.pythonhosted.org/packages/e4/a7/d6dea477eca5f0335c1d75bbbc7673427c62f51a057a4a03b288bbbdc8e7/livekit-1.0.19-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:c1da7c6c0640b6a26f67fe6a42c76428c33080a59a8753776c298c08b3dcb8bc", size = 12599543, upload-time = "2025-11-13T07:18:15.243Z" },
+    { url = "https://files.pythonhosted.org/packages/d8/7c/2fdf4a053d4df67ce8f322aaabc4b6020304368c10897b72481ae9d56244/livekit-1.0.19-py3-none-win_amd64.whl", hash = "sha256:4d5368afa82e08d2030fc2697f41d5f3e1dcada40fac62197e2f8cffdb5a70f9", size = 11715750, upload-time = "2025-11-13T07:18:17.296Z" },
 ]
 
 [[package]]
 name = "livekit-agents"
-source = { editable = "../../../../../agent-13/livekit-agents" }
+version = "1.3.2"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiofiles" },
     { name = "aiohttp" },
@@ -929,109 +936,19 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "watchfiles" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/07/8a/2f652864b99ff3410fb26f8bbec72654fb48c99819f1e654d08dde188fdd/livekit_agents-1.3.2.tar.gz", hash = "sha256:86672304346c8949bbf62629f5fb6af2f94c8b8bee90bd1eaa5833da4916de6c", size = 561382, upload-time = "2025-11-17T06:38:46.386Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7d/ad/c6663c80cc817eb868d8b7cabf8e0526d0f8d3b3d1a79c37e163c0ab071d/livekit_agents-1.3.2-py3-none-any.whl", hash = "sha256:62c4912ba7a9ab2943d203bf9359d52811eed8e9eedf8dd90a9b9f8cdd62c9a5", size = 636045, upload-time = "2025-11-17T06:38:44.428Z" },
+]
 
 [package.optional-dependencies]
-cartesia = [
-    { name = "livekit-plugins-cartesia" },
-]
 codecs = [
     { name = "av" },
     { name = "numpy" },
 ]
-deepgram = [
-    { name = "livekit-plugins-deepgram" },
-]
 images = [
     { name = "pillow" },
 ]
-openai = [
-    { name = "livekit-plugins-openai" },
-]
-silero = [
-    { name = "livekit-plugins-silero" },
-]
-turn-detector = [
-    { name = "livekit-plugins-turn-detector" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "aiofiles", specifier = ">=24" },
-    { name = "aiohttp", specifier = "~=3.10" },
-    { name = "av", specifier = ">=14.0.0,<16" },
-    { name = "av", marker = "extra == 'codecs'", specifier = ">=12.0.0" },
-    { name = "certifi", specifier = ">=2025.6.15" },
-    { name = "click", specifier = "~=8.1" },
-    { name = "colorama", specifier = ">=0.4.6" },
-    { name = "docstring-parser", specifier = ">=0.16" },
-    { name = "eval-type-backport" },
-    { name = "livekit", specifier = ">=1.0.12,<2" },
-    { name = "livekit-api", specifier = ">=1.0.7,<2" },
-    { name = "livekit-blingfire", specifier = "~=1.0" },
-    { name = "livekit-plugins-anam", marker = "extra == 'anam'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-anam" },
-    { name = "livekit-plugins-anthropic", marker = "extra == 'anthropic'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-anthropic" },
-    { name = "livekit-plugins-assemblyai", marker = "extra == 'assemblyai'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-assemblyai" },
-    { name = "livekit-plugins-aws", marker = "extra == 'aws'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-aws" },
-    { name = "livekit-plugins-azure", marker = "extra == 'azure'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-azure" },
-    { name = "livekit-plugins-baseten", marker = "extra == 'baseten'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-baseten" },
-    { name = "livekit-plugins-bey", marker = "extra == 'bey'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-bey" },
-    { name = "livekit-plugins-bithuman", marker = "extra == 'bithuman'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-bithuman" },
-    { name = "livekit-plugins-cartesia", marker = "extra == 'cartesia'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-cartesia" },
-    { name = "livekit-plugins-clova", marker = "extra == 'clova'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-clova" },
-    { name = "livekit-plugins-deepgram", marker = "extra == 'deepgram'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-deepgram" },
-    { name = "livekit-plugins-elevenlabs", marker = "extra == 'elevenlabs'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-elevenlabs" },
-    { name = "livekit-plugins-fal", marker = "extra == 'fal'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-fal" },
-    { name = "livekit-plugins-fireworksai", marker = "extra == 'fireworksai'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-fireworksai" },
-    { name = "livekit-plugins-fishaudio", marker = "python_full_version >= '3.10' and extra == 'fishaudio'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-fishaudio" },
-    { name = "livekit-plugins-gladia", marker = "extra == 'gladia'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-gladia" },
-    { name = "livekit-plugins-google", marker = "extra == 'google'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-google" },
-    { name = "livekit-plugins-groq", marker = "extra == 'groq'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-groq" },
-    { name = "livekit-plugins-hedra", marker = "extra == 'hedra'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-hedra" },
-    { name = "livekit-plugins-hume", marker = "extra == 'hume'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-hume" },
-    { name = "livekit-plugins-inworld", marker = "extra == 'inworld'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-inworld" },
-    { name = "livekit-plugins-langchain", marker = "extra == 'langchain'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-langchain" },
-    { name = "livekit-plugins-lmnt", marker = "extra == 'lmnt'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-lmnt" },
-    { name = "livekit-plugins-minimax-ai", marker = "extra == 'minimax'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-minimax" },
-    { name = "livekit-plugins-mistralai", marker = "extra == 'mistralai'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-mistralai" },
-    { name = "livekit-plugins-neuphonic", marker = "extra == 'neuphonic'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-neuphonic" },
-    { name = "livekit-plugins-nltk", marker = "extra == 'nltk'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-nltk" },
-    { name = "livekit-plugins-openai", marker = "extra == 'openai'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-openai" },
-    { name = "livekit-plugins-resemble", marker = "extra == 'resemble'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-resemble" },
-    { name = "livekit-plugins-rime", marker = "extra == 'rime'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-rime" },
-    { name = "livekit-plugins-sarvam", marker = "extra == 'sarvam'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-sarvam" },
-    { name = "livekit-plugins-silero", marker = "extra == 'silero'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-silero" },
-    { name = "livekit-plugins-simli", marker = "extra == 'simli'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-simli" },
-    { name = "livekit-plugins-smallestai", marker = "extra == 'smallestai'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-smallestai" },
-    { name = "livekit-plugins-soniox", marker = "extra == 'soniox'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-soniox" },
-    { name = "livekit-plugins-speechify", marker = "extra == 'speechify'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-speechify" },
-    { name = "livekit-plugins-speechmatics", marker = "extra == 'speechmatics'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-speechmatics" },
-    { name = "livekit-plugins-spitch", marker = "extra == 'spitch'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-spitch" },
-    { name = "livekit-plugins-tavus", marker = "extra == 'tavus'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-tavus" },
-    { name = "livekit-plugins-turn-detector", marker = "extra == 'turn-detector'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-turn-detector" },
-    { name = "livekit-plugins-ultravox", marker = "extra == 'ultravox'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-ultravox" },
-    { name = "livekit-plugins-upliftai", marker = "extra == 'upliftai'", editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-upliftai" },
-    { name = "livekit-protocol", specifier = ">=1.0.8,<2" },
-    { name = "mcp", marker = "python_full_version >= '3.10' and extra == 'mcp'", specifier = ">=1.10.0,<2" },
-    { name = "nest-asyncio", specifier = ">=1.6.0" },
-    { name = "numpy", specifier = ">=1.26.0" },
-    { name = "numpy", marker = "extra == 'codecs'", specifier = ">=1.26.0" },
-    { name = "openai", specifier = ">=1.99.2" },
-    { name = "opentelemetry-api", specifier = ">=1.34" },
-    { name = "opentelemetry-exporter-otlp", specifier = ">=1.34.1" },
-    { name = "opentelemetry-sdk", specifier = ">=1.34.1" },
-    { name = "pillow", marker = "extra == 'images'", specifier = ">=10.3.0" },
-    { name = "prometheus-client", specifier = ">=0.22" },
-    { name = "protobuf", specifier = ">=3" },
-    { name = "psutil", specifier = ">=7.0" },
-    { name = "pydantic", specifier = ">=2.0,<3" },
-    { name = "pyjwt", specifier = ">=2.0" },
-    { name = "sounddevice", specifier = ">=0.5" },
-    { name = "typer", specifier = ">=0.15.1" },
-    { name = "types-protobuf", specifier = ">=4" },
-    { name = "typing-extensions", specifier = ">=4.12" },
-    { name = "watchfiles", specifier = ">=1.0" },
-]
-provides-extras = ["anam", "anthropic", "assemblyai", "aws", "azure", "baseten", "bey", "bithuman", "cartesia", "clova", "codecs", "deepgram", "elevenlabs", "fal", "fireworksai", "fishaudio", "gladia", "google", "groq", "hedra", "hume", "images", "inworld", "langchain", "lmnt", "mcp", "minimax", "mistralai", "neuphonic", "nltk", "openai", "resemble", "rime", "sarvam", "silero", "simli", "smallestai", "soniox", "speechify", "speechmatics", "spitch", "tavus", "turn-detector", "ultravox", "upliftai"]
 
 [[package]]
 name = "livekit-api"
@@ -1072,30 +989,6 @@ wheels = [
 ]
 
 [[package]]
-name = "livekit-plugins-cartesia"
-source = { editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-cartesia" }
-dependencies = [
-    { name = "livekit-agents" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "livekit-agents", editable = "../../../../../agent-13/livekit-agents" }]
-
-[[package]]
-name = "livekit-plugins-deepgram"
-source = { editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-deepgram" }
-dependencies = [
-    { name = "livekit-agents", extra = ["codecs"] },
-    { name = "numpy" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "livekit-agents", extras = ["codecs"], editable = "../../../../../agent-13/livekit-agents" },
-    { name = "numpy", specifier = ">=1.26" },
-]
-
-[[package]]
 name = "livekit-plugins-noise-cancellation"
 version = "0.2.5"
 source = { registry = "https://pypi.org/simple" }
@@ -1112,39 +1005,35 @@ wheels = [
 
 [[package]]
 name = "livekit-plugins-openai"
-source = { editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-openai" }
+version = "1.3.2"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "livekit-agents", extra = ["codecs", "images"] },
     { name = "openai", extra = ["realtime"] },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "google-auth", marker = "extra == 'vertex'", specifier = ">=2.0.0" },
-    { name = "livekit-agents", extras = ["codecs", "images"], editable = "../../../../../agent-13/livekit-agents" },
-    { name = "openai", extras = ["realtime"], specifier = ">=1.107.2" },
+sdist = { url = "https://files.pythonhosted.org/packages/91/75/d99dfef21f2dfd90b1600feccd05f6213bdc4e685d11fac7a29091437be1/livekit_plugins_openai-1.3.2.tar.gz", hash = "sha256:7d2d1221cbb5674a1dc650475f513ff65d0b17e70aa937c620b5f6b85ab8e7ee", size = 45468, upload-time = "2025-11-17T06:39:39.584Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8b/41/2baa0dab5817a6365e6b59059e918abe498c03c9f31202d52913d8ea1b2b/livekit_plugins_openai-1.3.2-py3-none-any.whl", hash = "sha256:6c227c202690c7802b55828f807cc371f79ef9e51366d1a157285602de05fab0", size = 52276, upload-time = "2025-11-17T06:39:38.283Z" },
 ]
-provides-extras = ["vertex"]
 
 [[package]]
 name = "livekit-plugins-silero"
-source = { editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-silero" }
+version = "1.3.2"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "livekit-agents" },
     { name = "numpy" },
     { name = "onnxruntime" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "livekit-agents", editable = "../../../../../agent-13/livekit-agents" },
-    { name = "numpy", specifier = ">=1.26" },
-    { name = "onnxruntime", specifier = ">=1.18,<=1.23.1" },
+sdist = { url = "https://files.pythonhosted.org/packages/9f/54/f4a53abd8f04a01ab5cf37ba59f5ce9b372de1c2802c292a23e3407e2bae/livekit_plugins_silero-1.3.2.tar.gz", hash = "sha256:0a13add9d74a8c434e6a91c05c8660988bffa58abe011c20c4fe0e22f13ed98d", size = 1955359, upload-time = "2025-11-17T06:39:48.66Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3b/1a/3ef8232ab0c4bea410599afb1b3b2b12566068436938121c9a77ee29ac14/livekit_plugins_silero-1.3.2-py3-none-any.whl", hash = "sha256:94b81f974e8583c62da9ce95dbdf0c0e8af7ee9eaf3aeb4495d4d4a56e98765a", size = 3903485, upload-time = "2025-11-17T06:39:47.15Z" },
 ]
 
 [[package]]
 name = "livekit-plugins-turn-detector"
-source = { editable = "../../../../../agent-13/livekit-plugins/livekit-plugins-turn-detector" }
+version = "1.3.2"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
     { name = "livekit-agents" },
@@ -1152,27 +1041,22 @@ dependencies = [
     { name = "onnxruntime" },
     { name = "transformers" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "jinja2" },
-    { name = "livekit-agents", editable = "../../../../../agent-13/livekit-agents" },
-    { name = "numpy", specifier = ">=1.26" },
-    { name = "onnxruntime", specifier = ">=1.18" },
-    { name = "transformers", specifier = ">=4.47.1" },
+sdist = { url = "https://files.pythonhosted.org/packages/c9/10/d1b50690555a32d98e13d4747a231f2c2c22bcc71567a05d01fd41b64c59/livekit_plugins_turn_detector-1.3.2.tar.gz", hash = "sha256:4e0f0906ec0085e24120be6618dd3a29ac523ad6258726658554eee974feb49d", size = 8688, upload-time = "2025-11-17T06:40:00.983Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f9/1b/4b280d3610cd4c82a7c77bef40d70ec0f107b8ca5b67267945a58eb22c69/livekit_plugins_turn_detector-1.3.2-py3-none-any.whl", hash = "sha256:de09277e91610b10c29016cbbd5ae113601584580a7918cf5c06068f8479df7a", size = 10354, upload-time = "2025-11-17T06:40:00.09Z" },
 ]
 
 [[package]]
 name = "livekit-protocol"
-version = "1.0.8"
+version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "protobuf" },
     { name = "types-protobuf" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/48/b1/289729f058eb04014584a8f21c48fbd5907b125db71d69a236195c69da62/livekit_protocol-1.0.8.tar.gz", hash = "sha256:735e9b8825ccfebdcfa6db8d1a007b12db6bc1558304be803b672a504207c814", size = 60831, upload-time = "2025-10-08T22:18:35.505Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ca/ce/21822e6d2289cc19327547d81f0a0acb45203bfc8bfa8920ec054ffd582e/livekit_protocol-1.1.0.tar.gz", hash = "sha256:3085f8ae28b86b58c066b37019cb4c6b4df0a9ac52949d36ebbaddf7ef00f483", size = 61550, upload-time = "2025-11-08T07:45:14.899Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b9/de/9f8474c33689ced5e7b0bd20a9f34419e876628ce9e6fab66368759b6853/livekit_protocol-1.0.8-py3-none-any.whl", hash = "sha256:77fb929589728949d2b4bc50874e260f1fc1a6dcf0f1e6f37095c8ffdc246556", size = 72495, upload-time = "2025-10-08T22:18:34.162Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/f5/56e33f63a24c983142fe60989101f7f3a616e280a16e2a651db59a284125/livekit_protocol-1.1.0-py3-none-any.whl", hash = "sha256:840cf59ed3ba970fdc13fa0e6e205669be265afda2b8dba950a89e9841419e0e", size = 73146, upload-time = "2025-11-08T07:45:13.417Z" },
 ]
 
 [[package]]
@@ -2272,24 +2156,24 @@ wheels = [
 
 [[package]]
 name = "safetensors"
-version = "0.6.2"
+version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ac/cc/738f3011628920e027a11754d9cae9abec1aed00f7ae860abbf843755233/safetensors-0.6.2.tar.gz", hash = "sha256:43ff2aa0e6fa2dc3ea5524ac7ad93a9839256b8703761e76e2d0b2a3fa4f15d9", size = 197968, upload-time = "2025-08-08T13:13:58.654Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/29/9c/6e74567782559a63bd040a236edca26fd71bc7ba88de2ef35d75df3bca5e/safetensors-0.7.0.tar.gz", hash = "sha256:07663963b67e8bd9f0b8ad15bb9163606cd27cc5a1b96235a50d8369803b96b0", size = 200878, upload-time = "2025-11-19T15:18:43.199Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4d/b1/3f5fd73c039fc87dba3ff8b5d528bfc5a32b597fea8e7a6a4800343a17c7/safetensors-0.6.2-cp38-abi3-macosx_10_12_x86_64.whl", hash = "sha256:9c85ede8ec58f120bad982ec47746981e210492a6db876882aa021446af8ffba", size = 454797, upload-time = "2025-08-08T13:13:52.066Z" },
-    { url = "https://files.pythonhosted.org/packages/8c/c9/bb114c158540ee17907ec470d01980957fdaf87b4aa07914c24eba87b9c6/safetensors-0.6.2-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:d6675cf4b39c98dbd7d940598028f3742e0375a6b4d4277e76beb0c35f4b843b", size = 432206, upload-time = "2025-08-08T13:13:50.931Z" },
-    { url = "https://files.pythonhosted.org/packages/d3/8e/f70c34e47df3110e8e0bb268d90db8d4be8958a54ab0336c9be4fe86dac8/safetensors-0.6.2-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:1d2d2b3ce1e2509c68932ca03ab8f20570920cd9754b05063d4368ee52833ecd", size = 473261, upload-time = "2025-08-08T13:13:41.259Z" },
-    { url = "https://files.pythonhosted.org/packages/2a/f5/be9c6a7c7ef773e1996dc214e73485286df1836dbd063e8085ee1976f9cb/safetensors-0.6.2-cp38-abi3-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:93de35a18f46b0f5a6a1f9e26d91b442094f2df02e9fd7acf224cfec4238821a", size = 485117, upload-time = "2025-08-08T13:13:43.506Z" },
-    { url = "https://files.pythonhosted.org/packages/c9/55/23f2d0a2c96ed8665bf17a30ab4ce5270413f4d74b6d87dd663258b9af31/safetensors-0.6.2-cp38-abi3-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:89a89b505f335640f9120fac65ddeb83e40f1fd081cb8ed88b505bdccec8d0a1", size = 616154, upload-time = "2025-08-08T13:13:45.096Z" },
-    { url = "https://files.pythonhosted.org/packages/98/c6/affb0bd9ce02aa46e7acddbe087912a04d953d7a4d74b708c91b5806ef3f/safetensors-0.6.2-cp38-abi3-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:fc4d0d0b937e04bdf2ae6f70cd3ad51328635fe0e6214aa1fc811f3b576b3bda", size = 520713, upload-time = "2025-08-08T13:13:46.25Z" },
-    { url = "https://files.pythonhosted.org/packages/fe/5d/5a514d7b88e310c8b146e2404e0dc161282e78634d9358975fd56dfd14be/safetensors-0.6.2-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8045db2c872db8f4cbe3faa0495932d89c38c899c603f21e9b6486951a5ecb8f", size = 485835, upload-time = "2025-08-08T13:13:49.373Z" },
-    { url = "https://files.pythonhosted.org/packages/7a/7b/4fc3b2ba62c352b2071bea9cfbad330fadda70579f617506ae1a2f129cab/safetensors-0.6.2-cp38-abi3-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:81e67e8bab9878bb568cffbc5f5e655adb38d2418351dc0859ccac158f753e19", size = 521503, upload-time = "2025-08-08T13:13:47.651Z" },
-    { url = "https://files.pythonhosted.org/packages/5a/50/0057e11fe1f3cead9254315a6c106a16dd4b1a19cd247f7cc6414f6b7866/safetensors-0.6.2-cp38-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:b0e4d029ab0a0e0e4fdf142b194514695b1d7d3735503ba700cf36d0fc7136ce", size = 652256, upload-time = "2025-08-08T13:13:53.167Z" },
-    { url = "https://files.pythonhosted.org/packages/e9/29/473f789e4ac242593ac1656fbece6e1ecd860bb289e635e963667807afe3/safetensors-0.6.2-cp38-abi3-musllinux_1_2_armv7l.whl", hash = "sha256:fa48268185c52bfe8771e46325a1e21d317207bcabcb72e65c6e28e9ffeb29c7", size = 747281, upload-time = "2025-08-08T13:13:54.656Z" },
-    { url = "https://files.pythonhosted.org/packages/68/52/f7324aad7f2df99e05525c84d352dc217e0fa637a4f603e9f2eedfbe2c67/safetensors-0.6.2-cp38-abi3-musllinux_1_2_i686.whl", hash = "sha256:d83c20c12c2d2f465997c51b7ecb00e407e5f94d7dec3ea0cc11d86f60d3fde5", size = 692286, upload-time = "2025-08-08T13:13:55.884Z" },
-    { url = "https://files.pythonhosted.org/packages/ad/fe/cad1d9762868c7c5dc70c8620074df28ebb1a8e4c17d4c0cb031889c457e/safetensors-0.6.2-cp38-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:d944cea65fad0ead848b6ec2c37cc0b197194bec228f8020054742190e9312ac", size = 655957, upload-time = "2025-08-08T13:13:57.029Z" },
-    { url = "https://files.pythonhosted.org/packages/59/a7/e2158e17bbe57d104f0abbd95dff60dda916cf277c9f9663b4bf9bad8b6e/safetensors-0.6.2-cp38-abi3-win32.whl", hash = "sha256:cab75ca7c064d3911411461151cb69380c9225798a20e712b102edda2542ddb1", size = 308926, upload-time = "2025-08-08T13:14:01.095Z" },
-    { url = "https://files.pythonhosted.org/packages/2c/c3/c0be1135726618dc1e28d181b8c442403d8dbb9e273fd791de2d4384bcdd/safetensors-0.6.2-cp38-abi3-win_amd64.whl", hash = "sha256:c7b214870df923cbc1593c3faee16bec59ea462758699bd3fee399d00aac072c", size = 320192, upload-time = "2025-08-08T13:13:59.467Z" },
+    { url = "https://files.pythonhosted.org/packages/fa/47/aef6c06649039accf914afef490268e1067ed82be62bcfa5b7e886ad15e8/safetensors-0.7.0-cp38-abi3-macosx_10_12_x86_64.whl", hash = "sha256:c82f4d474cf725255d9e6acf17252991c3c8aac038d6ef363a4bf8be2f6db517", size = 467781, upload-time = "2025-11-19T15:18:35.84Z" },
+    { url = "https://files.pythonhosted.org/packages/e8/00/374c0c068e30cd31f1e1b46b4b5738168ec79e7689ca82ee93ddfea05109/safetensors-0.7.0-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:94fd4858284736bb67a897a41608b5b0c2496c9bdb3bf2af1fa3409127f20d57", size = 447058, upload-time = "2025-11-19T15:18:34.416Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/06/578ffed52c2296f93d7fd2d844cabfa92be51a587c38c8afbb8ae449ca89/safetensors-0.7.0-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e07d91d0c92a31200f25351f4acb2bc6aff7f48094e13ebb1d0fb995b54b6542", size = 491748, upload-time = "2025-11-19T15:18:09.79Z" },
+    { url = "https://files.pythonhosted.org/packages/ae/33/1debbbb70e4791dde185edb9413d1fe01619255abb64b300157d7f15dddd/safetensors-0.7.0-cp38-abi3-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:8469155f4cb518bafb4acf4865e8bb9d6804110d2d9bdcaa78564b9fd841e104", size = 503881, upload-time = "2025-11-19T15:18:16.145Z" },
+    { url = "https://files.pythonhosted.org/packages/8e/1c/40c2ca924d60792c3be509833df711b553c60effbd91da6f5284a83f7122/safetensors-0.7.0-cp38-abi3-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:54bef08bf00a2bff599982f6b08e8770e09cc012d7bba00783fc7ea38f1fb37d", size = 623463, upload-time = "2025-11-19T15:18:21.11Z" },
+    { url = "https://files.pythonhosted.org/packages/9b/3a/13784a9364bd43b0d61eef4bea2845039bc2030458b16594a1bd787ae26e/safetensors-0.7.0-cp38-abi3-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:42cb091236206bb2016d245c377ed383aa7f78691748f3bb6ee1bfa51ae2ce6a", size = 532855, upload-time = "2025-11-19T15:18:25.719Z" },
+    { url = "https://files.pythonhosted.org/packages/a0/60/429e9b1cb3fc651937727befe258ea24122d9663e4d5709a48c9cbfceecb/safetensors-0.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dac7252938f0696ddea46f5e855dd3138444e82236e3be475f54929f0c510d48", size = 507152, upload-time = "2025-11-19T15:18:33.023Z" },
+    { url = "https://files.pythonhosted.org/packages/3c/a8/4b45e4e059270d17af60359713ffd83f97900d45a6afa73aaa0d737d48b6/safetensors-0.7.0-cp38-abi3-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:1d060c70284127fa805085d8f10fbd0962792aed71879d00864acda69dbab981", size = 541856, upload-time = "2025-11-19T15:18:31.075Z" },
+    { url = "https://files.pythonhosted.org/packages/06/87/d26d8407c44175d8ae164a95b5a62707fcc445f3c0c56108e37d98070a3d/safetensors-0.7.0-cp38-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:cdab83a366799fa730f90a4ebb563e494f28e9e92c4819e556152ad55e43591b", size = 674060, upload-time = "2025-11-19T15:18:37.211Z" },
+    { url = "https://files.pythonhosted.org/packages/11/f5/57644a2ff08dc6325816ba7217e5095f17269dada2554b658442c66aed51/safetensors-0.7.0-cp38-abi3-musllinux_1_2_armv7l.whl", hash = "sha256:672132907fcad9f2aedcb705b2d7b3b93354a2aec1b2f706c4db852abe338f85", size = 771715, upload-time = "2025-11-19T15:18:38.689Z" },
+    { url = "https://files.pythonhosted.org/packages/86/31/17883e13a814bd278ae6e266b13282a01049b0c81341da7fd0e3e71a80a3/safetensors-0.7.0-cp38-abi3-musllinux_1_2_i686.whl", hash = "sha256:5d72abdb8a4d56d4020713724ba81dac065fedb7f3667151c4a637f1d3fb26c0", size = 714377, upload-time = "2025-11-19T15:18:40.162Z" },
+    { url = "https://files.pythonhosted.org/packages/4a/d8/0c8a7dc9b41dcac53c4cbf9df2b9c83e0e0097203de8b37a712b345c0be5/safetensors-0.7.0-cp38-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:b0f6d66c1c538d5a94a73aa9ddca8ccc4227e6c9ff555322ea40bdd142391dd4", size = 677368, upload-time = "2025-11-19T15:18:41.627Z" },
+    { url = "https://files.pythonhosted.org/packages/05/e5/cb4b713c8a93469e3c5be7c3f8d77d307e65fe89673e731f5c2bfd0a9237/safetensors-0.7.0-cp38-abi3-win32.whl", hash = "sha256:c74af94bf3ac15ac4d0f2a7c7b4663a15f8c2ab15ed0fc7531ca61d0835eccba", size = 326423, upload-time = "2025-11-19T15:18:45.74Z" },
+    { url = "https://files.pythonhosted.org/packages/5d/e6/ec8471c8072382cb91233ba7267fd931219753bb43814cbc71757bfd4dab/safetensors-0.7.0-cp38-abi3-win_amd64.whl", hash = "sha256:d1239932053f56f3456f32eb9625590cc7582e905021f94636202a864d470755", size = 341380, upload-time = "2025-11-19T15:18:44.427Z" },
 ]
 
 [[package]]

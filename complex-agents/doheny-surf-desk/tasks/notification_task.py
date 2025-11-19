@@ -1,16 +1,10 @@
 """Notification task for sending booking confirmations."""
-import asyncio
 import random
 from datetime import datetime
 from dataclasses import dataclass
 from livekit.agents import AgentTask, function_tool
-from livekit.agents.voice import RunContext
-import sys
-from pathlib import Path
 
-# Add parent directory to path for imports
-sys.path.append(str(Path(__file__).parent.parent))
-from utils import format_booking_summary, format_gear_checklist, load_reading_guidelines
+from utils import format_gear_checklist, load_reading_guidelines
 
 
 def mock_send_notification(email: str, phone: str, message: str, channel: str = "email") -> dict:

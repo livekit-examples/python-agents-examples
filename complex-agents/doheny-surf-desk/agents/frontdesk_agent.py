@@ -1,11 +1,7 @@
 """Front desk agent for initial consultation and routing."""
-import sys
-from pathlib import Path
 from livekit.agents.llm import function_tool
 
-# Add parent directory to path for imports
-sys.path.append(str(Path(__file__).parent.parent))
-from agents.base_agent import BaseAgent, RunContext_T
+from .base_agent import BaseAgent, RunContext_T
 from utils import load_prompt
 
 

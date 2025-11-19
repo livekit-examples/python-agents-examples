@@ -1,14 +1,10 @@
 """Gear agent for recommending surfboard and wetsuit equipment."""
-import sys
-from pathlib import Path
 from livekit.agents.llm import function_tool
 
-# Add parent directory to path for imports
-sys.path.append(str(Path(__file__).parent.parent))
-from agents.base_agent import BaseAgent, RunContext_T
+from .base_agent import BaseAgent, RunContext_T
 from utils import load_prompt
 
-
+# Some random business logic here to make it more interesting :-)
 class GearAgent(BaseAgent):
     """Agent responsible for equipment recommendations and sizing."""
     

@@ -1,19 +1,14 @@
 """Intake agent for collecting customer profile information."""
-import sys
-from pathlib import Path
 from livekit.agents.beta.workflows.email_address import GetEmailResult
 from livekit.agents.llm import function_tool
 from livekit.agents.beta.workflows import TaskGroup
 
-# Add parent directory to path for imports
-sys.path.append(str(Path(__file__).parent.parent))
-from agents.base_agent import BaseAgent, RunContext_T
-from utils import load_prompt
-from tasks.name_task import NameResult, NameTask
-from tasks.phone_task import PhoneResult, PhoneTask
-from tasks.age_task import AgeResult, AgeTask
+from .base_agent import BaseAgent, RunContext_T
+from tasks.name_task import NameTask
+from tasks.phone_task import PhoneTask
+from tasks.age_task import AgeTask
 from tasks.email_task import GetEmailTask
-from tasks.experience_task import ExperienceResult, ExperienceTask
+from tasks.experience_task import ExperienceTask
 
 
 class IntakeAgent(BaseAgent):

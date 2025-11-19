@@ -1,12 +1,8 @@
 """Billing agent for payment processing and booking finalization."""
-import sys
-from pathlib import Path
 from livekit.agents.llm import function_tool
 from livekit.agents.beta.workflows import TaskGroup
 
-# Add parent directory to path for imports
-sys.path.append(str(Path(__file__).parent.parent))
-from agents.base_agent import BaseAgent, RunContext_T
+from .base_agent import BaseAgent, RunContext_T
 from utils import load_prompt
 from tools.payment_tools import calculate_lesson_cost, process_mock_payment
 from tasks.notification_task import NotificationTask

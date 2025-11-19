@@ -1,12 +1,9 @@
 """Phone collection task."""
-import sys
-from pathlib import Path
 from dataclasses import dataclass
 from livekit.agents import AgentTask, RunContext
-from livekit.agents.llm.tool_context import function_tool, ToolError
+from livekit.agents.llm import function_tool, ToolError
 from livekit.agents.voice import SpeechHandle
 
-sys.path.append(str(Path(__file__).parent.parent))
 from utils import load_reading_guidelines
 
 

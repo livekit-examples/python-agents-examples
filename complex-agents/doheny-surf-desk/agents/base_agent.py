@@ -99,9 +99,7 @@ class SurfBookingData:
         return " | ".join(parts) if parts else "No booking info yet"
 
 
-# Type alias for RunContext with SurfBookingData
 RunContext_T = RunContext[SurfBookingData]
-
 
 class BaseAgent(Agent):
     """Base agent with shared handoff logic.

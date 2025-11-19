@@ -1,14 +1,13 @@
 """Scheduler agent for booking lesson time slots."""
-import sys
-from pathlib import Path
+import json
+from typing import Annotated
 from livekit.agents.llm import function_tool
+from numpy import number
 
-# Add parent directory to path for imports
-sys.path.append(str(Path(__file__).parent.parent))
-from agents.base_agent import BaseAgent, RunContext_T
+from .base_agent import BaseAgent, RunContext_T
 from utils import load_prompt
 from tools.calendar_tools import get_mock_availability, create_mock_booking
-from tools.tide_tools import get_tide_schedule, get_surf_conditions
+from tools.tide_tools import get_tide_schedule, get_surf_conditions, get_weather_forecast
 
 
 class SchedulerAgent(BaseAgent):
@@ -263,6 +262,17 @@ class SchedulerAgent(BaseAgent):
         )
         
         return response
+
+    @function_tool(name="get_weather_forecast")
+    async def get_weather_forecast(self, context: RunContext_T, forecast_days: int) -> str:
+        """Get weather forecast for the next few days.
+        
+        Args:
+            context: RunContext with userdata
+            forecast_days: Number of days to forecast
+        """
+        weather_forecast = await get_weather_forecast(forecast_days)
+        return json.loads(weather_forecast)
     
     @function_tool
     async def get_surf_report(self, context: RunContext_T, date: str, spot: str) -> str:

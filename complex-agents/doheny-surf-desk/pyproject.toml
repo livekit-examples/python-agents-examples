@@ -5,8 +5,11 @@ description = "Doheny Surf Desk booking agent with multi-agent workflow"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "livekit-agents[openai,silero,turn-detector,deepgram,cartesia] @ file:///Users/hormold/dev/agent-13/livekit-agents",
-    "livekit-plugins-noise-cancellation~=0.2",
+    "livekit-agents>=1.3.2",
+    "livekit-plugins-openai>=1.3.2",
+    "livekit-plugins-silero>=1.3.2",
+    "livekit-plugins-turn-detector>=1.3.2",
+    "livekit-plugins-noise-cancellation~=0.2.5",
     "pytest>=8.4.2",
     "pytest-asyncio>=1.2.0",
     "python-dotenv",
