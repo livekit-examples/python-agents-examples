@@ -68,14 +68,14 @@ def scan_directory(root_path: Path, base_path: Path) -> List[Dict[str, Any]]:
     entries = []
     
     # Directories to skip
-    skip_dirs = {'.git', '__pycache__', 'node_modules', '.venv', 'venv', 'env', '.env'}
+    skip_dirs = {'.git', '__pycache__', 'node_modules', '.venv', 'venv', 'env', '.env', 'tests'}
     
     for dirpath, dirnames, filenames in os.walk(root_path):
         # Remove directories to skip from the search
         dirnames[:] = [d for d in dirnames if d not in skip_dirs]
         
         for filename in filenames:
-            if filename.endswith('.py'):
+            if filename.endswith('.py') and not filename.startswith('test_'):
                 file_path = Path(dirpath) / filename
                 metadata = extract_frontmatter(file_path)
                 

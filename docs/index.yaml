@@ -1,6 +1,6 @@
 version: '1.0'
 description: Index of all LiveKit Agent examples with metadata
-total_examples: 111
+total_examples: 110
 examples:
 - file_path: avatars/hedra/dynamically_created_avatar/agent.py
   title: Dynamically Created Avatar
@@ -290,6 +290,28 @@ examples:
   - Character creation and stats management
   - Inventory and equipment system
   - Voice acting for different NPCs
+- file_path: complex-agents/doheny-surf-desk/agent.py
+  title: Doheny Surf Desk Booking Agent
+  category: complex-agents
+  tags:
+  - multi_agent
+  - tasks
+  - task_groups
+  - observer_pattern
+  - guardrails
+  - llm_evaluation
+  - context_injection
+  difficulty: advanced
+  description: Surf school booking system with background observer agent and task groups for sequential workflows
+  requires: livekit-agents>=1.3.0
+  demonstrates:
+  - Background observer agent that monitors conversation transcripts in real-time
+  - LLM-based evaluation every 3 user turns to detect safety issues (minors, injuries, weather concerns, skill mismatches,
+    VIP customers)
+  - Context injection pattern - observer injects system messages into active agent's chat context as guardrails
+  - Task groups for sequential task execution with structured return values (profile collection, payment processing)
+  - Multi-agent workflow with 5 specialized agents (IntakeAgent, SchedulerAgent, GearAgent, BillingAgent, FrontDeskAgent)
+  - Observer can improve conversation quality by monitoring outputs in background
 - file_path: complex-agents/drive-thru/drivethru_agent.py
   title: Drive-Thru Order Agent
   category: complex-agents
@@ -575,25 +597,6 @@ examples:
   - Dynamic video track subscription
   - Image content injection into chat context
   - Track publication event handling
-- file_path: complex-agents/drive-thru/test_agent.py
-  title: Drive-Thru Agent Test Suite
-  category: drive-thru
-  tags:
-  - pytest
-  - agent_testing
-  - run_result
-  - judge_llm
-  - mock_tools
-  difficulty: advanced
-  description: Comprehensive test suite for drive-thru ordering agent
-  demonstrates:
-  - Agent testing with pytest
-  - RunResult expectations and assertions
-  - LLM judge for intent verification
-  - Tool mocking for error simulation
-  - Order flow testing scenarios
-  - Conversation context testing
-  - ChatContext manipulation
 - file_path: complex-agents/drive-thru/tools/management_tools.py
   title: Drive-Thru Order Management Tools
   category: drive-thru
@@ -679,25 +682,6 @@ examples:
   demonstrates:
   - Using event emitters in an agent to trigger actions like welcome and farewell messages for the sake of example (even though
     there are already events for this)
-- file_path: complex-agents/exa-deep-researcher/tests/test_agent.py
-  title: EXA Deep Researcher Agent Test Suite
-  category: exa-deep-researcher
-  tags:
-  - pytest
-  - agent_testing
-  - run_result
-  - judge_llm
-  - mock_tools
-  - clarification
-  difficulty: advanced
-  description: Test suite for EXA Deep Researcher agent with clarification flow testing
-  demonstrates:
-  - Agent testing with pytest
-  - RunResult expectations and assertions
-  - LLM judge for intent verification
-  - Tool mocking for EXA client
-  - Clarification flow testing
-  - Multiple conversation turns
 - file_path: flows/declarative_flow.py
   title: Declarative Flow
   category: flows
