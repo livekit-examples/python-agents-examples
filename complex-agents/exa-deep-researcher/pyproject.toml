@@ -1,0 +1,20 @@
+[project]
+name = "exa-deep-researcher"
+version = "0.1.0"
+description = "EXA Deep Researcher Agent"
+requires-python = ">=3.10"
+dependencies = [
+    "livekit-agents[turn-detector]~=1.2",
+    "livekit-plugins-turn-detector>=0.1.0",
+    "livekit-plugins-silero>=0.6.8",
+    "python-dotenv>=1.0.0",
+    "exa-py>=1.0.0",
+    "livekit-plugins-noise-cancellation~=0.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+]
+

@@ -1,6 +1,6 @@
 version: '1.0'
 description: Index of all LiveKit Agent examples with metadata
-total_examples: 104
+total_examples: 111
 examples:
 - file_path: avatars/hedra/dynamically_created_avatar/agent.py
   title: Dynamically Created Avatar
@@ -220,7 +220,7 @@ examples:
   description: Shows how to use tool calling in an agent.
   demonstrates:
   - Using the most basic form of tool calling in an agent to print to the console
-- file_path: basics/uninterruptable/uninterruptable.py
+- file_path: basics/uninterruptable.py
   title: Uninterruptable Agent
   category: basics
   tags:
@@ -233,19 +233,6 @@ examples:
   - Setting allow_interruptions=False in agent configuration
   - Testing interruption handling behavior
   - Agent-initiated conversation with on_enter
-- file_path: complex-agents/jeopardy/benchmark_agent.py
-  title: Jeopardy Agent
-  category: benchmarking
-  tags:
-  - benchmarking
-  - openai
-  - deepgram
-  difficulty: beginner
-  description: A simple Jeopardy contestant agent that answers questions.
-  demonstrates:
-  - Basic voice agent that listens and responds
-  - Jeopardy-style answer formatting
-  - Using the metrics_collected event to track performance
 - file_path: complex-agents/role-playing/agents/base_agent.py
   title: Base Game Agent
   category: complex-agents
@@ -321,6 +308,24 @@ examples:
   - Background audio playback during session
   - RPC handler registration for external control
   - Structured userdata for session state
+- file_path: complex-agents/exa-deep-researcher/agent.py
+  title: EXA Deep Researcher
+  category: complex-agents
+  tags:
+  - exa
+  - research
+  - voice_controlled
+  - background_jobs
+  - rpc_streaming
+  difficulty: advanced
+  description: Voice-controlled deep research agent using EXA for web intelligence
+  demonstrates:
+  - Voice-only control
+  - Single background research job with state management
+  - EXA API integration for search and content fetching
+  - RPC streaming to UI for status, notes, and reports
+  - Token-aware compression and concurrency control
+  - Cited final reports saved to disk
 - file_path: complex-agents/role-playing/core/game_state.py
   title: Game State Management
   category: complex-agents
@@ -644,8 +649,6 @@ examples:
   category: egress
   tags:
   - recording
-  - openai
-  - deepgram
   difficulty: intermediate
   description: Shows how to create an agent that can record the input to a room and save it to a file.
   demonstrates:
@@ -656,7 +659,7 @@ examples:
   tags:
   - events
   - openai
-  - deepgram
+  - assemblyai
   difficulty: beginner
   description: Shows how to use events in an agent to trigger actions.
   demonstrates:
@@ -670,19 +673,38 @@ examples:
   tags:
   - events
   - openai
-  - deepgram
+  - assemblyai
   difficulty: beginner
   description: Shows how to use event emitters in an agent to trigger actions.
   demonstrates:
   - Using event emitters in an agent to trigger actions like welcome and farewell messages for the sake of example (even though
     there are already events for this)
+- file_path: complex-agents/exa-deep-researcher/tests/test_agent.py
+  title: EXA Deep Researcher Agent Test Suite
+  category: exa-deep-researcher
+  tags:
+  - pytest
+  - agent_testing
+  - run_result
+  - judge_llm
+  - mock_tools
+  - clarification
+  difficulty: advanced
+  description: Test suite for EXA Deep Researcher agent with clarification flow testing
+  demonstrates:
+  - Agent testing with pytest
+  - RunResult expectations and assertions
+  - LLM judge for intent verification
+  - Tool mocking for EXA client
+  - Clarification flow testing
+  - Multiple conversation turns
 - file_path: flows/declarative_flow.py
   title: Declarative Flow
   category: flows
   tags:
   - flows
   - openai
-  - deepgram
+  - assemblyai
   difficulty: intermediate
   description: Shows how to create a declarative flow using a dictionary of mutliple agents and their transitions.
   demonstrates:
@@ -694,7 +716,7 @@ examples:
   tags:
   - flows
   - openai
-  - deepgram
+  - assemblyai
   difficulty: intermediate
   description: Shows how to create a multi-stage flow using a series of agents.
   demonstrates:
@@ -705,7 +727,7 @@ examples:
   tags:
   - flows
   - openai
-  - deepgram
+  - assemblyai
   difficulty: beginner
   description: Shows how to create a simple one-way flow using a series of agents.
   demonstrates:
@@ -760,19 +782,45 @@ examples:
   tags:
   - home-automation
   - openai
-  - deepgram
+  - assemblyai
   difficulty: intermediate
   description: Shows how to create an agent that can control home automation devices.
   demonstrates:
   - Using function tools to control home automation devices.
   - Using a wake word to trigger the agent.
+- file_path: mcp/http_client.py
+  title: MCP Agent
+  category: mcp
+  tags:
+  - mcp
+  - openai
+  - assemblyai
+  difficulty: beginner
+  description: Shows how to use a LiveKit Agent as an MCP client.
+  demonstrates:
+  - Connecting to a local MCP server as a client.
+  - Connecting to a remote MCP server as a client.
+  - Using a function tool to retrieve data from the MCP server.
+- file_path: mcp/stdio_client.py
+  title: MCP Agent
+  category: mcp
+  tags:
+  - mcp
+  - openai
+  - assemblyai
+  difficulty: beginner
+  description: Shows how to use a LiveKit Agent as an MCP client.
+  demonstrates:
+  - Connecting to a local MCP server as a client.
+  - Connecting to a remote MCP server as a client.
+  - Using a function tool to retrieve data from the MCP server.
 - file_path: mcp/agent.py
   title: MCP Agent
   category: mcp
   tags:
   - mcp
   - openai
-  - deepgram
+  - assemblyai
   difficulty: beginner
   description: Shows how to use a LiveKit Agent as an MCP client.
   demonstrates:
@@ -808,7 +856,7 @@ examples:
   tags:
   - metrics
   - openai
-  - deepgram
+  - assemblyai
   difficulty: beginner
   description: Shows how to use the STT metrics to log metrics to the console.
   demonstrates:
@@ -845,7 +893,7 @@ examples:
   tags:
   - metrics
   - openai
-  - deepgram
+  - assemblyai
   difficulty: beginner
   description: Shows how to use the VAD metrics to log metrics to the console.
   demonstrates:
@@ -862,7 +910,7 @@ examples:
   tags:
   - multi-agent
   - openai
-  - deepgram
+  - assemblyai
   difficulty: intermediate
   description: Shows how to create a multi-agent that can switch between a long and short agent using a function tool.
   demonstrates:
@@ -1172,6 +1220,17 @@ examples:
   demonstrates:
   - Using the `tts_node` method to override the default TTS node and add custom logic to do replacements on the output, like
     replacing "lol" with "<laughs>".
+- file_path: pipeline-tts/sarvam.py
+  title: Sarvam TTS and STT
+  category: pipeline-tts, pipeline-stt
+  tags:
+  - pipeline-tts
+  - pipeline-stt
+  - sarvam
+  difficulty: beginner
+  description: Shows how to use the Sarvam TTS and STT models.
+  demonstrates:
+  - Using the Sarvam TTS and STT models.
 - file_path: rag/rag_db_builder.py
   title: RAG Database Builder
   category: rag
@@ -1207,6 +1266,19 @@ examples:
   - Function tool registration
   - Flexible thinking phase handling
   - Random message selection
+- file_path: realtime/gemini_realtime_api.py
+  title: Basic Gemini Realtime Agent
+  category: realtime
+  tags:
+  - gemini_realtime
+  - minimal_setup
+  difficulty: beginner
+  description: Minimal Gemini Realtime model agent setup
+  demonstrates:
+  - Gemini Realtime model basic usage
+  - Minimal agent configuration
+  - Session-based generation
+  - VAD with Silero
 - file_path: realtime/openai-realtime.py
   title: Basic OpenAI Realtime Agent
   category: realtime
@@ -1240,6 +1312,19 @@ examples:
   - Discount code application
   - Order summary and finalization
   - Real-time order state printing
+- file_path: realtime/gemini_live_vision.py
+  title: Gemini Realtime Agent with Live Vision
+  category: realtime
+  tags:
+  - gemini_realtime
+  - live_vision
+  difficulty: beginner
+  description: Minimal Gemini Realtime model agent setup with live vision capabilities
+  demonstrates:
+  - Gemini Realtime model basic usage
+  - Live vision capabilities
+  - Session-based generation
+  - VAD with Silero
 - file_path: realtime/openai-realtime-tools.py
   title: OpenAI Realtime with 50+ Tools
   category: realtime
@@ -1552,3 +1637,13 @@ examples:
   - Custom STT configuration with translation capabilities
   - Event-driven transcription and speech synthesis
   - Advanced multilingual processing pipeline
+- file_path: vision/moondream_vision.py
+  title: Moondream Vision Agent
+  category: vision
+  tags:
+  - moondream
+  - vision
+  difficulty: intermediate
+  description: Moondream Vision Agent
+  demonstrates:
+  - Adding vision capabilities to an agent when the LLM does not have vision capabilities
