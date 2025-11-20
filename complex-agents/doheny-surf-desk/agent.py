@@ -2,18 +2,18 @@
 ---
 title: Doheny Surf Desk Booking Agent
 category: complex-agents
-tags: [multi_agent, tasks, task_groups, observer_pattern, guardrails, typed_tasks, context_injection]
+tags: [multi_agent, tasks, task_groups, observer_pattern, guardrails, llm_evaluation, context_injection, phone_receptionist, booking_system, telephony]
 difficulty: advanced
-description: Surf school booking system demonstrating typed tasks, task groups, and parallel observer with LLM-based guardrails
+description: Phone receptionist agent for surf school bookings with background observer and task groups - great example for building phone-based booking systems
 requires: livekit-agents>=1.3.0
 demonstrates:
-  - Sequential task execution with TaskGroup
-  - Typed tasks with structured return values (ConsentTask, NotificationTask, PaymentDetailsTask)
-  - Parallel observer agent using LLM-based evaluation for safety guardrails
-  - Observer context injection pattern (hints injected into active agent's chat context)
-  - Multi-agent workflow with 5 specialized agents and seamless handoffs
-  - Context preservation across agent transitions
-  - Minor consent collection and payment validation workflows
+  - Complete phone receptionist workflow for appointment booking (you need to connect your calendar) and payment processing (demo, not real payment processing)
+  - Background observer agent that monitors conversation transcripts in real-time
+  - LLM-based evaluation every 3 user turns to detect safety issues (minors, injuries, weather concerns, skill mismatches, VIP customers)
+  - Context injection pattern - observer injects system messages into active agent's chat context as guardrails
+  - Task groups for sequential task execution with structured return values (profile collection, payment processing)
+  - Multi-agent workflow with 5 specialized agents (IntakeAgent, SchedulerAgent, GearAgent, BillingAgent, FrontDeskAgent)
+  - Observer can improve conversation quality by monitoring outputs in background
 ---
 """
 import logging

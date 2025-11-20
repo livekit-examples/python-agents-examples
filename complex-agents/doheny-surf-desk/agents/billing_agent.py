@@ -180,13 +180,10 @@ class BillingAgent(BaseAgent):
         """
         userdata = context.userdata
         
-        # Check if total is calculated
         if not userdata.total_amount:
             return "BLOCKED: Calculate total first before processing payment."
         
-        # Check minor consent requirement
         if userdata.is_minor and not userdata.guardian_consent:
-            # Run consent task first
             await context.wait_for_playout()
             consent_result = await ConsentTask(chat_ctx=self.chat_ctx)
             
@@ -201,8 +198,6 @@ class BillingAgent(BaseAgent):
             userdata.guardian_name = consent_result.guardian_name
             userdata.guardian_contact = consent_result.guardian_contact
         
-        # Collect payment details if not already collected
-        # Check if we have payment details (we'll use a flag or check if payment_status is None)
         if not hasattr(userdata, '_payment_details_collected') or not userdata._payment_details_collected:
             await context.wait_for_playout()
             payment_details_result = await PaymentDetailsTask()
