@@ -1,0 +1,10 @@
+{
+  "filename": "greeting.wav",
+  "timestamp": "2025-11-24T10:26:48.331412",
+  "voice_name": "Ashley",
+  "voice_description": "Warm, natural American female",
+  "duration": 10.44,
+  "sample_rate": 24000,
+  "channels": 1,
+  "text": "Hello LiveKit users! Welcome to an amazing experience where your audio and communication come to life. We're thrilled to have you here and can't wait to see what you'll create with LiveKit!"
+}

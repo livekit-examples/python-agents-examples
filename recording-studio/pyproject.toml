@@ -1,0 +1,12 @@
+[project]
+name = "recording-playback-agent"
+version = "0.1.0"
+description = "LiveKit Agent that can record and playback audio"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "livekit-agents>=0.13.0",
+    "livekit-plugins-silero>=0.13.0",
+    "livekit-plugins-cartesia>=0.13.0",
+    "python-dotenv>=1.0.0",
+]

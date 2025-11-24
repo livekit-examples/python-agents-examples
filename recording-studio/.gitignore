@@ -1,0 +1,7 @@
+recordings/*.wav
+recordings/*.json
+!recordings/.gitkeep
+!recordings/greeting.wav
+!recordings/greeting.json
+agent_recording.wav
+
