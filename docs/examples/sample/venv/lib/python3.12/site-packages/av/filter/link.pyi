@@ -1,0 +1,2 @@
+class FilterLink:
+    pass

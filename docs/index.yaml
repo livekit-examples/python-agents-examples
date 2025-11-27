@@ -25,8 +25,7 @@ examples:
   - deepgram
   - hedra
   difficulty: advanced
-  description: Shows how to create an avatar that can help a user learn about the Fall of the Roman Empire using flash cards
-    and quizzes.
+  description: Shows how to create an avatar that can help a user learn about the Fall of the Roman Empire using flash cards and quizzes.
   demonstrates:
   - Creating a new hedra avatar session using a custom image
   - Using RPC to send messages to the client for flash cards and quizzes using `perform_rpc`
@@ -75,15 +74,14 @@ examples:
   - deepgram
   - tavus
   difficulty: intermediate
-  description: Shows how to create a tavus avatar that can help a user learn about the Fall of the Roman Empire using flash
-    cards and quizzes.
+  description: Shows how to create a tavus avatar that can help a user learn about the Fall of the Roman Empire using flash cards and quizzes.
   demonstrates:
   - Creating a new tavus avatar session
   - Using RPC to send messages to the client for flash cards and quizzes using `perform_rpc`
   - Using `register_rpc_method` to register the RPC methods so that the agent can receive messages from the client
   - Using UserData to store state for the cards and the quizzes
   - Using custom data classes to represent the flash cards and quizzes
-- file_path: basics/change_agent_instructions.py
+- file_path: basics/change_agent_instructions/change_agent_instructions.py
   title: Change Agent Instructions
   category: basics
   tags:
@@ -94,7 +92,7 @@ examples:
   description: Shows how to change the instructions of an agent.
   demonstrates:
   - Changing agent instructions after the agent has started using `update_instructions`
-- file_path: basics/context_variables.py
+- file_path: basics/context_variables/context_variables.py
   title: Context Variables
   category: basics
   tags:
@@ -106,7 +104,7 @@ examples:
   description: Shows how to give an agent context about the user using simple variables.
   demonstrates:
   - Using context variables from a simple dictionary
-- file_path: basics/label_messages.py
+- file_path: basics/label_messages/label_messages.py
   title: Conversation Event Monitoring Agent
   category: basics
   tags:
@@ -116,11 +114,10 @@ examples:
   - deepgram
   - openai
   difficulty: beginner
-  description: Shows how to monitor and log conversation events as they occur, useful for debugging and understanding agent-user
-    interactions.
+  description: Shows how to monitor and log conversation events as they occur, useful for debugging and understanding agent-user interactions.
   demonstrates:
   - Conversation event handling and logging
-- file_path: basics/echo_transcriber_agent.py
+- file_path: basics/echo_transcriber_agent/echo_transcriber_agent.py
   title: Echo Transcriber Agent
   category: basics
   tags:
@@ -133,7 +130,7 @@ examples:
   demonstrates:
   - Transcribing audio
   - Echoing audio back that's stored in a buffer
-- file_path: basics/exit_message.py
+- file_path: basics/exit_message/exit_message.py
   title: Exit Message
   category: basics
   tags:
@@ -145,7 +142,7 @@ examples:
   description: Shows how to use the `on_exit` method to take an action when the agent exits.
   demonstrates:
   - Use the `on_exit` method to take an action when the agent exits
-- file_path: basics/say_in_voice.py
+- file_path: basics/say_in_voice/say_in_voice.py
   title: Function Tool Voice Switching Agent
   category: basics
   tags:
@@ -156,13 +153,12 @@ examples:
   - deepgram
   - openai
   difficulty: beginner
-  description: Demonstrates how to create an agent that can dynamically switch between different voices during a conversation
-    using function tools.
+  description: Demonstrates how to create an agent that can dynamically switch between different voices during a conversation using function tools.
   demonstrates:
   - Dynamic TTS voice switching
   - Function tool integration
   - Multiple TTS provider support (Inworld)
-- file_path: basics/interrupts_user.py
+- file_path: basics/interrupts_user/interrupts_user.py
   title: Interrupt User
   category: basics
   tags:
@@ -174,7 +170,7 @@ examples:
   demonstrates:
   - Using the `stt_node` to read the user's input in real time
   - Setting `allow_interruptions` to `False` to prevent the user from interrupting the agent
-- file_path: basics/listen_and_respond.py
+- file_path: basics/listen_and_respond/listen_and_respond.py
   title: Listen and Respond
   category: basics
   tags:
@@ -186,7 +182,7 @@ examples:
   description: Shows how to create an agent that can listen to the user and respond.
   demonstrates:
   - This is the most basic agent that can listen to the user and respond. This is a good starting point for any agent.
-- file_path: basics/playing_audio.py
+- file_path: basics/playing_audio/playing_audio.py
   title: Playing Audio
   category: basics
   tags:
@@ -197,7 +193,7 @@ examples:
   description: Shows how to play audio from a file in an agent.
   demonstrates:
   - Playing audio from a file
-- file_path: basics/repeater.py
+- file_path: basics/repeater/repeater.py
   title: Repeater
   category: basics
   tags:
@@ -209,7 +205,7 @@ examples:
   demonstrates:
   - Using the `on_user_input_transcribed` event to listen to the user's input
   - Using the `say` method to respond to the user with the same input
-- file_path: basics/tool_calling.py
+- file_path: basics/tool_calling/tool_calling.py
   title: Tool Calling
   category: basics
   tags:
@@ -220,7 +216,7 @@ examples:
   description: Shows how to use tool calling in an agent.
   demonstrates:
   - Using the most basic form of tool calling in an agent to print to the console
-- file_path: basics/uninterruptable.py
+- file_path: basics/uninterruptable/uninterruptable.py
   title: Uninterruptable Agent
   category: basics
   tags:
@@ -305,15 +301,12 @@ examples:
   - booking_system
   - telephony
   difficulty: advanced
-  description: Phone receptionist agent for surf school bookings with background observer and task groups - great example
-    for building phone-based booking systems
+  description: Phone receptionist agent for surf school bookings with background observer and task groups - great example for building phone-based booking systems
   requires: livekit-agents>=1.3.0
   demonstrates:
-  - Complete phone receptionist workflow for appointment booking (you need to connect your calendar) and payment processing
-    (demo, not real payment processing)
+  - Complete phone receptionist workflow for appointment booking (you need to connect your calendar) and payment processing (demo, not real payment processing)
   - Background observer agent that monitors conversation transcripts in real-time
-  - LLM-based evaluation every 3 user turns to detect safety issues (minors, injuries, weather concerns, skill mismatches,
-    VIP customers)
+  - LLM-based evaluation every 3 user turns to detect safety issues (minors, injuries, weather concerns, skill mismatches, VIP customers)
   - Context injection pattern - observer injects system messages into active agent's chat context as guardrails
   - Task groups for sequential task execution with structured return values (profile collection, payment processing)
   - Multi-agent workflow with 5 specialized agents (IntakeAgent, SchedulerAgent, GearAgent, BillingAgent, FrontDeskAgent)
@@ -653,7 +646,7 @@ examples:
   - Background audio player setup
   - Database integration for menu loading
   - Max tool steps configuration
-- file_path: egress/recording_agent.py
+- file_path: egress/recording_agent/recording_agent.py
   title: Recording Agent
   category: egress
   tags:
@@ -662,7 +655,7 @@ examples:
   description: Shows how to create an agent that can record the input to a room and save it to a file.
   demonstrates:
   - Using egress to record the input to a room
-- file_path: events/basic_event.py
+- file_path: events/basic_event/basic_event.py
   title: Basic Event
   category: events
   tags:
@@ -676,7 +669,7 @@ examples:
   - Using `on` to register an event listener
   - Using `off` to unregister an event listener
   - Using `once` to register an event listener that will only be triggered once
-- file_path: events/event_emitters.py
+- file_path: events/event_emitters/event_emitters.py
   title: Event Emitters
   category: events
   tags:
@@ -686,8 +679,7 @@ examples:
   difficulty: beginner
   description: Shows how to use event emitters in an agent to trigger actions.
   demonstrates:
-  - Using event emitters in an agent to trigger actions like welcome and farewell messages for the sake of example (even though
-    there are already events for this)
+  - Using event emitters in an agent to trigger actions like welcome and farewell messages for the sake of example (even though there are already events for this)
 - file_path: flows/declarative_flow.py
   title: Declarative Flow
   category: flows
@@ -738,7 +730,7 @@ examples:
   - Return value handling (None, message) pattern
   - Simple function execution without parameters
   - Voice-friendly function descriptions
-- file_path: tool_calling/update_tools.py
+- file_path: function-calling/update_tools/update_tools.py
   title: Dynamic Tool Updates
   category: function-calling
   tags:
@@ -828,7 +820,7 @@ examples:
   description: Shows how to create an MCP server that can be used to control a LiveKit room.
   demonstrates:
   - Creating an MCP server that can be used to control a LiveKit room.
-- file_path: metrics/langfuse_tracing.py
+- file_path: metrics/langfuse_tracing/langfuse_tracing.py
   title: Langfuse Tracing
   category: metrics
   tags:
@@ -840,7 +832,7 @@ examples:
   demonstrates:
   - Using the langfuse tracer to trace the agent session.
   - Using the metrics_collected event to log metrics to langfuse.
-- file_path: metrics/metrics_stt.py
+- file_path: metrics/metrics_stt/metrics_stt.py
   title: STT Metrics
   category: metrics
   tags:
@@ -877,7 +869,7 @@ examples:
   - JSON serialization of metrics data
   - Error handling for network requests
   - Comprehensive metrics tracking
-- file_path: metrics/metrics_vad.py
+- file_path: metrics/metrics_vad/metrics_vad.py
   title: VAD Metrics
   category: metrics
   tags:
@@ -940,7 +932,7 @@ examples:
   description: Shows how to use the Google LLM.
   demonstrates:
   - Using the Google LLM.
-- file_path: pipeline-llm/interrupt_user.py
+- file_path: pipeline-llm/interrupt_user/interrupt_user.py
   title: Interrupt User
   category: pipeline-llm
   tags:
@@ -953,7 +945,7 @@ examples:
   - Using the `session.say` method to interrupt the user.
   - Using the `allow_interruptions` parameter to prevent the user from interrupting the agent.
   - Once the agent has spoken, it will allow the user to interrupt again.
-- file_path: pipeline-llm/replacing_llm_output.py
+- file_path: pipeline-llm/replacing_llm_output/replacing_llm_output.py
   title: LLM Output Replacement
   category: pipeline-llm
   tags:
@@ -970,7 +962,7 @@ examples:
   - Text replacement in LLM output
   - Custom llm_node for output manipulation
   - Handling model-specific output formats
-- file_path: pipeline-llm/llm_powered_content_filter.py
+- file_path: pipeline-llm/llm_powered_content_filter/llm_powered_content_filter.py
   title: LLM-Powered Content Filter
   category: pipeline-llm
   tags:
@@ -987,7 +979,7 @@ examples:
   - Custom llm_node override for filtering
   - Handling different chunk formats
   - Real-time content evaluation
-- file_path: pipeline-llm/large_context.py
+- file_path: pipeline-llm/large_context/large_context.py
   title: Large Context Window LLM
   category: pipeline-llm
   tags:
@@ -1028,7 +1020,7 @@ examples:
   - OpenAI LLM integration
   - Standard pipeline setup
   - Basic agent configuration
-- file_path: pipeline-llm/simple_content_filter.py
+- file_path: pipeline-llm/simple_content_filter/simple_content_filter.py
   title: Simple Content Filter
   category: pipeline-llm
   tags:
@@ -1043,7 +1035,7 @@ examples:
   - Custom llm_node override
   - Static offensive terms list
   - Stream processing with substitution
-- file_path: pipeline-llm/transcription_node.py
+- file_path: pipeline-llm/transcription_node/transcription_node.py
   title: Transcription Node Modifier
   category: pipeline-llm
   tags:
@@ -1173,7 +1165,7 @@ examples:
   description: Shows how to use the Rime TTS model.
   demonstrates:
   - Using the Rime TTS model.
-- file_path: pipeline-tts/short_replies_only.py
+- file_path: pipeline-tts/short_replies_only/short_replies_only.py
   title: Short Replies Only
   category: pipeline-tts
   tags:
@@ -1184,8 +1176,7 @@ examples:
   description: Shows how to override the default TTS node to only respond with short replies based on the number of chunks.
   demonstrates:
   - Using the `tts_node` method to override the default TTS node and add custom logic to only respond with short replies.
-  - Using the `session.interrupt` method to interrupt the agent if it's taking too long to respond, and then informing the
-    user with `session.say`
+  - Using the `session.interrupt` method to interrupt the agent if it's taking too long to respond, and then informing the user with `session.say`
 - file_path: pipeline-tts/tts_comparison/tts_comparison.py
   title: TTS Comparison
   category: pipeline-tts
@@ -1208,8 +1199,7 @@ examples:
   difficulty: intermediate
   description: Shows how to override the default TTS node to do replacements on the output.
   demonstrates:
-  - Using the `tts_node` method to override the default TTS node and add custom logic to do replacements on the output, like
-    replacing "lol" with "<laughs>".
+  - Using the `tts_node` method to override the default TTS node and add custom logic to do replacements on the output, like replacing "lol" with "<laughs>".
 - file_path: pipeline-tts/sarvam.py
   title: Sarvam TTS and STT
   category: pipeline-tts, pipeline-stt
@@ -1302,7 +1292,7 @@ examples:
   - Discount code application
   - Order summary and finalization
   - Real-time order state printing
-- file_path: realtime/gemini_live_vision.py
+- file_path: realtime/gemini_live_vision/gemini_live_vision.py
   title: Gemini Realtime Agent with Live Vision
   category: realtime
   tags:
@@ -1404,7 +1394,7 @@ examples:
   - Duplicate example for testing
   - Math and string operations
   - List manipulations
-- file_path: rpc/rpc_agent.py
+- file_path: rpc/rpc_agent/rpc_agent.py
   title: RPC State Management Agent
   category: rpc
   tags:
@@ -1456,7 +1446,7 @@ examples:
   - Focused questioning strategy
   - Brief and direct interaction patterns
   - Automatic greeting generation
-- file_path: telephony/sip_lifecycle.py
+- file_path: telephony/sip_lifecycle/sip_lifecycle.py
   title: SIP Lifecycle Management Agent
   category: telephony
   tags:
@@ -1474,7 +1464,7 @@ examples:
   - Participant attribute monitoring
   - Call lifecycle event handlers
   - Function tools for call operations
-- file_path: telephony/answer_call.py
+- file_path: telephony/answer_call/answer_call.py
   title: Simple Call Answering Agent
   category: telephony
   tags:
@@ -1508,7 +1498,7 @@ examples:
   - Automated room deletion after completion
   - Function tools for survey response recording
   - Professional survey caller persona
-- file_path: telephony/warm_handoff.py
+- file_path: telephony/warm_handoff/warm_handoff.py
   title: Warm Handoff Agent
   category: telephony
   tags:
@@ -1592,7 +1582,7 @@ examples:
   - Environment variable loading for tests
   - Simple greeting validation pattern
   - LLM judge pattern for response evaluation
-- file_path: translators/pipeline_translator.py
+- file_path: translation/pipeline_translator/pipeline_translator.py
   title: Pipeline Translator Agent
   category: translation
   tags:
@@ -1609,7 +1599,7 @@ examples:
   - Simple translation-focused agent instructions
   - Clean input-to-output translation pipeline
   - Voice-to-voice translation system
-- file_path: translators/tts_translator.py
+- file_path: translation/tts_translator/tts_translator.py
   title: TTS Translator with Gladia STT
   category: translation
   tags:
@@ -1627,7 +1617,7 @@ examples:
   - Custom STT configuration with translation capabilities
   - Event-driven transcription and speech synthesis
   - Advanced multilingual processing pipeline
-- file_path: vision/moondream_vision.py
+- file_path: vision/moondream_vision/moondream_vision.py
   title: Moondream Vision Agent
   category: vision
   tags:
