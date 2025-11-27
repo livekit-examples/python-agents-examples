@@ -1,0 +1,161 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.75rem;
+  --background: #f5f8f8;
+  --foreground: #0f1f23;
+  --card: #ffffff;
+  --card-foreground: #0f1f23;
+  --popover: #ffffff;
+  --popover-foreground: #0f1f23;
+  --primary: #23d3f6;
+  --primary-foreground: #041015;
+  --secondary: #e4edf0;
+  --secondary-foreground: #0f1f23;
+  --muted: #d0dddf;
+  --muted-foreground: #506970;
+  --accent: #cceff7;
+  --accent-foreground: #052128;
+  --destructive: #ff6d6d;
+  --border: #c4d3d7;
+  --input: #c4d3d7;
+  --ring: #1fd5f9;
+  --chart-1: #23d3f6;
+  --chart-2: #ffc857;
+  --chart-3: #a29bfe;
+  --chart-4: #ff9f68;
+  --chart-5: #6ee7b7;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f1f23;
+  --sidebar-primary: #23d3f6;
+  --sidebar-primary-foreground: #041015;
+  --sidebar-accent: #e4edf0;
+  --sidebar-accent-foreground: #0f1f23;
+  --sidebar-border: #c4d3d7;
+  --sidebar-ring: #1fd5f9;
+}
+
+.dark {
+  --background: #030d11;
+  --foreground: #e7fcff;
+  --card: #101f22;
+  --card-foreground: #f3feff;
+  --popover: #101f22;
+  --popover-foreground: #f3feff;
+  --primary: #1fd5f9;
+  --primary-foreground: #02181f;
+  --secondary: #0a171b;
+  --secondary-foreground: #e7fcff;
+  --muted: #14262b;
+  --muted-foreground: #7fa0a8;
+  --accent: #1a2f35;
+  --accent-foreground: #dff7fb;
+  --destructive: #ff5f6d;
+  --border: #1f3136;
+  --input: #1f3136;
+  --ring: #1fd5f9;
+  --chart-1: #1fd5f9;
+  --chart-2: #ffc857;
+  --chart-3: #f472b6;
+  --chart-4: #7c3aed;
+  --chart-5: #34d399;
+  --sidebar: #080f13;
+  --sidebar-foreground: #f3feff;
+  --sidebar-primary: #1fd5f9;
+  --sidebar-primary-foreground: #02181f;
+  --sidebar-accent: #132227;
+  --sidebar-accent-foreground: #f3feff;
+  --sidebar-border: #1f3136;
+  --sidebar-ring: #1fd5f9;
+}
+
+@theme inline {
+  --font-sans:
+    var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono:
+    var(--font-commit-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-foreground/20 outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utils {
+  .animate-text-shimmer {
+    animation-delay: 0.5s;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-name: text-shimmer;
+    background: var(--muted-foreground)
+      gradient(
+        linear,
+        100% 0,
+        0 0,
+        from(var(--muted-foreground)),
+        color-stop(0.5, var(--secondary-foreground)),
+        to(var(--muted-foreground))
+      );
+    background: var(--muted-foreground) -webkit-gradient(
+        linear,
+        100% 0,
+        0 0,
+        from(var(--muted-foreground)),
+        color-stop(0.5, var(--secondary-foreground)),
+        to(var(--muted-foreground))
+      );
+    background-repeat: no-repeat;
+    background-size: 50% 200%;
+    display: inline-block;
+  }
+
+  @keyframes text-shimmer {
+    0% {
+      background-position: -100% 0;
+    }
+    100% {
+      background-position: 250% 0;
+    }
+  }
+}

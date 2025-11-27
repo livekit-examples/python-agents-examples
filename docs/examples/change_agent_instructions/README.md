@@ -8,8 +8,7 @@ demonstrates:
   - Changing agent instructions after the agent has started using `update_instructions`
 ---
 
-In this recipe you will start an agent and then update its instructions on the fly. The example tweaks the voice prompts
-for SIP callers while keeping the same media pipeline (STT/LLM/TTS) running.
+In this recipe you will start an agent and then update its instructions on the fly. The example tweaks the voice prompts for SIP callers while keeping the same media pipeline (STT/LLM/TTS) running.
 
 ## Prerequisites
 
@@ -43,7 +42,7 @@ logger.setLevel(logging.INFO)
 
 ## Create the agent with inference strings
 
-Define the agent using LiveKit inference strings for STT/LLM/TTS so you do not need provider-specific keys:
+Define the agent using LiveKit inference for STT/LLM/TTS so you do not need provider-specific keys:
 
 ```python
 class ChangeInstructionsAgent(Agent):
@@ -70,8 +69,7 @@ class ChangeInstructionsAgent(Agent):
 
 ## Change instructions at runtime
 
-When a participant name looks like a phone number (any 4 digits in a row), update the instructions to reference the phone
-context, then start the initial reply:
+When a participant name looks like a phone number (any 4 digits in a row), update the instructions to reference the phone context, then start the initial reply:
 
 ```python
     async def on_enter(self):
@@ -104,6 +102,13 @@ if __name__ == "__main__":
 ```bash
 python change_agent_instructions.py console
 ```
+
+## Run it (with telephony)
+```bash
+python change_agent_instructions.py dev
+```
+
+Then call your agent after purchasing a [phone number](https://docs.livekit.io/sip/cloud/phone-numbers/)
 
 ## How it works
 

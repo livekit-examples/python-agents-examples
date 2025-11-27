@@ -101,7 +101,7 @@ The SQLite database (`nutrition_tracker.db`) stores food consumption records wit
 
 - Next.js app with real-time nutrition dashboard
 - Displays daily totals for calories and macronutrients
-- Shows chronological list of foods consumed today
+- shows chronological list of foods consumed today
 - Updates automatically via RPC when new foods are logged
 
 ## Customization

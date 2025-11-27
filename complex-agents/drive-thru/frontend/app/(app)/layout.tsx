@@ -1,4 +1,5 @@
 import { headers } from 'next/headers';
+import { PassthroughImage } from '@/components/passthrough-image';
 import { getAppConfig, getOrigin } from '@/lib/utils';
 
 interface AppLayoutProps {
@@ -19,10 +20,18 @@ export default async function AppLayout({ children }: AppLayoutProps) {
           href="https://livekit.io"
           className="scale-100 transition-transform duration-300 hover:scale-110"
         >
-          <img src={logo} alt={`${companyName} Logo`} className="block size-6 dark:hidden" />
-          <img
+          <PassthroughImage
+            src={logo}
+            alt={`${companyName} Logo`}
+            width={24}
+            height={24}
+            className="block size-6 dark:hidden"
+          />
+          <PassthroughImage
             src={logoDark ?? logo}
             alt={`${companyName} Logo`}
+            width={24}
+            height={24}
             className="hidden size-6 dark:block"
           />
         </a>

@@ -15,12 +15,14 @@ interface AppProps {
 
 export function App({ appConfig }: AppProps) {
   const room = useMemo(() => new Room(), []);
-  const [sessionStarted, setSessionStarted] = useState(true); // Auto-start session
+  const [sessionStarted, setSessionStarted] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const { connectionDetails, refreshConnectionDetails } = useConnectionDetails();
 
   useEffect(() => {
     const onDisconnected = () => {
       setSessionStarted(false);
+      setIsConnecting(false);
       refreshConnectionDetails();
     };
     const onMediaDevicesError = (error: Error) => {
@@ -39,32 +41,61 @@ export function App({ appConfig }: AppProps) {
 
   useEffect(() => {
     if (sessionStarted && room.state === 'disconnected' && connectionDetails) {
+      let cancelled = false;
+      setIsConnecting(true);
       Promise.all([
         room.localParticipant.setMicrophoneEnabled(true, undefined, {
           preConnectBuffer: appConfig.isPreConnectBufferEnabled,
         }),
         room.connect(connectionDetails.serverUrl, connectionDetails.participantToken),
-      ]).catch((error) => {
-        toastAlert({
-          title: 'There was an error connecting to the agent',
-          description: `${error.name}: ${error.message}`,
+      ])
+        .then(() => {
+          if (!cancelled) {
+            setIsConnecting(false);
+          }
+        })
+        .catch((error) => {
+          if (!cancelled) {
+            setIsConnecting(false);
+            setSessionStarted(false);
+          }
+          toastAlert({
+            title: 'There was an error connecting to the agent',
+            description: `${error.name}: ${error.message}`,
+          });
         });
-      });
+
+      return () => {
+        cancelled = true;
+        setIsConnecting(false);
+        room.disconnect();
+      };
     }
-    return () => {
-      room.disconnect();
-    };
+    return () => {};
   }, [room, sessionStarted, connectionDetails, appConfig.isPreConnectBufferEnabled]);
 
+  useEffect(() => {
+    if (!sessionStarted) {
+      setIsConnecting(false);
+    }
+  }, [sessionStarted]);
+
+  const handleStartSession = () => {
+    if (!connectionDetails) {
+      refreshConnectionDetails();
+    }
+    setSessionStarted(true);
+  };
 
   return (
     <>
       <RoomContext.Provider value={room}>
         <RoomAudioRenderer />
         <SessionView
-          appConfig={appConfig}
-          disabled={!sessionStarted}
           sessionStarted={sessionStarted}
+          onStartSession={handleStartSession}
+          isConnecting={isConnecting}
+          connectionReady={Boolean(connectionDetails)}
         />
       </RoomContext.Provider>
 

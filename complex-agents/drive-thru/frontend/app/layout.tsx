@@ -1,39 +1,12 @@
 import { Public_Sans } from 'next/font/google';
-import localFont from 'next/font/local';
 import { headers } from 'next/headers';
-import { ApplyThemeScript, ThemeToggle } from '@/components/theme-toggle';
+import { ApplyThemeScript } from '@/components/theme-toggle';
 import { getAppConfig, getOrigin } from '@/lib/utils';
 import './globals.css';
 
 const publicSans = Public_Sans({
   variable: '--font-public-sans',
   subsets: ['latin'],
-});
-
-const commitMono = localFont({
-  src: [
-    {
-      path: './fonts/CommitMono-400-Regular.otf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: './fonts/CommitMono-700-Regular.otf',
-      weight: '700',
-      style: 'normal',
-    },
-    {
-      path: './fonts/CommitMono-400-Italic.otf',
-      weight: '400',
-      style: 'italic',
-    },
-    {
-      path: './fonts/CommitMono-700-Italic.otf',
-      weight: '700',
-      style: 'italic',
-    },
-  ],
-  variable: '--font-commit-mono',
 });
 
 interface RootLayoutProps {
@@ -61,7 +34,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <ApplyThemeScript />
       </head>
       <body
-        className={`${publicSans.variable} ${commitMono.variable} overflow-x-hidden antialiased bg-white text-black`}
+        className={`${publicSans.variable} bg-background text-foreground overflow-x-hidden antialiased`}
       >
         {children}
       </body>

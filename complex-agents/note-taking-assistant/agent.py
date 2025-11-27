@@ -138,7 +138,7 @@ class NoteTakingAssistant:
                     content=[prompt]
                 )
             ])
-            
+
             response = ""
             async with self.llm.chat(chat_ctx=ctx) as stream:
                 async for chunk in stream:
@@ -147,15 +147,15 @@ class NoteTakingAssistant:
                     content = getattr(chunk.delta, 'content', None) if hasattr(chunk, 'delta') else str(chunk)
                     if content:
                         response += content
-            
+
             self.current_notes = response.strip()
-            
+
             # Send updated notes to frontend via RPC
             await self.send_notes_to_frontend()
-            
+
         except Exception as e:
             logger.error(f"Error updating notes: {e}")
-    
+
     async def send_notes_to_frontend(self):
         """Send current notes and transcriptions to frontend via RPC"""
         try:
@@ -164,10 +164,10 @@ class NoteTakingAssistant:
             if not remote_participants:
                 logger.info("No remote participants found to send notes")
                 return
-            
+
             # Send to the first remote participant (the frontend)
             client_participant = remote_participants[0]
-            
+
             # Send notes via RPC
             await self.ctx.room.local_participant.perform_rpc(
                 destination_identity=client_participant.identity,
@@ -181,7 +181,7 @@ class NoteTakingAssistant:
             logger.info(f"Sent notes to frontend ({client_participant.identity})")
         except Exception as e:
             logger.error(f"Error sending notes via RPC: {e}")
-    
+
     async def send_transcription_to_frontend(self, transcription: str):
         """Send the current transcript to frontend via RPC"""
         if not transcription:
@@ -197,10 +197,10 @@ class NoteTakingAssistant:
                 logger.info("No remote participants found to send transcription")
                 self._last_transcription_sent = previous_sent
                 return
-            
+
             # Send to the first remote participant (the frontend)
             client_participant = remote_participants[0]
-            
+
             # Send transcription via RPC
             await self.ctx.room.local_participant.perform_rpc(
                 destination_identity=client_participant.identity,
@@ -214,36 +214,36 @@ class NoteTakingAssistant:
         except Exception as e:
             self._last_transcription_sent = previous_sent
             logger.error(f"Error sending transcription via RPC: {e}")
-    
+
     async def generate_diagnosis(self, notes: str) -> str:
         """Generate a diagnosis based on the current notes"""
         try:
             prompt = f"""
-                You are a medical diagnostic assistant. Based on the following medical notes from a patient consultation, 
+                You are a medical diagnostic assistant. Based on the following medical notes from a patient consultation,
                 provide potential diagnoses and recommendations.
-                
+
                 Medical Notes:
                 {notes}
-                
+
                 Please provide:
                 1. **Possible Diagnoses**: List the most likely diagnoses based on the symptoms and history
                 2. **Differential Diagnoses**: Other conditions to consider
                 3. **Recommended Tests**: Suggest appropriate diagnostic tests if needed
                 4. **Treatment Considerations**: Initial treatment approaches to consider
                 5. **Follow-up Recommendations**: When and why to follow up
-                
+
                 IMPORTANT: This is for educational purposes only and should not replace professional medical judgment.
                 Always recommend consulting with healthcare professionals for actual medical advice.
-                
+
                 Format your response in clear markdown with headers and bullet points.
             """
-            
+
             ctx = ChatContext([
                 ChatMessage(
                     type="message",
                     role="system",
-                    content=["""You are a knowledgeable medical diagnostic assistant. Provide thorough, 
-                             evidence-based assessments while always emphasizing that your analysis is for 
+                    content=["""You are a knowledgeable medical diagnostic assistant. Provide thorough,
+                             evidence-based assessments while always emphasizing that your analysis is for
                              educational purposes and should not replace professional medical consultation."""]
                 ),
                 ChatMessage(
@@ -252,7 +252,7 @@ class NoteTakingAssistant:
                     content=[prompt]
                 )
             ])
-            
+
             response = ""
             async with self.llm.chat(chat_ctx=ctx) as stream:
                 async for chunk in stream:
@@ -261,7 +261,7 @@ class NoteTakingAssistant:
                     content = getattr(chunk.delta, 'content', None) if hasattr(chunk, 'delta') else str(chunk)
                     if content:
                         response += content
-            
+
             return response.strip()
         except Exception as e:
             logger.error(f"Error generating diagnosis: {e}")
@@ -271,7 +271,7 @@ async def entrypoint(ctx: JobContext):
     setup_langfuse()  # set up the langfuse tracer
 
     session = AgentSession()
-    
+
     # Create the agent
     agent = Agent(
         instructions="""
@@ -316,7 +316,7 @@ async def entrypoint(ctx: JobContext):
             asyncio.create_task(
                 note_assistant.send_transcription_to_frontend(display_text)
             )
-    
+
     @session.on("metrics_collected")
     def _on_metrics_collected(ev: MetricsCollectedEvent):
         usage_collector.collect(ev.metrics)
@@ -331,20 +331,20 @@ async def entrypoint(ctx: JobContext):
         agent=agent,
         room=ctx.room
     )
-    
+
     # Register RPC handler for diagnosis requests after session starts
     async def handle_diagnosis_request(rpc_invocation):
         """Handle diagnosis request from frontend"""
         try:
             payload = json.loads(rpc_invocation.payload)
             notes = payload.get("notes", "")
-            
+
             if not notes:
                 return json.dumps({"error": "No notes provided for diagnosis"})
-            
+
             # Generate diagnosis
             diagnosis = await note_assistant.generate_diagnosis(notes)
-            
+
             # Send diagnosis back to frontend
             remote_participants = list(ctx.room.remote_participants.values())
             if remote_participants:
@@ -357,12 +357,12 @@ async def entrypoint(ctx: JobContext):
                         "timestamp": asyncio.get_event_loop().time()
                     })
                 )
-            
+
             return json.dumps({"success": True})
         except Exception as e:
             logger.error(f"Error handling diagnosis request: {e}")
             return json.dumps({"error": str(e)})
-    
+
     # Register the RPC method
     ctx.room.local_participant.register_rpc_method("request_diagnosis", handle_diagnosis_request)
 

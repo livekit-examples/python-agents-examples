@@ -56,6 +56,12 @@ export function useAgentControlBar(props: UseAgentControlBarProps = {}): UseAgen
     source: Track.Source.ScreenShare,
     onDeviceError: (error) => props.onDeviceError?.({ source: Track.Source.ScreenShare, error }),
   });
+  const cameraToggleEnabled = cameraToggle.enabled;
+  const cameraToggleFn = cameraToggle.toggle;
+  const microphoneToggleEnabled = microphoneToggle.enabled;
+  const microphoneToggleFn = microphoneToggle.toggle;
+  const screenShareToggleEnabled = screenShareToggle.enabled;
+  const screenShareToggleFn = screenShareToggle.toggle;
 
   const micTrackRef = React.useMemo(() => {
     return {
@@ -101,33 +107,39 @@ export function useAgentControlBar(props: UseAgentControlBarProps = {}): UseAgen
 
   const handleToggleCamera = React.useCallback(
     async (enabled?: boolean) => {
-      if (screenShareToggle.enabled) {
-        screenShareToggle.toggle(false);
+      if (screenShareToggleEnabled) {
+        screenShareToggleFn(false);
       }
-      await cameraToggle.toggle(enabled);
+      await cameraToggleFn(enabled);
       // persist video input enabled preference
-      saveVideoInputEnabled(!cameraToggle.enabled);
+      saveVideoInputEnabled(!cameraToggleEnabled);
     },
-    [cameraToggle.enabled, screenShareToggle.enabled]
+    [
+      cameraToggleEnabled,
+      cameraToggleFn,
+      saveVideoInputEnabled,
+      screenShareToggleEnabled,
+      screenShareToggleFn,
+    ]
   );
 
   const handleToggleMicrophone = React.useCallback(
     async (enabled?: boolean) => {
-      await microphoneToggle.toggle(enabled);
+      await microphoneToggleFn(enabled);
       // persist audio input enabled preference
-      saveAudioInputEnabled(!microphoneToggle.enabled);
+      saveAudioInputEnabled(!microphoneToggleEnabled);
     },
-    [microphoneToggle.enabled]
+    [microphoneToggleEnabled, microphoneToggleFn, saveAudioInputEnabled]
   );
 
   const handleToggleScreenShare = React.useCallback(
     async (enabled?: boolean) => {
-      if (cameraToggle.enabled) {
-        cameraToggle.toggle(false);
+      if (cameraToggleEnabled) {
+        cameraToggleFn(false);
       }
-      await screenShareToggle.toggle(enabled);
+      await screenShareToggleFn(enabled);
     },
-    [screenShareToggle.enabled, cameraToggle.enabled]
+    [cameraToggleEnabled, cameraToggleFn, screenShareToggleFn]
   );
 
   return {

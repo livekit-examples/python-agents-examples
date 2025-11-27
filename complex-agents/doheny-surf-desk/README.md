@@ -2,7 +2,7 @@
 
 A voice-based surf lesson booking system demonstrating **background observer agents**, **typed tasks**, and **task groups** using LiveKit Agents.
 
-## What This Demo Shows
+## What This Demo shows
 
 This example demonstrates three key patterns:
 
@@ -12,7 +12,7 @@ The **ObserverAgent** runs in parallel with the main conversation flow. It monit
 
 ### 2. Sequential Task Groups
 
-Shows how to execute multiple tasks in sequence with structured return values using `TaskGroup`.
+shows how to execute multiple tasks in sequence with structured return values using `TaskGroup`.
 For more information, see the [LiveKit Agents TaskGroup documentation](https://docs.livekit.io/agents/build/tasks/#taskgroup).
 
 ### 3. Typed Tasks with Structured Results

@@ -67,7 +67,7 @@ def _has_frontmatter(file_path: Path) -> bool:
     try:
         content = file_path.read_text(encoding="utf-8", errors="ignore")
         # Check if the file starts with frontmatter (raw or in docstring)
-        return (FRONTMATTER_PATTERN.match(content) is not None or 
+        return (FRONTMATTER_PATTERN.match(content) is not None or
                 FRONTMATTER_IN_DOCSTRING_PATTERN.match(content) is not None)
     except Exception:
         return False
@@ -101,21 +101,21 @@ def _scan(paths: list[Path]) -> dict[str, bool]:
             # Skip excluded directories
             if any(part in EXCLUDE_DIRS for part in py.parts):
                 continue
-            
+
             # Skip files in docs/tools directory
             if "docs/tools" in str(py):
                 continue
-            
+
             # Only check files that appear to be agent examples
             if not _is_agent_example(py):
                 continue
-            
+
             # Make path relative for cleaner output
             try:
                 rel_path = py.relative_to(Path.cwd())
             except ValueError:
                 rel_path = py
-            
+
             found[str(rel_path)] = _has_frontmatter(py)
 
     return found
@@ -126,7 +126,7 @@ def _report(found: dict[str, bool], warn_only=False):
     if not found:
         print("\nNo agent example files found.")
         return False, []
-    
+
     total = len(found)
     with_frontmatter = sum(found.values())
     incomplete = with_frontmatter < total
@@ -134,10 +134,10 @@ def _report(found: dict[str, bool], warn_only=False):
 
     if not warn_only:
         print(f"\nFrontmatter Coverage ({with_frontmatter}/{total} files have frontmatter)")
-        
+
         # Sort files by path
         sorted_files = sorted(found.items())
-        
+
         # Group by directory for better readability
         current_dir = None
         for file_path, has_fm in sorted_files:
@@ -145,21 +145,21 @@ def _report(found: dict[str, bool], warn_only=False):
             if dir_path != current_dir:
                 current_dir = dir_path
                 print(f"\n  {dir_path}/")
-            
+
             tick = "✔" if has_fm else "✘"
             file_name = Path(file_path).name
             print(f"    {tick} {file_name}")
-            
+
             if not has_fm:
                 files_without_frontmatter.append(file_path)
-    
+
     elif incomplete:
         print(f"\nWARNING: {total - with_frontmatter} agent example files are missing frontmatter ({with_frontmatter}/{total} have frontmatter)")
         for file_path in sorted(found.keys()):
             if not found[file_path]:
                 print(f"  Missing: {file_path}")
                 files_without_frontmatter.append(file_path)
-    
+
     return incomplete, files_without_frontmatter
 
 
@@ -217,6 +217,6 @@ if __name__ == "__main__":
         print(f"\nERROR: Found {len(missing)} files without frontmatter. Add frontmatter to these agent examples.")
         print("\nRun with --show-example to see the expected format.")
         sys.exit(1)
-    
+
     if incomplete and not args.warn_only:
         print("\nTip: Run with --show-example to see the expected frontmatter format.")

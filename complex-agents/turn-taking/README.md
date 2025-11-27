@@ -87,7 +87,7 @@ The application will be available at `http://localhost:3000`. Connect to start c
 
 - Next.js app with real-time EOU probability display
 - Registers RPC handler for `client.eou_update` method
-- Shows transcription view and audio visualizer
+- shows transcription view and audio visualizer
 - Updates EOU percentage dynamically as user speaks
 
 ### RPC Communication

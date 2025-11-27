@@ -8,3 +8,6 @@ __pycache__
 .DS_Store
 README_TEMPLATE.md
 in_progress/
+docs/venv
+.pytest_cache/
+__pycache__/

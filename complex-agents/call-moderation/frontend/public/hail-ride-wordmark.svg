@@ -1,0 +1,20 @@
+<svg width="220" height="48" viewBox="0 0 220 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="220" height="48" rx="12" fill="url(#gradient-bg)"/>
+  <text
+    x="24"
+    y="31"
+    fill="#041015"
+    font-size="24"
+    font-family="'Plus Jakarta Sans','Segoe UI',sans-serif"
+    font-weight="700"
+    letter-spacing="0.02em"
+  >
+    Hail Ride
+  </text>
+  <defs>
+    <linearGradient id="gradient-bg" x1="0" y1="0" x2="220" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E2FBFF"/>
+      <stop offset="1" stop-color="#A3E6F7"/>
+    </linearGradient>
+  </defs>
+</svg>

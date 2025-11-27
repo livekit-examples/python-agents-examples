@@ -9,107 +9,186 @@ demonstrates:
   - Allowing agents to self-update their own options using function tools.
 ---
 
-# ElevenLabs Language Switcher Agent
-
-A multilingual voice assistant that dynamically switches between languages using ElevenLabs TTS and LiveKit's voice agents.
-
-## Overview
-
-**Language Switcher Agent** - A voice-enabled assistant that can seamlessly switch between multiple languages during a conversation, demonstrating dynamic TTS and STT configuration.
-
-## Features
-
-- **Dynamic Language Switching**: Change languages mid-conversation without restarting
-- **Synchronized STT/TTS**: Both speech recognition and synthesis switch together
-- **Multiple Language Support**: English, Spanish, French, German, and Italian
-- **Native Pronunciation**: Each language uses ElevenLabs' native language models
-- **Contextual Greetings**: Language-specific welcome messages after switching
-- **Voice-Enabled**: Built using LiveKit's voice capabilities with support for:
-  - Speech-to-Text (STT) using Deepgram (multilingual)
-  - Large Language Model (LLM) using OpenAI GPT-4o
-  - Text-to-Speech (TTS) using ElevenLabs Turbo v2.5
-  - Voice Activity Detection (VAD) using Silero
-
-## How It Works
-
-1. User connects and hears a greeting in English
-2. User can ask the agent to switch to any supported language
-3. The agent updates both TTS and STT language settings dynamically
-4. A confirmation message is spoken in the new language
-5. All subsequent conversation happens in the selected language
-6. User can switch languages again at any time during the conversation
+In this example you will build a multilingual voice agent that can switch between languages mid-call by updating ElevenLabs TTS and Deepgram STT on the fly. The agent greets callers in English, switches to Spanish, French, German, or Italian when asked, and replies with a native greeting in the new language.
 
 ## Prerequisites
 
-- Python 3.10+
-- `livekit-agents`>=1.0
-- LiveKit account and credentials
-- API keys for:
-  - OpenAI (for LLM capabilities)
-  - Deepgram (for multilingual speech-to-text)
-  - ElevenLabs (for multilingual text-to-speech)
+- Python 3.10+ and `livekit-agents`>=1.0
+- A `.env` at the repo root with:
+  ```
+  LIVEKIT_URL=your_livekit_url
+  LIVEKIT_API_KEY=your_api_key
+  LIVEKIT_API_SECRET=your_api_secret
+  OPENAI_API_KEY=your_openai_key
+  DEEPGRAM_API_KEY=your_deepgram_key
+  ELEVENLABS_API_KEY=your_elevenlabs_key
+  ```
+- Install dependencies in one line:
+  ```bash
+  pip install python-dotenv "livekit-agents[deepgram,elevenlabs,openai]"
+  ```
 
-## Installation
+## Load configuration and logging
 
-1. Clone the repository
+Initialize logging and load your `.env` so STT, TTS, and LLM plugins can find their keys.
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```python
+import logging
+from pathlib import Path
+from dotenv import load_dotenv
+from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, function_tool
+from livekit.plugins import deepgram, openai, elevenlabs, silero
 
-3. Create a `.env` file in the parent directory with your API credentials:
-   ```
-   LIVEKIT_URL=your_livekit_url
-   LIVEKIT_API_KEY=your_api_key
-   LIVEKIT_API_SECRET=your_api_secret
-   OPENAI_API_KEY=your_openai_key
-   DEEPGRAM_API_KEY=your_deepgram_key
-   ELEVENLABS_API_KEY=your_elevenlabs_key
-   ```
+logger = logging.getLogger("language-switcher")
+logger.setLevel(logging.INFO)
 
-## Running the Agent
-
-```bash
-python elevenlabs_change_language.py dev
+load_dotenv()
 ```
 
-The agent will start in English. Try saying:
+## Define the language-switcher agent
+
+Start with English STT/TTS plus GPT-4o, and give the agent short instructions about switching languages.
+
+```python
+class LanguageSwitcherAgent(Agent):
+    def __init__(self) -> None:
+        super().__init__(
+            instructions="""
+                You are a helpful assistant communicating through voice.
+                You can switch to a different language if asked.
+                Don't use any unpronouncable characters.
+            """,
+            stt=deepgram.STT(
+                model="nova-2-general",
+                language="en"
+            ),
+            llm=openai.LLM(model="gpt-4o"),
+            tts=elevenlabs.TTS(
+                model="eleven_turbo_v2_5",
+                language="en"
+            ),
+            vad=silero.VAD.load()
+        )
+        self.current_language = "en"
+```
+
+## Map supported languages and greetings
+
+Track friendly names, Deepgram language codes, and native greetings so you can update both TTS and STT together.
+
+```python
+        self.language_names = {
+            "en": "English",
+            "es": "Spanish",
+            "fr": "French",
+            "de": "German",
+            "it": "Italian"
+        }
+
+        self.deepgram_language_codes = {
+            "en": "en",
+            "es": "es",
+            "fr": "fr-CA",
+            "de": "de",
+            "it": "it"
+        }
+
+        self.greetings = {
+            "en": "Hello! I'm now speaking in English. How can I help you today?",
+            "es": "¡Hola! Ahora estoy hablando en español. ¿Cómo puedo ayudarte hoy?",
+            "fr": "Bonjour! Je parle maintenant en français. Comment puis-je vous aider aujourd'hui?",
+            "de": "Hallo! Ich spreche jetzt Deutsch. Wie kann ich Ihnen heute helfen?",
+            "it": "Ciao! Ora sto parlando in italiano. Come posso aiutarti oggi?"
+        }
+```
+
+## Switch languages dynamically
+
+Use a helper to update both audio pipelines and confirm with a greeting in the target language.
+
+```python
+    async def on_enter(self):
+        await self.session.say("Hi there! I can speak in multiple languages including Spanish, French, German, and Italian. Just ask me to switch to any of these languages. How can I help you today?")
+
+    async def _switch_language(self, language_code: str) -> None:
+        """Helper method to switch the language"""
+        if language_code == self.current_language:
+            await self.session.say(f"I'm already speaking in {self.language_names[language_code]}.")
+            return
+
+        if self.tts is not None:
+            self.tts.update_options(language=language_code)
+
+        if self.stt is not None:
+            deepgram_language = self.deepgram_language_codes.get(language_code, language_code)
+            self.stt.update_options(language=deepgram_language)
+
+        self.current_language = language_code
+
+        await self.session.say(self.greetings[language_code])
+```
+
+## Expose tool calls for each language
+
+Function tools give the LLM explicit hooks to change the language when the user asks.
+
+```python
+    @function_tool
+    async def switch_to_english(self):
+        """Switch to speaking English"""
+        await self._switch_language("en")
+
+    @function_tool
+    async def switch_to_spanish(self):
+        """Switch to speaking Spanish"""
+        await self._switch_language("es")
+
+    @function_tool
+    async def switch_to_french(self):
+        """Switch to speaking French"""
+        await self._switch_language("fr")
+
+    @function_tool
+    async def switch_to_german(self):
+        """Switch to speaking German"""
+        await self._switch_language("de")
+
+    @function_tool
+    async def switch_to_italian(self):
+        """Switch to speaking Italian"""
+        await self._switch_language("it")
+```
+
+## Start the session
+
+Launch the language-switcher agent and connect it to your LiveKit room.
+
+```python
+async def entrypoint(ctx: JobContext):
+    session = AgentSession()
+
+    await session.start(
+        agent=LanguageSwitcherAgent(),
+        room=ctx.room
+    )
+
+if __name__ == "__main__":
+    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+```
+
+## Run it
+
+```bash
+python elevenlabs_change_language.py console
+```
+
+Try saying:
 - "Switch to Spanish"
 - "Can you speak French?"
 - "Let's talk in German"
 - "Change to Italian"
 
-## Architecture Details
-
-### Language Configuration
-
-The agent maintains mappings for:
-- **Language codes**: Standard two-letter codes (en, es, fr, de, it)
-- **Language names**: Human-readable names for user feedback
-- **Deepgram codes**: Some languages use region-specific codes (e.g., fr-CA for French)
-- **Greetings**: Native language welcome messages
-
-### Dynamic Updates
-
-Language switching involves:
-1. **TTS Update**: `self.tts.update_options(language=language_code)`
-2. **STT Update**: `self.stt.update_options(language=deepgram_language)`
-3. **State tracking**: Current language stored for duplicate prevention
-4. **Confirmation**: Native language greeting confirms the switch
-
-### Function Tools
-
-Each language has a dedicated function tool:
-- `switch_to_english()`
-- `switch_to_spanish()`
-- `switch_to_french()`
-- `switch_to_german()`
-- `switch_to_italian()`
-
-This approach allows the LLM to understand natural language requests like "habla español" or "parlez-vous français?"
-
-## Supported Languages
+## Supported languages
 
 | Language | Code | Deepgram Code | Example Phrase |
 |----------|------|---------------|----------------|
@@ -119,21 +198,131 @@ This approach allows the LLM to understand natural language requests like "habla
 | German | de | de | "Hallo! Wie kann ich Ihnen helfen?" |
 | Italian | it | it | "Ciao! Come posso aiutarti?" |
 
-## Possible Customizations
+## How it works
 
-1. **Add More Languages**: Extend the language mappings and add corresponding function tools
-2. **Voice Selection**: Use different ElevenLabs voices for different languages
-3. **Regional Variants**: Add support for regional dialects (e.g., Mexican Spanish, British English)
-4. **Language Detection**: Implement automatic language detection from user speech
-5. **Model Selection**: Use different ElevenLabs models for specific language pairs
+1. The agent greets in English and waits for a language change request.
+2. A function tool routes to `_switch_language`, which updates both TTS and STT via `update_options`.
+3. The agent tracks the current language to avoid redundant switches.
+4. A native greeting confirms the change, and the rest of the conversation stays in the selected language until switched again.
 
-## Extra Notes
+## Complete example
 
-- **ElevenLabs Model**: Uses `eleven_turbo_v2_5` which supports multiple languages
-- **Deepgram Model**: Uses `nova-2-general` with language-specific parameters
-- **Language Persistence**: Current language is maintained throughout the session
+```python
+import logging
+from pathlib import Path
+from dotenv import load_dotenv
+from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, function_tool
+from livekit.plugins import deepgram, openai, elevenlabs, silero
 
-## Example Conversation
+logger = logging.getLogger("language-switcher")
+logger.setLevel(logging.INFO)
+
+load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+
+class LanguageSwitcherAgent(Agent):
+    def __init__(self) -> None:
+        super().__init__(
+            instructions="""
+                You are a helpful assistant communicating through voice.
+                You can switch to a different language if asked.
+                Don't use any unpronouncable characters.
+            """,
+            stt=deepgram.STT(
+                model="nova-2-general",
+                language="en"
+            ),
+            llm=openai.LLM(model="gpt-4o"),
+            tts=elevenlabs.TTS(
+                model="eleven_turbo_v2_5",
+                language="en"
+            ),
+            vad=silero.VAD.load()
+        )
+        self.current_language = "en"
+
+        self.language_names = {
+            "en": "English",
+            "es": "Spanish",
+            "fr": "French",
+            "de": "German",
+            "it": "Italian"
+        }
+
+        self.deepgram_language_codes = {
+            "en": "en",
+            "es": "es",
+            "fr": "fr-CA",
+            "de": "de",
+            "it": "it"
+        }
+
+        self.greetings = {
+            "en": "Hello! I'm now speaking in English. How can I help you today?",
+            "es": "¡Hola! Ahora estoy hablando en español. ¿Cómo puedo ayudarte hoy?",
+            "fr": "Bonjour! Je parle maintenant en français. Comment puis-je vous aider aujourd'hui?",
+            "de": "Hallo! Ich spreche jetzt Deutsch. Wie kann ich Ihnen heute helfen?",
+            "it": "Ciao! Ora sto parlando in italiano. Come posso aiutarti oggi?"
+        }
+
+    async def on_enter(self):
+        await self.session.say(f"Hi there! I can speak in multiple languages including Spanish, French, German, and Italian. Just ask me to switch to any of these languages. How can I help you today?")
+
+    async def _switch_language(self, language_code: str) -> None:
+        """Helper method to switch the language"""
+        if language_code == self.current_language:
+            await self.session.say(f"I'm already speaking in {self.language_names[language_code]}.")
+            return
+
+        if self.tts is not None:
+            self.tts.update_options(language=language_code)
+
+        if self.stt is not None:
+            deepgram_language = self.deepgram_language_codes.get(language_code, language_code)
+            self.stt.update_options(language=deepgram_language)
+
+        self.current_language = language_code
+
+        await self.session.say(self.greetings[language_code])
+
+    @function_tool
+    async def switch_to_english(self):
+        """Switch to speaking English"""
+        await self._switch_language("en")
+
+    @function_tool
+    async def switch_to_spanish(self):
+        """Switch to speaking Spanish"""
+        await self._switch_language("es")
+
+    @function_tool
+    async def switch_to_french(self):
+        """Switch to speaking French"""
+        await self._switch_language("fr")
+
+    @function_tool
+    async def switch_to_german(self):
+        """Switch to speaking German"""
+        await self._switch_language("de")
+
+    @function_tool
+    async def switch_to_italian(self):
+        """Switch to speaking Italian"""
+        await self._switch_language("it")
+
+
+async def entrypoint(ctx: JobContext):
+    session = AgentSession()
+
+    await session.start(
+        agent=LanguageSwitcherAgent(),
+        room=ctx.room
+    )
+
+if __name__ == "__main__":
+    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+```
+
+## Example conversation
 
 ```
 Agent: "Hi there! I can speak in multiple languages..."

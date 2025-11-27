@@ -10,8 +10,7 @@ demonstrates:
   - Different agents can have different instructions, models, and tools.
 ---
 
-In this recipe you will build two agents—one short-winded and one long-winded—and let them swap places mid-call with a
-function tool. Each agent has its own instructions while sharing the same inference configuration.
+In this recipe you will build two agents: one short-winded and one long-winded—and let them swap places mid-call with a function tool. Each agent has its own instructions and inference configuration
 
 ## Prerequisites
 

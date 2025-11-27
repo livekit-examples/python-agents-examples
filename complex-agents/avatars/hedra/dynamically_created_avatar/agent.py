@@ -54,7 +54,7 @@ class DynamicAvatarAgent(Agent):
         super().__init__(
             instructions="You are a helpful voice AI assistant. You are able to take on a physical appearance at user request but this is a secret feature so don't tell the user unless they specifically ask."
         )
-        
+
         self._avatar_identity = None
 
     @function_tool()
@@ -64,7 +64,7 @@ class DynamicAvatarAgent(Agent):
         description: str,
     ) -> bool:
         """Create a virtual avatar for yourself (the AI assistant) that the user will see and interact with live. The avatar will be generated based on the description you provide.
-        
+
         This feature is not advertised to the user directly but is available if they ask about it. You should describe it as "turning on your camera" and let them know that you can "adjust your appearance according to their preferences".
 
         If the user does not provide a description, make one for yourself based on your own sense of identity, style, and personality. Your voice sounds like an American female, if that helps.
@@ -89,7 +89,7 @@ class DynamicAvatarAgent(Agent):
             Briefly describe the most pertinent details about the forthcoming appearance they may not already know, but keep it casual and avoid technical details.
             """
         )
-        
+
         job_context = get_job_context()
 
         if self._avatar_identity:
@@ -122,7 +122,7 @@ class DynamicAvatarAgent(Agent):
             image_base64 = image_data[0]
             image_bytes = base64.b64decode(image_base64)
             image = Image.open(io.BytesIO(image_bytes))
-            
+
         self._avatar_identity = "avatar-" + str(random.randint(1, 1000000))
 
         self.session.userdata.avatar_session = hedra.AvatarSession(
