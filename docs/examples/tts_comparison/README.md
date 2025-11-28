@@ -1,7 +1,7 @@
 ---
 title: TTS Comparison
 category: pipeline-tts
-tags: [pipeline-tts, openai, deepgram]
+tags: [pipeline-tts, deepgram, openai, rime, elevenlabs, cartesia, playai]
 difficulty: intermediate
 description: Switches between different TTS providers using function tools.
 demonstrates:
@@ -9,98 +9,136 @@ demonstrates:
   - Each function tool returns a new agent with the same instructions, but with a different TTS provider.
 ---
 
-# TTS Provider Comparison Agent
-
-A voice assistant that allows real-time switching between different Text-to-Speech providers to compare voice quality, latency, and characteristics using LiveKit's voice agents.
-
-## Overview
-
-**TTS Comparison Agent** - A voice-enabled assistant that dynamically switches between multiple TTS providers (Rime, ElevenLabs, Cartesia, and PlayAI) during a conversation, allowing direct comparison of different voice synthesis technologies.
-
-## Features
-
-- **Multiple TTS Providers**: Compare 4 different TTS services in one session
-- **Dynamic Provider Switching**: Change voices mid-conversation via agent transfer
-- **Consistent Sample Rate**: All providers use 44.1kHz for fair comparison
-- **Provider Awareness**: Agent knows which TTS it's using and can discuss differences
-- **Voice-Enabled**: Built using LiveKit's voice capabilities with support for:
-  - Speech-to-Text (STT) using Deepgram
-  - Large Language Model (LLM) using OpenAI GPT-4o
-  - Text-to-Speech (TTS) using multiple providers
-  - Voice Activity Detection (VAD) using Silero
-
-## TTS Providers included in this comparison
-
-### 1. Rime
-- **Model**: MistV2
-- **Voice**: Abbie
-- **Sample Rate**: 44.1kHz
-- **Characteristics**: Natural conversational voice
-
-### 2. ElevenLabs
-- **Model**: Eleven Multilingual V2
-- **Sample Rate**: Default (provider-managed)
-- **Characteristics**: High-quality multilingual support
-
-### 3. Cartesia
-- **Model**: Sonic Preview
-- **Voice**: Custom voice ID
-- **Sample Rate**: 44.1kHz
-- **Characteristics**: Fast, low-latency synthesis
-
-### 4. PlayAI
-- **Model**: PlayDialog
-- **Voice**: Custom cloned voice
-- **Sample Rate**: 44.1kHz
-- **Characteristics**: Voice cloning capabilities
-
-## How It Works
-
-1. Session starts with the Rime TTS provider
-2. Agent introduces itself using the current voice
-3. User can request to switch providers (e.g., "Switch to ElevenLabs")
-4. Agent transfers to a new agent instance with the requested TTS
-5. New agent greets the user with the new voice
-6. Process repeats for any provider comparison
+This example demonstrates a voice assistant that allows real-time switching between different Text-to-Speech providers to compare voice quality, latency, and characteristics. Each provider has its own agent class, and function tools allow seamless switching mid-conversation.
 
 ## Prerequisites
 
-- Python 3.10+
-- `livekit-agents`>=1.0
-- LiveKit account and credentials
-- API keys for:
-  - OpenAI (for LLM capabilities)
-  - Deepgram (for speech-to-text)
-  - Rime (for Rime TTS)
-  - ElevenLabs (for ElevenLabs TTS)
-  - Cartesia (for Cartesia TTS)
-  - PlayAI (for PlayAI TTS)
+- Add a `.env` in this directory with your LiveKit credentials and API keys for each TTS provider:
+  ```
+  LIVEKIT_URL=your_livekit_url
+  LIVEKIT_API_KEY=your_api_key
+  LIVEKIT_API_SECRET=your_api_secret
+  OPENAI_API_KEY=your_openai_key
+  DEEPGRAM_API_KEY=your_deepgram_key
+  RIME_API_KEY=your_rime_key
+  ELEVENLABS_API_KEY=your_elevenlabs_key
+  CARTESIA_API_KEY=your_cartesia_key
+  PLAYAI_API_KEY=your_playai_key
+  ```
+- Install dependencies:
+  ```bash
+  pip install "livekit-agents[silero,deepgram,openai,rime,elevenlabs,playai,cartesia]" python-dotenv
+  ```
 
-## Installation
+## Load environment and create the AgentServer
 
-1. Clone the repository
+Import the necessary modules, load environment variables, and create an AgentServer. The VAD is prewarmed once per process and shared across all agents.
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```python
+import logging
+from dotenv import load_dotenv
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, function_tool
+from livekit.plugins import deepgram, openai, rime, elevenlabs, cartesia, playai, silero
 
-3. Create a `.env` file in the parent directory with your API credentials:
-   ```
-   LIVEKIT_URL=your_livekit_url
-   LIVEKIT_API_KEY=your_api_key
-   LIVEKIT_API_SECRET=your_api_secret
-   OPENAI_API_KEY=your_openai_key
-   DEEPGRAM_API_KEY=your_deepgram_key
-   RIME_API_KEY=your_rime_key
-   ELEVENLABS_API_KEY=your_elevenlabs_key
-   CARTESIA_API_KEY=your_cartesia_key
-   PLAYAI_API_KEY=your_playai_key
-   ```
+logger = logging.getLogger("tts-comparison")
+logger.setLevel(logging.INFO)
 
-## Running the Agent
+load_dotenv()
 
-```bash
+server = AgentServer()
+```
+
+## Prewarm VAD for faster connections
+
+Preload the VAD model once per process. The VAD instance is passed to each agent so they can reuse it when switching providers.
+
+```python
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+```
+
+## Define agents for each TTS provider
+
+Each agent class configures a different TTS provider while sharing the same STT, LLM, and VAD. Function tools return new agent instances to enable switching. The VAD is stored so it can be passed to the next agent during transfer.
+
+```python
+class RimeAgent(Agent):
+    def __init__(self, vad) -> None:
+        super().__init__(
+            instructions="""
+                You are a helpful assistant communicating through voice.
+                You are currently using the Rime TTS provider.
+                You can switch to a different TTS provider if asked.
+                Don't use any unpronouncable characters.
+            """,
+            stt=deepgram.STT(),
+            llm=openai.LLM(),
+            tts=rime.TTS(),
+            vad=vad
+        )
+        self._vad = vad
+
+    async def on_enter(self) -> None:
+        await self.session.say("Hello! I'm now using the Rime TTS voice. How does it sound?")
+
+    @function_tool
+    async def switch_to_elevenlabs(self):
+        """Switch to ElevenLabs TTS voice"""
+        return ElevenLabsAgent(self._vad)
+
+    @function_tool
+    async def switch_to_cartesia(self):
+        """Switch to Cartesia TTS voice"""
+        return CartesiaAgent(self._vad)
+
+    @function_tool
+    async def switch_to_playai(self):
+        """Switch to PlayAI TTS voice"""
+        return PlayAIAgent(self._vad)
+```
+
+## Additional TTS provider agents
+
+The ElevenLabs, Cartesia, and PlayAI agents follow the same pattern—each configures its own TTS provider and provides function tools to switch to the other providers.
+
+```python
+class ElevenLabsAgent(Agent):
+    def __init__(self, vad) -> None:
+        super().__init__(
+            instructions="...",
+            stt=deepgram.STT(),
+            llm=openai.LLM(),
+            tts=elevenlabs.TTS(),
+            vad=vad
+        )
+        self._vad = vad
+
+    # ... on_enter and switch functions
+```
+
+## Create the RTC session entrypoint
+
+Start with the Rime agent and pass the prewarmed VAD. The session handles agent transfers automatically when function tools return new agents.
+
+```python
+@server.rtc_session()
+async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession()
+
+    await session.start(
+        agent=RimeAgent(vad=ctx.proc.userdata["vad"]),
+        room=ctx.room
+    )
+    await ctx.connect()
+```
+
+## Run it
+
+```console
 python tts_comparison.py dev
 ```
 
@@ -110,56 +148,187 @@ Try these commands to switch between providers:
 - "Let me hear PlayAI"
 - "Go back to Rime"
 
-## Architecture Details
+## How it works
 
-### Agent Transfer Pattern
+1. Session starts with the Rime TTS provider.
+2. Agent introduces itself using the current voice.
+3. User can request to switch providers (e.g., "Switch to ElevenLabs").
+4. Function tool returns a new agent instance with the requested TTS.
+5. Session transfers to the new agent and `on_enter()` provides audio confirmation.
+6. The prewarmed VAD is passed to each new agent during transfer.
 
-Each TTS provider has its own agent class:
-- `RimeAgent`
-- `ElevenLabsAgent`
-- `CartesiaAgent`
-- `PlayAIAgent`
+## Full example
 
-Switching providers involves:
-1. Function tool detects switch request
-2. Returns new agent instance
-3. Session transfers to new agent
-4. `on_enter()` method provides audio confirmation
-
-### Sample Rate Consistency
-
-All providers are configured to use 44.1kHz sample rate (where configurable) to ensure fair comparison. This prevents audio quality differences due to sample rate mismatches.
-
-### Provider Configuration
-
-Each agent maintains its own TTS configuration:
 ```python
-tts=rime.TTS(
-    sample_rate=44100,
-    model="mistv2",
-    speaker="abbie"
-)
-```
+import logging
+from dotenv import load_dotenv
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, function_tool
+from livekit.plugins import deepgram, openai, rime, elevenlabs, cartesia, playai, silero
 
-## Comparison Criteria
+logger = logging.getLogger("tts-comparison")
+logger.setLevel(logging.INFO)
 
-When testing different providers, consider:
+load_dotenv()
 
-1. **Voice Quality**: Naturalness, clarity, pronunciation
-2. **Latency**: Time from request to first audio
-3. **Expressiveness**: Emotion and intonation range
-4. **Language Support**: Accent and multilingual capabilities
-5. **Consistency**: Voice stability across utterances
-6. **Cost**: Per-character or per-second pricing
+class RimeAgent(Agent):
+    def __init__(self, vad) -> None:
+        super().__init__(
+            instructions="""
+                You are a helpful assistant communicating through voice.
+                You are currently using the Rime TTS provider.
+                You can switch to a different TTS provider if asked.
+                Don't use any unpronouncable characters.
+            """,
+            stt=deepgram.STT(),
+            llm=openai.LLM(),
+            tts=rime.TTS(),
+            vad=vad
+        )
+        self._vad = vad
 
-## Example Conversation
+    async def on_enter(self) -> None:
+        await self.session.say("Hello! I'm now using the Rime TTS voice. How does it sound?")
 
-```
-Agent (Rime): "Hello! I'm now using the Rime TTS voice. How does it sound?"
-User: "It sounds good. Can I hear ElevenLabs?"
-Agent (ElevenLabs): "Hello! I'm now using the ElevenLabs TTS voice. What do you think of how I sound?"
-User: "Very natural! Now try Cartesia"
-Agent (Cartesia): "Hello! I'm now using the Cartesia TTS voice. How do I sound to you?"
-User: "Fast response! What about PlayAI?"
-Agent (PlayAI): "Hello! I'm now using the PlayAI TTS voice. What are your thoughts on how I sound?"
+    @function_tool
+    async def switch_to_elevenlabs(self):
+        """Switch to ElevenLabs TTS voice"""
+        return ElevenLabsAgent(self._vad)
+
+    @function_tool
+    async def switch_to_cartesia(self):
+        """Switch to Cartesia TTS voice"""
+        return CartesiaAgent(self._vad)
+
+    @function_tool
+    async def switch_to_playai(self):
+        """Switch to PlayAI TTS voice"""
+        return PlayAIAgent(self._vad)
+
+
+class ElevenLabsAgent(Agent):
+    def __init__(self, vad) -> None:
+        super().__init__(
+            instructions="""
+                You are a helpful assistant communicating through voice.
+                You are currently using the ElevenLabs TTS provider.
+                You can switch to a different TTS provider if asked.
+                Don't use any unpronouncable characters.
+            """,
+            stt=deepgram.STT(),
+            llm=openai.LLM(),
+            tts=elevenlabs.TTS(),
+            vad=vad
+        )
+        self._vad = vad
+
+    async def on_enter(self) -> None:
+        await self.session.say("Hello! I'm now using the ElevenLabs TTS voice. What do you think of how I sound?")
+
+    @function_tool
+    async def switch_to_rime(self):
+        """Switch to Rime TTS voice"""
+        return RimeAgent(self._vad)
+
+    @function_tool
+    async def switch_to_cartesia(self):
+        """Switch to Cartesia TTS voice"""
+        return CartesiaAgent(self._vad)
+
+    @function_tool
+    async def switch_to_playai(self):
+        """Switch to PlayAI TTS voice"""
+        return PlayAIAgent(self._vad)
+
+
+class CartesiaAgent(Agent):
+    def __init__(self, vad) -> None:
+        super().__init__(
+            instructions="""
+                You are a helpful assistant communicating through voice.
+                You are currently using the Cartesia TTS provider.
+                You can switch to a different TTS provider if asked.
+                Don't use any unpronouncable characters.
+            """,
+            stt=deepgram.STT(),
+            llm=openai.LLM(),
+            tts=cartesia.TTS(),
+            vad=vad
+        )
+        self._vad = vad
+
+    async def on_enter(self) -> None:
+        await self.session.say("Hello! I'm now using the Cartesia TTS voice. How do I sound to you?")
+
+    @function_tool
+    async def switch_to_rime(self):
+        """Switch to Rime TTS voice"""
+        return RimeAgent(self._vad)
+
+    @function_tool
+    async def switch_to_elevenlabs(self):
+        """Switch to ElevenLabs TTS voice"""
+        return ElevenLabsAgent(self._vad)
+
+    @function_tool
+    async def switch_to_playai(self):
+        """Switch to PlayAI TTS voice"""
+        return PlayAIAgent(self._vad)
+
+
+class PlayAIAgent(Agent):
+    def __init__(self, vad) -> None:
+        super().__init__(
+            instructions="""
+                You are a helpful assistant communicating through voice.
+                You are currently using the PlayAI TTS provider.
+                You can switch to a different TTS provider if asked.
+                Don't use any unpronouncable characters.
+            """,
+            stt=deepgram.STT(),
+            llm=openai.LLM(),
+            tts=playai.TTS(),
+            vad=vad
+        )
+        self._vad = vad
+
+    async def on_enter(self) -> None:
+        await self.session.say("Hello! I'm now using the PlayAI TTS voice. What are your thoughts on how I sound?")
+
+    @function_tool
+    async def switch_to_rime(self):
+        """Switch to Rime TTS voice"""
+        return RimeAgent(self._vad)
+
+    @function_tool
+    async def switch_to_elevenlabs(self):
+        """Switch to ElevenLabs TTS voice"""
+        return ElevenLabsAgent(self._vad)
+
+    @function_tool
+    async def switch_to_cartesia(self):
+        """Switch to Cartesia TTS voice"""
+        return CartesiaAgent(self._vad)
+
+
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
+async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession()
+
+    await session.start(
+        agent=RimeAgent(vad=ctx.proc.userdata["vad"]),
+        room=ctx.room
+    )
+    await ctx.connect()
+
+if __name__ == "__main__":
+    cli.run_app(server)
 ```

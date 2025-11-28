@@ -2,7 +2,7 @@
 ---
 title: Warm Handoff Agent
 category: telephony
-tags: [call-transfer, warm-handoff, sip, agent-to-human, function-tools]
+tags: [call-transfer, warm-handoff, sip, agent-to-human, function-tools, deepgram, openai, elevenlabs]
 difficulty: intermediate
 description: Agent demonstrating warm handoff functionality to transfer calls to human agents
 demonstrates:
@@ -18,17 +18,16 @@ demonstrates:
 import asyncio
 import os
 import uuid
-from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, RunContext, function_tool
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, RunContext, function_tool
 from livekit import rtc
 from livekit import api
 from livekit.plugins import deepgram, openai, silero, elevenlabs
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 class WarmHandoffAgent(Agent):
-    def __init__(self, job_context=None) -> None:
+    def __init__(self, job_context=None, vad=None) -> None:
         self.job_context = job_context
         super().__init__(
             instructions="""
@@ -41,7 +40,7 @@ class WarmHandoffAgent(Agent):
                 encoding="pcm_44100",
                 model="eleven_multilingual_v2"
             ),
-            vad=silero.VAD.load()
+            vad=vad
         )
 
     @function_tool
@@ -57,13 +56,9 @@ class WarmHandoffAgent(Agent):
             await self.session.say("I'm sorry, I can't transfer the call at this time.")
             return None, "Failed to transfer call: No job context available"
 
-        # Get room name from environment variable
         room_name = os.environ.get('LIVEKIT_ROOM_NAME', self.job_context.room.name)
-
-        # Generate a unique identity for the SIP participant
         identity = f"transfer_{uuid.uuid4().hex[:8]}"
 
-        # Create LiveKit API client
         livekit_url = os.environ.get('LIVEKIT_URL')
         livekit_api_key = os.environ.get('LIVEKIT_API_KEY')
         livekit_api_secret = os.environ.get('LIVEKIT_API_SECRET')
@@ -72,7 +67,6 @@ class WarmHandoffAgent(Agent):
         try:
             print(f"Transferring call to {phone_number}")
 
-            # Using the API from the job context if available
             if self.job_context and hasattr(self.job_context, 'api'):
                 response = await self.job_context.api.sip.create_sip_participant(
                     api.CreateSIPParticipantRequest(
@@ -85,7 +79,6 @@ class WarmHandoffAgent(Agent):
                     )
                 )
             else:
-                # Fallback to creating our own API client
                 livekit_api = api.LiveKitAPI(
                     url=livekit_url,
                     api_key=livekit_api_key,
@@ -115,17 +108,24 @@ class WarmHandoffAgent(Agent):
             return None, f"Failed to transfer call: {e}"
 
     async def on_enter(self):
-        # Generate initial greeting
         self.session.generate_reply()
 
-async def entrypoint(ctx: JobContext):
-    session = AgentSession()
-    agent = WarmHandoffAgent(job_context=ctx)
+server = AgentServer()
 
-    await session.start(
-        agent=agent,
-        room=ctx.room
-    )
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
+async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession()
+    agent = WarmHandoffAgent(job_context=ctx, vad=ctx.proc.userdata["vad"])
+
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
 
     def on_participant_connected_handler(participant: rtc.RemoteParticipant):
         asyncio.create_task(async_on_participant_connected(participant))
@@ -133,12 +133,10 @@ async def entrypoint(ctx: JobContext):
     async def async_on_participant_connected(participant: rtc.RemoteParticipant):
         await agent.session.say(f"Hi there! Is there anything I can help you with?")
 
-    # Handle existing participants
     for participant in ctx.room.remote_participants.values():
         asyncio.create_task(async_on_participant_connected(participant))
 
-    # Set up listener for new participants
     ctx.room.on("participant_connected", on_participant_connected_handler)
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

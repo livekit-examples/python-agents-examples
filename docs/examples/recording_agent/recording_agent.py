@@ -2,7 +2,7 @@
 ---
 title: Recording Agent
 category: egress
-tags: [recording]
+tags: [recording, assemblyai, openai, cartesia]
 difficulty: intermediate
 description: Shows how to create an agent that can record the input to a room and save it to a file.
 demonstrates:
@@ -11,13 +11,12 @@ demonstrates:
 """
 
 import logging
-from pathlib import Path
 from dotenv import load_dotenv
 from livekit import api
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, inference
 from livekit.plugins import silero
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("recording-agent")
 logger.setLevel(logging.INFO)
@@ -27,29 +26,26 @@ class RecordingAgent(Agent):
         super().__init__(
             instructions="""
                 You are a helpful agent. When the user speaks, you listen and respond.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
     async def on_enter(self):
         self.session.generate_reply()
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
     file_contents = ""
     with open("/path/to/credentials.json", "r") as f:
-      file_contents = f.read()
+        file_contents = f.read()
 
     req = api.RoomCompositeEgressRequest(
         room_name="my-room",
@@ -69,14 +65,19 @@ async def entrypoint(ctx: JobContext):
     )
     lkapi = api.LiveKitAPI()
     res = await lkapi.egress.start_room_composite_egress(req)
-    session = AgentSession()
 
-    await session.start(
-        agent=RecordingAgent(),
-        room=ctx.room
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-5-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
+
+    await session.start(agent=RecordingAgent(), room=ctx.room)
+    await ctx.connect()
 
     await lkapi.aclose()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

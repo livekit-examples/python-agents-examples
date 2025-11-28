@@ -12,9 +12,7 @@ demonstrates:
   - Clean agent session lifecycle
 ---
 
-This example answers inbound phone calls using the same agent pattern as any other voice agent. No SIP-specific code is
-required: once you point a LiveKit phone number at a dispatch rule, SIP callers are delivered into the room and the
-running agent greets them.
+This example is a basic agent that can answer inbound phone calls. This doesn't require any SIP-specific code. When you point a LiveKit phone number at a dispatch rule, SIP callers are automatically delivered into the room and the running agent greets them.
 
 ## Prerequisites
 
@@ -31,70 +29,84 @@ running agent greets them.
   pip install "livekit-agents[silero]" python-dotenv
   ```
 
-## Load environment and logging
+## Load environment, logging, and define an AgentServer
 
 ```python
 import logging
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
+from livekit.agents import AgentServer, AgentSession, JobContext, JobProcess, cli, Agent, inference
 from livekit.plugins import silero
 
 load_dotenv()
 
 logger = logging.getLogger("answer-call")
 logger.setLevel(logging.INFO)
+
+server = AgentServer()
 ```
 
-## Define the agent
+## Define the agent and session
 
-Use inference strings for STT/LLM/TTS; no extra provider keys are needed:
+In this example, you'll keep your Agent lightweight. You only need to include the instructions. Next, preload VAD so that it runs once per process. This will cut down on connection latency. 
+
+Next, define STT, LLM, and TTS as a part of your AgentSession inside the rtc session. Lastly, start your session with your agent and connect to the room.
 
 ```python
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
 class SimpleAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
                 You are a helpful agent.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
     async def on_enter(self):
         self.session.generate_reply()
-```
 
-## Start the session
 
-```python
-async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+@server.rtc_session()
+async def my_agent(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
+    )
     agent = SimpleAgent()
 
-    await session.start(
-        agent=agent,
-        room=ctx.room
-    )
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
+```
 
+## Run the server
+
+The `cli.run_app()` function starts the agent server. It manages the worker lifecycle, connects to LiveKit, and processes incoming jobs. When you run the script, it will listen for incoming calls and automatically spawn agent sessions when calls arrive.
+
+```python
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)
 ```
 
 ## Run it
 
+Run the agent using the `console` command, which starts the agent in console mode. This mode is useful for testing and debugging. It connects to a mocked LiveKit room so you can test the agent locally before deploying. This will not work for real phone calls (since the room is mocked), but it's a great way to quickly test that your agent works.
+
 ```bash
 python answer_call.py console
+```
+
+If you want to test your agent with a real phone call, you'll need to start it in dev mode instead. This will connect your agent to a LiveKit server, which makes it available to your dispatch rules.
+
+```bash
+python answer_call.py dev
 ```
 
 ## How inbound calls connect
@@ -108,6 +120,7 @@ python answer_call.py console
 ```python
 import logging
 from dotenv import load_dotenv
+from livekit.agents import JobContext, JobProcess, WorkerOptions, cli, Agent, AgentSession, inference, AgentServer
 from livekit.plugins import silero
 
 load_dotenv()
@@ -120,34 +133,35 @@ class SimpleAgent(Agent):
         super().__init__(
             instructions="""
                 You are a helpful agent.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
     async def on_enter(self):
         self.session.generate_reply()
 
-async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
+async def my_agent(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
+    )
     agent = SimpleAgent()
 
-    await session.start(
-        agent=agent,
-        room=ctx.room
-    )
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)
 ```

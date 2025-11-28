@@ -1,35 +1,17 @@
-"""
----
-title: Langfuse Tracing
-category: metrics
-tags: [metrics, openai, deepgram]
-difficulty: intermediate
-description: Shows how to use the langfuse tracer to trace the agent session.
-demonstrates:
-  - Using the langfuse tracer to trace the agent session.
-  - Using the metrics_collected event to log metrics to langfuse.
----
-"""
 import base64
 import logging
 import os
-from pathlib import Path
-
 from dotenv import load_dotenv
 
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, RunContext, function_tool, metrics
+from livekit.agents import JobContext, JobProcess, cli, Agent, AgentSession, AgentServer, inference, RunContext, function_tool, metrics
 from livekit.agents.telemetry import set_tracer_provider
 from livekit.agents.voice import MetricsCollectedEvent
-from livekit.plugins import deepgram, openai, silero
-from livekit.plugins.turn_detector.multilingual import MultilingualModel
+from livekit.plugins import openai,silero
 
 logger = logging.getLogger("langfuse-trace-example")
+load_dotenv()
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
-
-def setup_langfuse(
-    host: str | None = None, public_key: str | None = None, secret_key: str | None = None
-):
+def setup_langfuse(host: str | None = None, public_key: str | None = None, secret_key: str | None = None):
     from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
     from opentelemetry.sdk.trace import TracerProvider
     from opentelemetry.sdk.trace.export import BatchSpanProcessor
@@ -39,7 +21,8 @@ def setup_langfuse(
     host = host or os.getenv("LANGFUSE_HOST")
 
     if not public_key or not secret_key or not host:
-        raise ValueError("LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY, and LANGFUSE_HOST must be set")
+        logger.warning("LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY, and LANGFUSE_HOST must be set for tracing")
+        return
 
     langfuse_auth = base64.b64encode(f"{public_key}:{secret_key}".encode()).decode()
     os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"] = f"{host.rstrip('/')}/api/public/otel"
@@ -49,6 +32,13 @@ def setup_langfuse(
     trace_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
     set_tracer_provider(trace_provider)
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+    setup_langfuse()
+
+server.setup_fnc = prewarm
 
 @function_tool
 async def lookup_weather(context: RunContext, location: str) -> str:
@@ -67,10 +57,9 @@ class Kelly(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="Your name is Kelly.",
-            llm=openai.LLM(model="gpt-4o-mini"),
-            stt=deepgram.STT(model="nova-3", language="multi"),
-            tts=openai.TTS(voice="ash"),
-            turn_detection=MultilingualModel(),
+            stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+            llm=inference.LLM(model="openai/gpt-4.1-mini"),
+            tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
             tools=[lookup_weather],
         )
 
@@ -105,10 +94,9 @@ class Alloy(Agent):
         return Kelly()
 
 
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    setup_langfuse()  # set up the langfuse tracer
-
-    session = AgentSession(vad=silero.VAD.load())
+    session = AgentSession(vad=ctx.proc.userdata["vad"])
 
     @session.on("metrics_collected")
     def _on_metrics_collected(ev: MetricsCollectedEvent):
@@ -116,7 +104,8 @@ async def entrypoint(ctx: JobContext):
         logger.info(f"Metrics collected: {ev.metrics}")
 
     await session.start(agent=Kelly(), room=ctx.room)
+    await ctx.connect()
 
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

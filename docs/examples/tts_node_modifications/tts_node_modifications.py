@@ -2,27 +2,27 @@
 ---
 title: TTS Node Override
 category: pipeline-tts
-tags: [pipeline-tts, openai, deepgram]
+tags: [pipeline-tts, deepgram, openai, rime]
 difficulty: intermediate
 description: Shows how to override the default TTS node to do replacements on the output.
 demonstrates:
   - Using the `tts_node` method to override the default TTS node and add custom logic to do replacements on the output, like replacing "lol" with "<laughs>".
 ---
 """
-from pathlib import Path
-from typing import AsyncIterable
+
 import logging
+from typing import AsyncIterable
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, ModelSettings
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, ModelSettings
 from livekit.plugins import deepgram, openai, silero, rime
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("tts_node")
 logger.setLevel(logging.INFO)
 
 class TtsNodeOverrideAgent(Agent):
-    def __init__(self) -> None:
+    def __init__(self, vad) -> None:
         super().__init__(
             instructions="""
                 You are a helpful assistant communicating through voice.
@@ -31,11 +31,11 @@ class TtsNodeOverrideAgent(Agent):
             stt=deepgram.STT(),
             llm=openai.LLM(model="gpt-4o"),
             tts=rime.TTS(model="arcana"),
-            vad=silero.VAD.load()
+            vad=vad
         )
 
     async def tts_node(self, text: AsyncIterable[str], model_settings: ModelSettings):
-        """Modify the TTS output by replacing 'lol' with '<laughs>'."""
+        """Modify the TTS output by replacing 'lol' with '<laugh>'."""
 
         async def process_text():
             async for chunk in text:
@@ -53,13 +53,24 @@ class TtsNodeOverrideAgent(Agent):
     async def on_enter(self):
         await self.session.say(f"Hi there! Is there anything I can help you with? If you say something funny, I might respond with lol.")
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
     session = AgentSession()
 
     await session.start(
-        agent=TtsNodeOverrideAgent(),
+        agent=TtsNodeOverrideAgent(vad=ctx.proc.userdata["vad"]),
         room=ctx.room
     )
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

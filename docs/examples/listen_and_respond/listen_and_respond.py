@@ -2,7 +2,7 @@
 ---
 title: Listen and Respond
 category: basics
-tags: [listen, respond, openai, deepgram]
+tags: [basics, assemblyai, openai, cartesia]
 difficulty: beginner
 description: Shows how to create an agent that can listen to the user and respond.
 demonstrates:
@@ -11,13 +11,11 @@ demonstrates:
 """
 
 import logging
-import os
-from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
+from livekit.agents import JobContext, JobProcess, Agent, AgentSession, inference, AgentServer, cli
 from livekit.plugins import silero
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("listen-and-respond")
 logger.setLevel(logging.INFO)
@@ -27,32 +25,34 @@ class ListenAndRespondAgent(Agent):
         super().__init__(
             instructions="""
                 You are a helpful agent. When the user speaks, you listen and respond.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
     async def on_enter(self):
         self.session.generate_reply()
 
-async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+server = AgentServer()
 
-    await session.start(
-        agent=ListenAndRespondAgent(),
-        room=ctx.room
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
+async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
+    agent = ListenAndRespondAgent()
+
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

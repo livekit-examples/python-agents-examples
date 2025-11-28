@@ -2,7 +2,7 @@
 ---
 title: Function Tool Voice Switching Agent
 category: basics
-tags: [tts, voice-switching, function-tools, inworld, deepgram, openai]
+tags: [tts, voice-switching, function-tools, inworld, assemblyai, openai]
 difficulty: beginner
 description: Demonstrates how to create an agent that can dynamically switch between different voices during a conversation using function tools.
 demonstrates:
@@ -14,7 +14,7 @@ demonstrates:
 
 import logging
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, function_tool
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, inference, function_tool
 from livekit.plugins import silero, inworld
 
 load_dotenv()
@@ -25,19 +25,14 @@ logger.setLevel(logging.INFO)
 class SayPhraseInVoiceAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions="""
-                You are an agent that can say phrases in different voices.
-            """,
-            stt="assemblyai/universal-streaming",
-            llm="openai/gpt-4.1-mini",
-            tts=inworld.TTS(voice="Ashley"),
-            vad=silero.VAD.load()
+            instructions="You are an agent that can say phrases in different voices."
         )
+        self._tts = inworld.TTS(voice="Ashley")
 
     async def say_phrase_in_voice(self, phrase, voice="Hades"):
-        self.tts.update_options(voice=voice)
+        self._tts.update_options(voice=voice)
         await self.session.say(phrase)
-        self.tts.update_options(voice="Ashley")
+        self._tts.update_options(voice="Ashley")
 
     @function_tool
     async def say_phrase_in_voice_tool(self, phrase: str, voice: str = "Ashley"):
@@ -47,15 +42,29 @@ class SayPhraseInVoiceAgent(Agent):
     async def on_enter(self):
         self.session.generate_reply()
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    await ctx.connect()
+    ctx.log_context_fields = {"room": ctx.room.name}
 
-    session = AgentSession()
+    agent = SayPhraseInVoiceAgent()
 
-    await session.start(
-        agent=SayPhraseInVoiceAgent(),
-        room=ctx.room
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-5-mini"),
+        tts=agent._tts,
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
 
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
+
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

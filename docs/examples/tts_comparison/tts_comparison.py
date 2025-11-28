@@ -2,7 +2,7 @@
 ---
 title: TTS Comparison
 category: pipeline-tts
-tags: [pipeline-tts, openai, deepgram]
+tags: [pipeline-tts, deepgram, openai, rime, elevenlabs, cartesia, playai]
 difficulty: intermediate
 description: Switches between different TTS providers using function tools.
 demonstrates:
@@ -10,19 +10,19 @@ demonstrates:
   - Each function tool returns a new agent with the same instructions, but with a different TTS provider.
 ---
 """
+
 import logging
-from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, function_tool
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, function_tool
 from livekit.plugins import deepgram, openai, rime, elevenlabs, cartesia, playai, silero
 
 logger = logging.getLogger("tts-comparison")
 logger.setLevel(logging.INFO)
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 class RimeAgent(Agent):
-    def __init__(self) -> None:
+    def __init__(self, vad) -> None:
         super().__init__(
             instructions="""
                 You are a helpful assistant communicating through voice.
@@ -33,31 +33,31 @@ class RimeAgent(Agent):
             stt=deepgram.STT(),
             llm=openai.LLM(),
             tts=rime.TTS(),
-            vad=silero.VAD.load()
+            vad=vad
         )
+        self._vad = vad
 
     async def on_enter(self) -> None:
-        """Called when switching to this provider"""
         await self.session.say("Hello! I'm now using the Rime TTS voice. How does it sound?")
 
     @function_tool
     async def switch_to_elevenlabs(self):
         """Switch to ElevenLabs TTS voice"""
-        return ElevenLabsAgent()
+        return ElevenLabsAgent(self._vad)
 
     @function_tool
     async def switch_to_cartesia(self):
         """Switch to Cartesia TTS voice"""
-        return CartesiaAgent()
+        return CartesiaAgent(self._vad)
 
     @function_tool
     async def switch_to_playai(self):
         """Switch to PlayAI TTS voice"""
-        return PlayAIAgent()
+        return PlayAIAgent(self._vad)
 
 
 class ElevenLabsAgent(Agent):
-    def __init__(self) -> None:
+    def __init__(self, vad) -> None:
         super().__init__(
             instructions="""
                 You are a helpful assistant communicating through voice.
@@ -68,31 +68,31 @@ class ElevenLabsAgent(Agent):
             stt=deepgram.STT(),
             llm=openai.LLM(),
             tts=elevenlabs.TTS(),
-            vad=silero.VAD.load()
+            vad=vad
         )
+        self._vad = vad
 
     async def on_enter(self) -> None:
-        """Called when switching to this provider"""
         await self.session.say("Hello! I'm now using the ElevenLabs TTS voice. What do you think of how I sound?")
 
     @function_tool
     async def switch_to_rime(self):
         """Switch to Rime TTS voice"""
-        return RimeAgent()
+        return RimeAgent(self._vad)
 
     @function_tool
     async def switch_to_cartesia(self):
         """Switch to Cartesia TTS voice"""
-        return CartesiaAgent()
+        return CartesiaAgent(self._vad)
 
     @function_tool
     async def switch_to_playai(self):
         """Switch to PlayAI TTS voice"""
-        return PlayAIAgent()
+        return PlayAIAgent(self._vad)
 
 
 class CartesiaAgent(Agent):
-    def __init__(self) -> None:
+    def __init__(self, vad) -> None:
         super().__init__(
             instructions="""
                 You are a helpful assistant communicating through voice.
@@ -103,31 +103,31 @@ class CartesiaAgent(Agent):
             stt=deepgram.STT(),
             llm=openai.LLM(),
             tts=cartesia.TTS(),
-            vad=silero.VAD.load()
+            vad=vad
         )
+        self._vad = vad
 
     async def on_enter(self) -> None:
-        """Called when switching to this provider"""
         await self.session.say("Hello! I'm now using the Cartesia TTS voice. How do I sound to you?")
 
     @function_tool
     async def switch_to_rime(self):
         """Switch to Rime TTS voice"""
-        return RimeAgent()
+        return RimeAgent(self._vad)
 
     @function_tool
     async def switch_to_elevenlabs(self):
         """Switch to ElevenLabs TTS voice"""
-        return ElevenLabsAgent()
+        return ElevenLabsAgent(self._vad)
 
     @function_tool
     async def switch_to_playai(self):
         """Switch to PlayAI TTS voice"""
-        return PlayAIAgent()
+        return PlayAIAgent(self._vad)
 
 
 class PlayAIAgent(Agent):
-    def __init__(self) -> None:
+    def __init__(self, vad) -> None:
         super().__init__(
             instructions="""
                 You are a helpful assistant communicating through voice.
@@ -138,36 +138,47 @@ class PlayAIAgent(Agent):
             stt=deepgram.STT(),
             llm=openai.LLM(),
             tts=playai.TTS(),
-            vad=silero.VAD.load()
+            vad=vad
         )
+        self._vad = vad
 
     async def on_enter(self) -> None:
-        """Called when switching to this provider"""
         await self.session.say("Hello! I'm now using the PlayAI TTS voice. What are your thoughts on how I sound?")
 
     @function_tool
     async def switch_to_rime(self):
         """Switch to Rime TTS voice"""
-        return RimeAgent()
+        return RimeAgent(self._vad)
 
     @function_tool
     async def switch_to_elevenlabs(self):
         """Switch to ElevenLabs TTS voice"""
-        return ElevenLabsAgent()
+        return ElevenLabsAgent(self._vad)
 
     @function_tool
     async def switch_to_cartesia(self):
         """Switch to Cartesia TTS voice"""
-        return CartesiaAgent()
+        return CartesiaAgent(self._vad)
 
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
     session = AgentSession()
 
     await session.start(
-        agent=RimeAgent(),
+        agent=RimeAgent(vad=ctx.proc.userdata["vad"]),
         room=ctx.room
     )
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

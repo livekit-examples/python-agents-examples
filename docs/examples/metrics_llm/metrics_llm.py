@@ -2,7 +2,7 @@
 ---
 title: LLM Metrics
 category: metrics
-tags: [metrics, openai, deepgram]
+tags: [metrics, assemblyai, openai, cartesia]
 difficulty: beginner
 description: Shows how to use the LLM metrics to log metrics to the console for all of the different LLM models.
 demonstrates:
@@ -21,51 +21,39 @@ demonstrates:
         - Tokens/Second
 ---
 """
+
 import logging
 import asyncio
-from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
+from livekit.agents import JobContext, JobProcess, Agent, AgentSession, inference, AgentServer, cli
 from livekit.agents.metrics import LLMMetrics
-from livekit.agents.voice.room_io import RoomInputOptions
-from livekit.plugins import deepgram, openai, silero
+from livekit.plugins import silero
 from rich.console import Console
 from rich.table import Table
 from rich import box
 from datetime import datetime
+
+load_dotenv()
 
 logger = logging.getLogger("metrics-llm")
 logger.setLevel(logging.INFO)
 
 console = Console()
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
-
 class LLMMetricsAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
                 You are a helpful agent.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
+    async def on_enter(self):
         def sync_wrapper(metrics: LLMMetrics):
             asyncio.create_task(self.on_metrics_collected(metrics))
 
-        self.llm.on("metrics_collected", sync_wrapper)
+        self.session.llm.on("metrics_collected", sync_wrapper)
+        self.session.generate_reply()
 
     async def on_metrics_collected(self, metrics: LLMMetrics) -> None:
         table = Table(
@@ -97,18 +85,28 @@ class LLMMetricsAgent(Agent):
         console.print(table)
         console.print("\n")
 
+server = AgentServer()
 
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+    ctx.log_context_fields = {"room": ctx.room.name}
 
-    await session.start(
-        agent=LLMMetricsAgent(),
-        room=ctx.room,
-        room_input_options=RoomInputOptions(),
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
+    agent = LLMMetricsAgent()
 
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(
-        entrypoint_fnc=entrypoint)
-    )
+    cli.run_app(server)

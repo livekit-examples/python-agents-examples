@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
 from livekit.plugins import openai, silero, deepgram
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("calling-agent")
 logger.setLevel(logging.INFO)

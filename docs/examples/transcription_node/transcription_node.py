@@ -2,7 +2,7 @@
 ---
 title: Transcription Node Modifier
 category: pipeline-llm
-tags: [transcription_modification, word_replacement, emoji_injection]
+tags: [transcription_modification, word_replacement, emoji_injection, assemblyai, openai, cartesia]
 difficulty: intermediate
 description: Modifies transcriptions by replacing words with custom versions
 demonstrates:
@@ -15,27 +15,22 @@ demonstrates:
 """
 
 import logging
-from pathlib import Path
 from typing import AsyncIterable
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, ModelSettings
-from livekit.plugins import openai, deepgram, silero
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, inference, ModelSettings
+from livekit.plugins import silero
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
-logger = logging.getLogger("openai_llm")
+logger = logging.getLogger("transcription-node")
 logger.setLevel(logging.INFO)
 
-class SimpleAgent(Agent):
+class TranscriptionModifierAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
                 You are a helpful agent.
-            """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(),
-            tts=openai.TTS(),
-            vad=silero.VAD.load()
+            """
         )
 
     async def on_enter(self):
@@ -68,13 +63,27 @@ class SimpleAgent(Agent):
 
         return process_text()
 
-async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+server = AgentServer()
 
-    await session.start(
-        agent=SimpleAgent(),
-        room=ctx.room
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
+async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
 
+    await session.start(agent=TranscriptionModifierAgent(), room=ctx.room)
+    await ctx.connect()
+
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

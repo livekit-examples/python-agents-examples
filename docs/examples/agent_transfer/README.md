@@ -1,16 +1,17 @@
 ---
-title: Long or Short Agent
+title: Agent Transfer
 category: multi-agent
 tags: [multi-agent, assemblyai, openai, cartesia]
 difficulty: intermediate
-description: Shows how to create a multi-agent that can switch between a long and short agent using a function tool.
+description: Shows how to switch between agents mid-call using function tools.
 demonstrates:
-  - Creating a multi-agent that can switch between a long and short agent using a function tool.
-  - Using a function tool to change the agent.
-  - Different agents can have different instructions, models, and tools.
+  - Agent transfer using update_agent()
+  - Function tools for agent switching
+  - Lightweight agent design with instructions and tools only
+  - Shared AgentSession across agent swaps
 ---
 
-In this recipe you will build two agents: one short-winded and one long-winded—and let them swap places mid-call with a function tool. Each agent has its own instructions and inference configuration
+This example demonstrates how to build two agents—one short-winded and one long-winded—and let them swap places mid-call with a function tool. Each agent has its own instructions and personality, but they share the same session so the call and media pipelines remain active across swaps.
 
 ## Prerequisites
 
@@ -20,30 +21,43 @@ In this recipe you will build two agents: one short-winded and one long-winded�
   LIVEKIT_API_KEY=your_api_key
   LIVEKIT_API_SECRET=your_api_secret
   ```
-- Install dependencies in one line:
+- Install dependencies:
   ```bash
   pip install "livekit-agents[silero]" python-dotenv
   ```
 
-## Load configuration and logging
+## Load environment, logging, and define an AgentServer
 
-Load your environment variables with `load_dotenv()` and set up logging.
+Start by loading your environment variables and setting up logging. Define an `AgentServer` which wraps your application and handles the worker lifecycle.
 
 ```python
 import logging
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, function_tool
+from livekit.agents import JobContext, JobProcess, Agent, AgentSession, AgentServer, cli, inference, function_tool
 from livekit.plugins import silero
 
 load_dotenv()
 
-logger = logging.getLogger("long-or-short")
+logger = logging.getLogger("agent-transfer")
 logger.setLevel(logging.INFO)
+
+server = AgentServer()
+```
+
+## Prewarm VAD for faster connections
+
+Preload the VAD model once per process using the `setup_fnc`. This runs before any sessions start and stores the VAD instance in `proc.userdata` so it can be reused across sessions without reloading.
+
+```python
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
 ```
 
 ## Create the short and long agents
 
-Use inference strings for STT, LLM, and TTS so you do not need provider-specific keys:
+Define two lightweight agent classes. Each agent only contains its instructions and a function tool to swap to the other agent. The `on_enter` method is called when the agent becomes active and announces itself.
 
 ```python
 class ShortAgent(Agent):
@@ -51,89 +65,70 @@ class ShortAgent(Agent):
         super().__init__(
             instructions="""
                 You are a helpful agent. When the user speaks, you listen and respond. Be as brief as possible. Arguably too brief.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
     async def on_enter(self):
         self.session.say("Hi. It's Short agent.")
-```
 
-```python
+    @function_tool
+    async def change_agent(self):
+        """Change the agent to the long agent."""
+        self.session.update_agent(LongAgent())
+
+
 class LongAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
                 You are a helpful agent. When the user speaks, you listen and respond in overly verbose, flowery, obnoxiously detailed sentences.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
     async def on_enter(self):
-        self.session.say("Salutations! it is I, your friendly neighborhood long agent.")
-```
+        self.session.say("Salutations! It is I, your friendly neighborhood long agent.")
 
-## Swap agents with a tool call
-
-Expose a function tool on each agent that replaces itself with the other. Both tools reuse the same session so state such
-as participants and audio pipelines stay intact:
-
-```python
-    @function_tool
-    async def change_agent(self):
-        """Change the agent to the long agent."""
-        self.session.update_agent(LongAgent())
-```
-
-```python
     @function_tool
     async def change_agent(self):
         """Change the agent to the short agent."""
         self.session.update_agent(ShortAgent())
 ```
 
-## Start the session
+## Define the RTC session entrypoint
 
-Launch the short agent by default; the tool can switch to the long agent when invoked:
+The `@server.rtc_session()` decorator marks this function as the entry point for new sessions. Inside, create an `AgentSession` with your STT, LLM, TTS, and VAD configuration. These settings are shared across both agents since they use the same session.
+
+Start the session with the short agent as the default, then connect to the room.
 
 ```python
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+    ctx.log_context_fields = {"room": ctx.room.name}
 
-    await session.start(
-        agent=ShortAgent(),
-        room=ctx.room
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
 
+    await session.start(agent=ShortAgent(), room=ctx.room)
+    await ctx.connect()
+```
+
+## Run the server
+
+The `cli.run_app()` function starts the agent server. It manages the worker lifecycle, connects to LiveKit, and processes incoming jobs.
+
+```python
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)
 ```
 
 ## Run it
+
+Run the agent using the `console` command, which starts the agent in console mode. This mode is useful for testing and debugging. It connects to a mocked LiveKit room so you can test the agent locally before deploying.
 
 ```bash
 python agent_transfer.py console
@@ -141,44 +136,39 @@ python agent_transfer.py console
 
 Ask the agent to "switch to the long agent" or "be more brief" to trigger the function tool and see the swap.
 
+If you want to test your agent in a real room, start it in dev mode instead:
+
+```bash
+python agent_transfer.py dev
+```
+
 ## How it works
 
 1. The short agent starts and greets the caller.
-2. A function tool on each agent calls `update_agent` to swap in the other agent.
+2. Each agent exposes a `change_agent` function tool that calls `update_agent()` to swap in the other agent.
 3. Because the session persists, the call and media pipelines remain active across swaps.
-4. Each agent keeps its own instructions and uses the same STT/LLM/TTS inference setup.
+4. Each agent keeps its own instructions and personality while sharing the same STT/LLM/TTS configuration.
 
-For a complete working example, see the code below:
+## Full example
 
 ```python
 import logging
 from dotenv import load_dotenv
+from livekit.agents import JobContext, JobProcess, Agent, AgentSession, AgentServer, cli, inference, function_tool
 from livekit.plugins import silero
 
 load_dotenv()
 
-logger = logging.getLogger("long-or-short")
+logger = logging.getLogger("agent-transfer")
 logger.setLevel(logging.INFO)
+
 
 class ShortAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
                 You are a helpful agent. When the user speaks, you listen and respond. Be as brief as possible. Arguably too brief.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
     async def on_enter(self):
@@ -189,45 +179,50 @@ class ShortAgent(Agent):
         """Change the agent to the long agent."""
         self.session.update_agent(LongAgent())
 
+
 class LongAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
                 You are a helpful agent. When the user speaks, you listen and respond in overly verbose, flowery, obnoxiously detailed sentences.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
     async def on_enter(self):
-        self.session.say("Salutations! it is I, your friendly neighborhood long agent.")
+        self.session.say("Salutations! It is I, your friendly neighborhood long agent.")
 
     @function_tool
     async def change_agent(self):
         """Change the agent to the short agent."""
         self.session.update_agent(ShortAgent())
 
-async def entrypoint(ctx: JobContext):
-    session = AgentSession()
 
-    await session.start(
-        agent=ShortAgent(),
-        room=ctx.room
+server = AgentServer()
+
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+
+server.setup_fnc = prewarm
+
+
+@server.rtc_session()
+async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
 
-    session.once
+    await session.start(agent=ShortAgent(), room=ctx.room)
+    await ctx.connect()
+
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)
 ```

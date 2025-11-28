@@ -56,7 +56,7 @@ from dotenv import load_dotenv
 from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, RunContext, function_tool, RoomOutputOptions
 from livekit.plugins import silero
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("rpc-state-agent")
 logger.setLevel(logging.INFO)

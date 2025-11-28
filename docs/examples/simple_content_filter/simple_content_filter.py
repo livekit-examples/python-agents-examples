@@ -2,7 +2,7 @@
 ---
 title: Simple Content Filter
 category: pipeline-llm
-tags: [keyword_filtering, offensive_terms, inline_replacement]
+tags: [pipeline-llm, openai, deepgram]
 difficulty: beginner
 description: Basic keyword-based content filter with inline replacement
 demonstrates:
@@ -15,15 +15,11 @@ demonstrates:
 """
 
 import logging
-from pathlib import Path
-from typing import AsyncIterable, Optional
 from dotenv import load_dotenv
-from livekit import rtc
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
-from livekit.plugins import openai, deepgram, silero
-import asyncio
+from livekit.agents import AgentServer, AgentSession, JobContext, JobProcess, cli, Agent, inference
+from livekit.plugins import silero
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("simple-content-filter")
 logger.setLevel(logging.INFO)
@@ -34,15 +30,11 @@ class SimpleAgent(Agent):
             instructions="""
                 You are a helpful agent.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(),
-            tts=openai.TTS(),
-            vad=silero.VAD.load()
         )
-    
+
     async def on_enter(self):
         self.session.generate_reply()
-    
+
     async def llm_node(
         self, chat_ctx, tools, model_settings=None
     ):
@@ -51,25 +43,43 @@ class SimpleAgent(Agent):
                 async for chunk in stream:
                     if chunk is None:
                         continue
-                        
+
                     content = getattr(chunk.delta, 'content', None) if hasattr(chunk, 'delta') else str(chunk)
                     if content is None:
                         yield chunk
                         continue
-                        
+
                     offensive_terms = ['fail']
                     print(content)
                     yield "CONTENT FILTERED" if any(term in content.lower() for term in offensive_terms) else chunk
 
         return process_stream()
 
-async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+server = AgentServer()
 
-    await session.start(
-        agent=SimpleAgent(),
-        room=ctx.room
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
+async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=inference.STT(model="deepgram/nova-3", language="en"),
+        llm=inference.LLM(model="openai/gpt-5-mini"),
+        tts=inference.TTS(
+            model="cartesia/sonic-3", 
+            voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"
+        ),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
+    agent = SimpleAgent()
+
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

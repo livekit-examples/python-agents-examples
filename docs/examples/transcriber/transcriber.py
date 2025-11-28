@@ -2,7 +2,7 @@
 ---
 title: Transcriber
 category: pipeline-stt
-tags: [pipeline-stt, openai, deepgram]
+tags: [pipeline-stt, assemblyai]
 difficulty: beginner
 description: Shows how to transcribe user speech to text without TTS or an LLM.
 demonstrates:
@@ -10,16 +10,22 @@ demonstrates:
   - An Agent that does not have TTS or an LLM. This is STT only.
 ---
 """
-from pathlib import Path
-from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
-from livekit.plugins import deepgram
+
 import datetime
+from dotenv import load_dotenv
+from livekit.agents import JobContext, AgentServer, cli, Agent, AgentSession, inference
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
+server = AgentServer()
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+    )
 
     @session.on("user_input_transcribed")
     def on_transcript(transcript):
@@ -29,12 +35,10 @@ async def entrypoint(ctx: JobContext):
                 f.write(f"[{timestamp}] {transcript.transcript}\n")
 
     await session.start(
-        agent=Agent(
-            instructions="You are a helpful assistant that transcribes user speech to text.",
-            stt=deepgram.STT()
-        ),
+        agent=Agent(instructions="You are a helpful assistant that transcribes user speech to text."),
         room=ctx.room
     )
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

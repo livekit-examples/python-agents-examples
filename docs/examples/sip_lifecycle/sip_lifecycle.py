@@ -2,7 +2,7 @@
 ---
 title: SIP Lifecycle Management Agent
 category: telephony
-tags: [sip, call-management, participant-handling, call-lifecycle, function-tools]
+tags: [telephony, sip, deepgram, openai]
 difficulty: advanced
 description: Advanced SIP agent demonstrating complete call lifecycle management
 demonstrates:
@@ -19,14 +19,13 @@ import asyncio
 import logging
 import os
 import uuid
-from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, RunContext, function_tool
+from livekit.agents import AgentServer, AgentSession, JobContext, JobProcess, cli, Agent, inference, RunContext, function_tool
 from livekit import rtc
 from livekit import api
-from livekit.plugins import deepgram, openai, silero, elevenlabs
+from livekit.plugins import silero
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("sip-lifecycle-agent")
 logger.setLevel(logging.INFO)
@@ -39,12 +38,6 @@ class SIPLifecycleAgent(Agent):
                 You are a helpful assistant demonstrating SIP call lifecycle management.
                 You can add SIP participants and end the call when requested.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=elevenlabs.TTS(
-                model="eleven_multilingual_v2"
-            ),
-            vad=silero.VAD.load()
         )
 
     @function_tool
@@ -159,14 +152,28 @@ class SIPLifecycleAgent(Agent):
     async def on_enter(self):
         self.session.generate_reply()
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=inference.STT(model="deepgram/nova-3", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="elevenlabs/eleven_multilingual_v2"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
+    )
     agent = SIPLifecycleAgent(job_context=ctx)
 
-    await session.start(
-        agent=agent,
-        room=ctx.room
-    )
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
 
     def on_participant_connected_handler(participant: rtc.RemoteParticipant):
         asyncio.create_task(async_on_participant_connected(participant))
@@ -235,4 +242,4 @@ async def entrypoint(ctx: JobContext):
     ctx.room.on("participant_attributes_changed", on_participant_attributes_changed_handler)
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

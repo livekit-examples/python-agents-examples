@@ -2,24 +2,25 @@
 ---
 title: ElevenLabs Change Language
 category: pipeline-tts
-tags: [pipeline-tts, openai, deepgram]
+tags: [pipeline-tts, elevenlabs, deepgram, openai]
 difficulty: intermediate
 description: Shows how to use the ElevenLabs TTS model to change the language of the agent.
 demonstrates:
-  - Using the `tts.update_options` method to change the language of the agent.
-  - Allowing agents to self-update their own options using function tools.
+  - Using the update_options() method to change the language of STT and TTS
+  - Allowing agents to self-update their own options using function tools
+  - Accessing session STT/TTS from within an agent
 ---
 """
 import logging
-from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, function_tool
-from livekit.plugins import deepgram, openai, elevenlabs, silero
+from livekit.agents import JobContext, JobProcess, Agent, AgentSession, AgentServer, cli, inference, function_tool
+from livekit.plugins import deepgram, elevenlabs, silero
+
+load_dotenv()
 
 logger = logging.getLogger("language-switcher")
 logger.setLevel(logging.INFO)
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
 
 class LanguageSwitcherAgent(Agent):
     def __init__(self) -> None:
@@ -28,17 +29,7 @@ class LanguageSwitcherAgent(Agent):
                 You are a helpful assistant communicating through voice.
                 You can switch to a different language if asked.
                 Don't use any unpronouncable characters.
-            """,
-            stt=deepgram.STT(
-                model="nova-2-general",
-                language="en"
-            ),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=elevenlabs.TTS(
-                model="eleven_turbo_v2_5",
-                language="en"
-            ),
-            vad=silero.VAD.load()
+            """
         )
         self.current_language = "en"
 
@@ -67,7 +58,7 @@ class LanguageSwitcherAgent(Agent):
         }
 
     async def on_enter(self):
-        await self.session.say(f"Hi there! I can speak in multiple languages including Spanish, French, German, and Italian. Just ask me to switch to any of these languages. How can I help you today?")
+        await self.session.say("Hi there! I can speak in multiple languages including Spanish, French, German, and Italian. Just ask me to switch to any of these languages. How can I help you today?")
 
     async def _switch_language(self, language_code: str) -> None:
         """Helper method to switch the language"""
@@ -75,12 +66,13 @@ class LanguageSwitcherAgent(Agent):
             await self.session.say(f"I'm already speaking in {self.language_names[language_code]}.")
             return
 
-        if self.tts is not None:
-            self.tts.update_options(language=language_code)
+        # Access TTS and STT from the session
+        if self.session.tts is not None:
+            self.session.tts.update_options(language=language_code)
 
-        if self.stt is not None:
+        if self.session.stt is not None:
             deepgram_language = self.deepgram_language_codes.get(language_code, language_code)
-            self.stt.update_options(language=deepgram_language)
+            self.session.stt.update_options(language=deepgram_language)
 
         self.current_language = language_code
 
@@ -112,13 +104,31 @@ class LanguageSwitcherAgent(Agent):
         await self._switch_language("it")
 
 
-async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+server = AgentServer()
 
-    await session.start(
-        agent=LanguageSwitcherAgent(),
-        room=ctx.room
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+
+server.setup_fnc = prewarm
+
+
+@server.rtc_session()
+async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=deepgram.STT(model="nova-2-general", language="en"),
+        llm=inference.LLM(model="openai/gpt-4o"),
+        tts=elevenlabs.TTS(model="eleven_turbo_v2_5", language="en"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
 
+    await session.start(agent=LanguageSwitcherAgent(), room=ctx.room)
+    await ctx.connect()
+
+
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

@@ -2,7 +2,7 @@
 ---
 title: STT Metrics
 category: metrics
-tags: [metrics, openai, assemblyai]
+tags: [metrics, assemblyai, openai, cartesia]
 difficulty: beginner
 description: Shows how to use the STT metrics to log metrics to the console.
 demonstrates:
@@ -17,55 +17,43 @@ demonstrates:
     - Error
 ---
 """
+
 import logging
 import asyncio
-from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
+from livekit.agents import JobContext, JobProcess, Agent, AgentSession, inference, AgentServer, cli
 from livekit.agents.metrics import STTMetrics, EOUMetrics
-from livekit.agents.voice.room_io import RoomInputOptions
 from livekit.plugins import silero
 from rich.console import Console
 from rich.table import Table
 from rich import box
 from datetime import datetime
 
+load_dotenv()
+
 logger = logging.getLogger("metrics-stt")
 logger.setLevel(logging.INFO)
 
 console = Console()
-
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
 
 class STTMetricsAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="""
                 You are a helpful agent.
-            """,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
+            """
         )
 
+    async def on_enter(self):
         def stt_wrapper(metrics: STTMetrics):
             asyncio.create_task(self.on_stt_metrics_collected(metrics))
 
         def eou_wrapper(metrics: EOUMetrics):
             asyncio.create_task(self.on_eou_metrics_collected(metrics))
 
-        self.stt.on("metrics_collected", stt_wrapper)
-        self.stt.on("eou_metrics_collected", eou_wrapper)
+        self.session.stt.on("metrics_collected", stt_wrapper)
+        self.session.stt.on("eou_metrics_collected", eou_wrapper)
+        self.session.generate_reply()
 
     async def on_stt_metrics_collected(self, metrics: STTMetrics) -> None:
         table = Table(
@@ -121,18 +109,28 @@ class STTMetricsAgent(Agent):
         console.print(table)
         console.print("\n")
 
+server = AgentServer()
 
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+    ctx.log_context_fields = {"room": ctx.room.name}
 
-    await session.start(
-        agent=STTMetricsAgent(),
-        room=ctx.room,
-        room_input_options=RoomInputOptions(),
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
+    agent = STTMetricsAgent()
 
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(
-        entrypoint_fnc=entrypoint)
-    )
+    cli.run_app(server)

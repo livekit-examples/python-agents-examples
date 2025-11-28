@@ -2,7 +2,7 @@
 ---
 title: NPC Character State Tracking
 category: state-management
-tags: [npc-interaction, state-tracking, rapport-system, agent-switching, conversation-flow]
+tags: [state-management, assemblyai, openai, cartesia]
 difficulty: advanced
 description: Advanced NPC system with dynamic rapport tracking and conversation state management
 demonstrates:
@@ -22,7 +22,7 @@ from typing import List, Annotated
 from enum import Enum
 from pydantic import Field
 
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, function_tool
+from livekit.agents import AgentServer, AgentSession, JobContext, JobProcess, cli, Agent, inference, function_tool
 from livekit.plugins import silero
 from livekit import api
 
@@ -41,22 +41,7 @@ class BaseAgent(Agent):
     """Base agent class handling common setup and job context."""
     def __init__(self, job_context: JobContext, instructions: str) -> None:
         self.job_context = job_context
-        super().__init__(
-            instructions=instructions,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
-        )
+        super().__init__(instructions=instructions)
 
     @function_tool
     async def adjust_rapport(self, delta: int) -> int:
@@ -82,7 +67,7 @@ class NPCAgent(BaseAgent):
                 "You're not a quest-giver. You'll talk if someone's interesting—but you've got little patience for fools or questions with obvious answers. "
                 "If rapport is low, you're short, distracted, maybe even rude. If rapport is high, you might offer a hot meal, a warning, or something you heard in confidence. "
                 "Your memory is long. You might reference a strange traveler last week, the sound of wolves last night, or the time someone pissed in the hearth. "
-                "You don’t explain yourself. You live here. This is your inn. Speak like you’re part of this world, and always stay in character."
+                "You don't explain yourself. You live here. This is your inn. Speak like you're part of this world, and always stay in character."
             )
         )
 
@@ -185,13 +170,28 @@ class NPCSummaryAgent(BaseAgent):
         except Exception as e:
             logger.error(f"Error deleting room: {e}")
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext) -> None:
-    session = AgentSession[NPCData]()
-    session.userdata = NPCData()
-    await session.start(
-        agent=NPCAgent(job_context=ctx),
-        room=ctx.room
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession[NPCData](
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
+    session.userdata = NPCData()
+
+    await session.start(agent=NPCAgent(job_context=ctx), room=ctx.room)
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

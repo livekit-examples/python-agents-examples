@@ -24,7 +24,7 @@ from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, 
 from livekit.agents.voice.agent_activity import StopResponse
 from livekit.plugins import silero
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("home-automation")
 logger.setLevel(logging.INFO)

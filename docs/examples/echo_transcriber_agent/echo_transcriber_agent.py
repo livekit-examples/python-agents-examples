@@ -2,29 +2,31 @@
 ---
 title: Echo Transcriber Agent
 category: basics
-tags: [echo, transcriber, deepgram, silero]
+tags: [echo, transcriber, assemblyai, silero]
 difficulty: beginner
 description: Shows how to create an agent that can transcribe audio and echo it back.
 demonstrates:
   - Transcribing audio
   - Echoing audio back that's stored in a buffer
+  - Custom STT node processing
+  - Custom VAD stream handling
 ---
 """
 import logging
 import asyncio
-from pathlib import Path
 from typing import AsyncIterable, Optional
 from dotenv import load_dotenv
 from livekit import rtc
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
+from livekit.agents import JobContext, JobProcess, Agent, AgentSession, AgentServer, cli
 from livekit.agents.voice import room_io
 from livekit.agents.vad import VADEventType
 from livekit.plugins import silero, noise_cancellation
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("echo-transcriber")
 logger.setLevel(logging.INFO)
+
 
 class EchoTranscriberAgent(Agent):
     def __init__(self) -> None:
@@ -91,7 +93,14 @@ class EchoTranscriberAgent(Agent):
 
         return super().stt_node(audio_with_buffer(), model_settings)
 
+
+server = AgentServer()
+
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
     await ctx.room.local_participant.set_attributes({"lk.agent.state": "listening"})
 
     session = AgentSession()
@@ -153,9 +162,11 @@ async def entrypoint(ctx: JobContext):
             audio_num_channels=1,
         )
     )
+    await ctx.connect()
 
     # Keep VAD task running
     await vad_task
 
+
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

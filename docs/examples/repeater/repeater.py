@@ -2,7 +2,7 @@
 ---
 title: Repeater
 category: basics
-tags: [repeater, openai, deepgram]
+tags: [repeater, assemblyai, openai, cartesia]
 difficulty: beginner
 description: Shows how to create an agent that can repeat what the user says.
 demonstrates:
@@ -10,15 +10,30 @@ demonstrates:
   - Using the `say` method to respond to the user with the same input
 ---
 """
-from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, inference
 from livekit.plugins import silero
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+    ctx.log_context_fields = {"room": ctx.room.name}
+
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-5-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        allow_interruptions=False,
+    )
 
     @session.on("user_input_transcribed")
     def on_transcript(transcript):
@@ -27,24 +42,11 @@ async def entrypoint(ctx: JobContext):
 
     await session.start(
         agent=Agent(
-            instructions="You are a helpful assistant that repeats what the user says.",
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            allow_interruptions=False,
-            vad=silero.VAD.load()
+            instructions="You are a helpful assistant that repeats what the user says."
         ),
         room=ctx.room
     )
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

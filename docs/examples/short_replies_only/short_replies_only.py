@@ -2,7 +2,7 @@
 ---
 title: Short Replies Only
 category: pipeline-tts
-tags: [pipeline-tts, openai, deepgram]
+tags: [pipeline-tts, openai, deepgram, rime]
 difficulty: beginner
 description: Shows how to override the default TTS node to only respond with short replies based on the number of chunks.
 demonstrates:
@@ -10,14 +10,13 @@ demonstrates:
   - Using the `session.interrupt` method to interrupt the agent if it's taking too long to respond, and then informing the user with `session.say`
 ---
 """
-from pathlib import Path
 from typing import AsyncIterable
 import logging
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, ModelSettings
-from livekit.plugins import deepgram, openai, silero, rime
+from livekit.agents import AgentServer, AgentSession, JobContext, JobProcess, cli, Agent, inference, ModelSettings
+from livekit.plugins import silero
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("tts_node")
 logger.setLevel(logging.INFO)
@@ -28,10 +27,6 @@ class ShortRepliesOnlyAgent(Agent):
             instructions="""
                 You are a helpful assistant communicating through voice.
             """,
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o"),
-            tts=rime.TTS(model="arcana"),
-            vad=silero.VAD.load()
         )
 
     async def tts_node(self, text: AsyncIterable[str], model_settings: ModelSettings):
@@ -56,15 +51,30 @@ class ShortRepliesOnlyAgent(Agent):
         return Agent.default.tts_node(self, process_text(), model_settings)
 
     async def on_enter(self):
-        await self.session.say(f"Hi there! Is there anything I can help you with?")
+        await self.session.say("Hi there! Is there anything I can help you with?")
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    session = AgentSession()
+    ctx.log_context_fields = {"room": ctx.room.name}
 
-    await session.start(
-        agent=ShortRepliesOnlyAgent(),
-        room=ctx.room
+    session = AgentSession(
+        stt=inference.STT(model="deepgram/nova-3", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="rime/arcana"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
     )
+    agent = ShortRepliesOnlyAgent()
+
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    cli.run_app(server)

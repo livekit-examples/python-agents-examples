@@ -2,7 +2,7 @@
 ---
 title: Survey Calling Agent
 category: telephony
-tags: [surveys, data-collection, csv-handling, automated-calling, metadata-processing]
+tags: [surveys, data-collection, csv-handling, automated-calling, metadata-processing, assemblyai, openai, cartesia]
 difficulty: intermediate
 description: Automated survey calling agent with CSV data management and response recording
 demonstrates:
@@ -16,17 +16,16 @@ demonstrates:
 """
 
 import logging
-import os
 import asyncio
 import pandas as pd
 import json
 from pathlib import Path
 from dotenv import load_dotenv
-from livekit.agents import JobContext, WorkerOptions, cli, Agent, AgentSession, inference, RunContext, function_tool
-from livekit.plugins import openai, silero, deepgram
+from livekit.agents import JobContext, JobProcess, AgentServer, cli, Agent, AgentSession, inference, RunContext, function_tool
+from livekit.plugins import silero
 from livekit.api import DeleteRoomRequest
 
-load_dotenv(dotenv_path=Path(__file__).parents[3] / '.env')
+load_dotenv()
 
 logger = logging.getLogger("calling-agent")
 logger.setLevel(logging.INFO)
@@ -40,8 +39,7 @@ class SurveyAgent(Agent):
         self.job_context = job_context
         self.survey_answer = None
         self.phone_number = self.context.get("phone_number", "unknown")
-        # Adjust for 0-based indexing since row_index from metadata is 1-based
-        self.row_index = self.context.get("row_index", 1)  # Default to 1 if not provided
+        self.row_index = self.context.get("row_index", 1)
 
         instructions = f"""
             You are conducting a brief phone survey. Your goal is to ask the following question:
@@ -55,22 +53,7 @@ class SurveyAgent(Agent):
             to persist what the user said.
         """
 
-        super().__init__(
-            instructions=instructions,
-            stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
-            ),
-            llm=inference.LLM(
-                model="openai/gpt-5-mini",
-                provider="openai",
-            ),
-            tts=inference.TTS(
-                model="cartesia/sonic-3",
-                voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc",
-            ),
-            vad=silero.VAD.load()
-        )
+        super().__init__(instructions=instructions)
 
     @function_tool
     async def record_survey_answer(self, context: RunContext, answer: str):
@@ -93,7 +76,17 @@ class SurveyAgent(Agent):
 
         return None, f"[Call ended]"
 
+server = AgentServer()
+
+def prewarm(proc: JobProcess):
+    proc.userdata["vad"] = silero.VAD.load()
+
+server.setup_fnc = prewarm
+
+@server.rtc_session()
 async def entrypoint(ctx: JobContext):
+    ctx.log_context_fields = {"room": ctx.room.name}
+
     metadata_json = ctx.job.metadata
     logger.info(f"Received metadata: {metadata_json}")
 
@@ -109,13 +102,17 @@ async def entrypoint(ctx: JobContext):
         "row_index": row_index
     }
 
-    session = AgentSession()
+    session = AgentSession(
+        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        llm=inference.LLM(model="openai/gpt-4.1-mini"),
+        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        vad=ctx.proc.userdata["vad"],
+        preemptive_generation=True,
+    )
     agent = SurveyAgent(question=question, context=context, job_context=ctx)
 
-    await session.start(
-        agent=agent,
-        room=ctx.room
-    )
+    await session.start(agent=agent, room=ctx.room)
+    await ctx.connect()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, agent_name="survey-agent"))
+    cli.run_app(server)

@@ -50,7 +50,7 @@ from livekit.plugins import openai, silero, deepgram, noise_cancellation
 from livekit.plugins.turn_detector.english import EnglishModel
 
 # Load environment variables
-load_dotenv(dotenv_path=Path(__file__).parents[3] / ".env")
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
