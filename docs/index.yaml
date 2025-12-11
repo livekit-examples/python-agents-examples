@@ -1,8 +1,8 @@
 version: '1.0'
 description: Index of all LiveKit Agent examples with metadata
-total_examples: 110
+total_examples: 77
 examples:
-- file_path: avatars/hedra/dynamically_created_avatar/agent.py
+- file_path: complex-agents/avatars/hedra/dynamically_created_avatar/agent.py
   title: Dynamically Created Avatar
   category: avatars
   tags:
@@ -16,7 +16,7 @@ examples:
   - Creating an avatar dynamically in an agent
   - Creating a new hedra avatar session using a custom image
   - A function tool that uses a docstring to describe the tool for the LLM to use
-- file_path: avatars/hedra/education_avatar/agent.py
+- file_path: complex-agents/avatars/hedra/education_avatar/agent.py
   title: Education Avatar
   category: avatars
   tags:
@@ -25,14 +25,15 @@ examples:
   - deepgram
   - hedra
   difficulty: advanced
-  description: Shows how to create an avatar that can help a user learn about the Fall of the Roman Empire using flash cards and quizzes.
+  description: Shows how to create an avatar that can help a user learn about the Fall of the Roman Empire using flash cards
+    and quizzes.
   demonstrates:
   - Creating a new hedra avatar session using a custom image
   - Using RPC to send messages to the client for flash cards and quizzes using `perform_rpc`
   - Using `register_rpc_method` to register the RPC methods so that the agent can receive messages from the client
   - Using UserData to store state for the cards and the quizzes
   - Using custom data classes to represent the flash cards and quizzes
-- file_path: avatars/hedra/pipeline_avatar/agent.py
+- file_path: complex-agents/avatars/hedra/pipeline_avatar/agent.py
   title: Hedra Avatar with Pipeline
   category: avatars
   tags:
@@ -50,7 +51,7 @@ examples:
   - Inworld TTS voice integration
   - Multilingual turn detection model
   - Noise cancellation with BVC
-- file_path: avatars/hedra/realtime_avatar/agent.py
+- file_path: complex-agents/avatars/hedra/realtime_avatar/agent.py
   title: Hedra Avatar with Realtime
   category: avatars
   tags:
@@ -65,7 +66,7 @@ examples:
   - OpenAI Realtime model for low-latency conversation
   - Minimal agent configuration with realtime model
   - Avatar participant identity management
-- file_path: avatars/tavus/tavus.py
+- file_path: complex-agents/avatars/tavus/tavus.py
   title: Tavus Avatar
   category: avatars
   tags:
@@ -74,37 +75,42 @@ examples:
   - deepgram
   - tavus
   difficulty: intermediate
-  description: Shows how to create a tavus avatar that can help a user learn about the Fall of the Roman Empire using flash cards and quizzes.
+  description: Shows how to create a tavus avatar that can help a user learn about the Fall of the Roman Empire using flash
+    cards and quizzes.
   demonstrates:
   - Creating a new tavus avatar session
   - Using RPC to send messages to the client for flash cards and quizzes using `perform_rpc`
   - Using `register_rpc_method` to register the RPC methods so that the agent can receive messages from the client
   - Using UserData to store state for the cards and the quizzes
   - Using custom data classes to represent the flash cards and quizzes
-- file_path: change_agent_instructions/change_agent_instructions.py
+- file_path: change_agent_instructions/page.mdoc
   title: Change Agent Instructions
   category: basics
   tags:
   - instructions
+  - assemblyai
   - openai
-  - deepgram
+  - cartesia
   difficulty: beginner
-  description: Shows how to change the instructions of an agent.
+  description: Shows how to change the instructions of an agent at runtime.
   demonstrates:
-  - Changing agent instructions after the agent has started using `update_instructions`
-- file_path: context_variables/context_variables.py
+  - Changing agent instructions after the agent has started using update_instructions()
+  - Conditional logic based on participant attributes
+- file_path: context_variables/page.mdoc
   title: Context Variables
   category: basics
   tags:
   - context
   - variables
+  - assemblyai
   - openai
-  - deepgram
+  - cartesia
   difficulty: beginner
   description: Shows how to give an agent context about the user using simple variables.
   demonstrates:
   - Using context variables from a simple dictionary
-- file_path: label_messages/label_messages.py
+  - Formatting instructions with user-specific data
+- file_path: label_messages/page.mdoc
   title: Conversation Event Monitoring Agent
   category: basics
   tags:
@@ -114,35 +120,40 @@ examples:
   - deepgram
   - openai
   difficulty: beginner
-  description: Shows how to monitor and log conversation events as they occur, useful for debugging and understanding agent-user interactions.
+  description: Shows how to monitor and log conversation events as they occur, useful for debugging and understanding agent-user
+    interactions.
   demonstrates:
   - Conversation event handling and logging
-- file_path: echo_transcriber_agent/echo_transcriber_agent.py
+- file_path: echo_transcriber_agent/page.mdoc
   title: Echo Transcriber Agent
   category: basics
   tags:
   - echo
   - transcriber
-  - deepgram
+  - assemblyai
   - silero
   difficulty: beginner
   description: Shows how to create an agent that can transcribe audio and echo it back.
   demonstrates:
   - Transcribing audio
   - Echoing audio back that's stored in a buffer
-- file_path: exit_message/exit_message.py
+  - Custom STT node processing
+  - Custom VAD stream handling
+- file_path: exit_message/page.mdoc
   title: Exit Message
   category: basics
   tags:
   - exit
   - message
+  - assemblyai
   - openai
-  - deepgram
+  - cartesia
   difficulty: beginner
-  description: Shows how to use the `on_exit` method to take an action when the agent exits.
+  description: Shows how to use the on_exit method to take an action when the agent exits.
   demonstrates:
-  - Use the `on_exit` method to take an action when the agent exits
-- file_path: say_in_voice/say_in_voice.py
+  - Using the on_exit method to take an action when the agent exits
+  - Using function tools to end sessions gracefully
+- file_path: say_in_voice/page.mdoc
   title: Function Tool Voice Switching Agent
   category: basics
   tags:
@@ -150,79 +161,74 @@ examples:
   - voice-switching
   - function-tools
   - inworld
-  - deepgram
+  - assemblyai
   - openai
   difficulty: beginner
-  description: Demonstrates how to create an agent that can dynamically switch between different voices during a conversation using function tools.
+  description: Demonstrates how to create an agent that can dynamically switch between different voices during a conversation
+    using function tools.
   demonstrates:
   - Dynamic TTS voice switching
   - Function tool integration
   - Multiple TTS provider support (Inworld)
-- file_path: interrupts_user/interrupts_user.py
-  title: Interrupt User
-  category: basics
-  tags:
-  - interrupts
-  - openai
-  - deepgram
-  difficulty: beginner
-  description: Shows how to interrupt the user if they try to say more than one sentence.
-  demonstrates:
-  - Using the `stt_node` to read the user's input in real time
-  - Setting `allow_interruptions` to `False` to prevent the user from interrupting the agent
-- file_path: listen_and_respond/listen_and_respond.py
+- file_path: listen_and_respond/page.mdoc
   title: Listen and Respond
   category: basics
   tags:
-  - listen
-  - respond
+  - basics
+  - assemblyai
   - openai
-  - deepgram
+  - cartesia
   difficulty: beginner
   description: Shows how to create an agent that can listen to the user and respond.
   demonstrates:
   - This is the most basic agent that can listen to the user and respond. This is a good starting point for any agent.
-- file_path: playing_audio/playing_audio.py
+- file_path: playing_audio/page.mdoc
   title: Playing Audio
   category: basics
   tags:
   - audio
+  - assemblyai
   - openai
-  - deepgram
+  - cartesia
   difficulty: beginner
   description: Shows how to play audio from a file in an agent.
   demonstrates:
   - Playing audio from a file
-- file_path: repeater/repeater.py
+- file_path: repeater/page.mdoc
   title: Repeater
   category: basics
   tags:
   - repeater
+  - assemblyai
   - openai
-  - deepgram
+  - cartesia
   difficulty: beginner
   description: Shows how to create an agent that can repeat what the user says.
   demonstrates:
   - Using the `on_user_input_transcribed` event to listen to the user's input
   - Using the `say` method to respond to the user with the same input
-- file_path: tool_calling/tool_calling.py
+- file_path: tool_calling/page.mdoc
   title: Tool Calling
   category: basics
   tags:
   - tool-calling
+  - assemblyai
   - openai
-  - deepgram
+  - cartesia
   difficulty: beginner
   description: Shows how to use tool calling in an agent.
   demonstrates:
   - Using the most basic form of tool calling in an agent to print to the console
-- file_path: uninterruptable/uninterruptable.py
+- file_path: uninterruptable/page.mdoc
   title: Uninterruptable Agent
   category: basics
   tags:
   - interruptions
   - allow_interruptions
   - agent_configuration
+  - assemblyai
+  - openai
+  - cartesia
   difficulty: beginner
   description: Agent configured to complete responses without user interruptions
   demonstrates:
@@ -301,34 +307,19 @@ examples:
   - booking_system
   - telephony
   difficulty: advanced
-  description: Phone receptionist agent for surf school bookings with background observer and task groups - great example for building phone-based booking systems
+  description: Phone receptionist agent for surf school bookings with background observer and task groups - great example
+    for building phone-based booking systems
   requires: livekit-agents>=1.3.0
   demonstrates:
-  - Complete phone receptionist workflow for appointment booking (you need to connect your calendar) and payment processing (demo, not real payment processing)
+  - Complete phone receptionist workflow for appointment booking (you need to connect your calendar) and payment processing
+    (demo, not real payment processing)
   - Background observer agent that monitors conversation transcripts in real-time
-  - LLM-based evaluation every 3 user turns to detect safety issues (minors, injuries, weather concerns, skill mismatches, VIP customers)
+  - LLM-based evaluation every 3 user turns to detect safety issues (minors, injuries, weather concerns, skill mismatches,
+    VIP customers)
   - Context injection pattern - observer injects system messages into active agent's chat context as guardrails
   - Task groups for sequential task execution with structured return values (profile collection, payment processing)
   - Multi-agent workflow with 5 specialized agents (IntakeAgent, SchedulerAgent, GearAgent, BillingAgent, FrontDeskAgent)
   - Observer can improve conversation quality by monitoring outputs in background
-- file_path: complex-agents/drive-thru/drivethru_agent.py
-  title: Drive-Thru Order Agent
-  category: complex-agents
-  tags:
-  - ordering_system
-  - modular_tools
-  - rpc_handlers
-  - background_audio
-  - state_management
-  difficulty: advanced
-  description: Restaurant drive-thru ordering system with modular tools and order management
-  demonstrates:
-  - Modular tool organization for menu items
-  - Dynamic tool generation based on menu data
-  - Order state management with add/remove/list operations
-  - Background audio playback during session
-  - RPC handler registration for external control
-  - Structured userdata for session state
 - file_path: complex-agents/exa-deep-researcher/agent.py
   title: EXA Deep Researcher
   category: complex-agents
@@ -596,141 +587,47 @@ examples:
   - Dynamic video track subscription
   - Image content injection into chat context
   - Track publication event handling
-- file_path: complex-agents/drive-thru/tools/management_tools.py
-  title: Drive-Thru Order Management Tools
-  category: drive-thru
-  tags:
-  - order_tools
-  - rpc_integration
-  - checkout_flow
-  difficulty: intermediate
-  description: Order management tools for drive-thru system
-  demonstrates:
-  - Order removal with validation
-  - Order listing and formatting
-  - Checkout completion flow
-  - RPC integration for UI updates
-  - Error handling with ToolError
-  - Order total calculation
-- file_path: complex-agents/drive-thru/tools/order_tools.py
-  title: Drive-Thru Order Placement Tools
-  category: drive-thru
-  tags:
-  - dynamic_tool_generation
-  - combo_meals
-  - enum_validation
-  - size_handling
-  difficulty: advanced
-  description: Dynamic tool builders for different order types in drive-thru system
-  demonstrates:
-  - Dynamic function tool generation
-  - Enum validation from menu items
-  - Complex parameter schemas with Pydantic
-  - Size validation and error handling
-  - Combo meal configuration
-  - Happy meal ordering
-  - Regular item ordering
-  - Price and details tracking
-- file_path: complex-agents/drive-thru/session_setup.py
-  title: Drive-Thru Session Setup
-  category: drive-thru
-  tags:
-  - session_management
-  - userdata_initialization
-  - background_audio_setup
-  difficulty: intermediate
-  description: Session setup utilities for drive-thru ordering system
-  demonstrates:
-  - Userdata initialization with menu items
-  - Session configuration with agent configs
-  - Background audio player setup
-  - Database integration for menu loading
-  - Max tool steps configuration
-- file_path: recording_agent/recording_agent.py
+- file_path: recording_agent/page.mdoc
   title: Recording Agent
   category: egress
   tags:
   - recording
+  - assemblyai
+  - openai
+  - cartesia
   difficulty: intermediate
   description: Shows how to create an agent that can record the input to a room and save it to a file.
   demonstrates:
   - Using egress to record the input to a room
-- file_path: basic_event/basic_event.py
+- file_path: basic_event/page.mdoc
   title: Basic Event
   category: events
   tags:
   - events
   - openai
   - assemblyai
+  - cartesia
   difficulty: beginner
   description: Shows how to use events in an agent to trigger actions.
   demonstrates:
   - Using events in an agent to trigger actions
-  - Using `on` to register an event listener
-  - Using `off` to unregister an event listener
-  - Using `once` to register an event listener that will only be triggered once
-- file_path: event_emitters/event_emitters.py
+  - Using on() to register an event listener
+  - Using off() to unregister an event listener
+  - Using once() to register an event listener that will only be triggered once
+- file_path: event_emitters/page.mdoc
   title: Event Emitters
   category: events
   tags:
   - events
-  - openai
   - assemblyai
+  - openai
+  - cartesia
   difficulty: beginner
   description: Shows how to use event emitters in an agent to trigger actions.
   demonstrates:
-  - Using event emitters in an agent to trigger actions like welcome and farewell messages for the sake of example (even though there are already events for this)
-- file_path: flows/declarative_flow.py
-  title: Declarative Flow
-  category: flows
-  tags:
-  - flows
-  - openai
-  - assemblyai
-  difficulty: intermediate
-  description: Shows how to create a declarative flow using a dictionary of mutliple agents and their transitions.
-  demonstrates:
-  - Creating a defined flow of agents using a dictionary of mutliple agents and their transitions.
-  - Using a function to determine the next agent in the flow.
-- file_path: flows/multi_stage_flow.py
-  title: Multi-Stage Flow
-  category: flows
-  tags:
-  - flows
-  - openai
-  - assemblyai
-  difficulty: intermediate
-  description: Shows how to create a multi-stage flow using a series of agents.
-  demonstrates:
-  - Creating a multi-stage flow using a series of agents.
-- file_path: flows/simple_flow.py
-  title: Simple Flow
-  category: flows
-  tags:
-  - flows
-  - openai
-  - assemblyai
-  difficulty: beginner
-  description: Shows how to create a simple one-way flow using a series of agents.
-  demonstrates:
-  - Creating a simple one-way flow using a series of agents that hand off to the next agent in the flow.
-- file_path: tool_calling/call_function_tool.py
-  title: Basic Function Calling
-  category: function-calling
-  tags:
-  - function-tools
-  - console-output
-  - basic-example
-  - voice-agent
-  difficulty: beginner
-  description: Simple demonstration of function calling with a console print function
-  demonstrates:
-  - Basic function tool decoration and usage
-  - Function registration with voice agents
-  - Return value handling (None, message) pattern
-  - Simple function execution without parameters
-  - Voice-friendly function descriptions
-- file_path: update_tools/update_tools.py
+  - Using event emitters in an agent to trigger custom actions like welcome and farewell messages
+  - Custom event handling with EventEmitter
+- file_path: update_tools/page.mdoc
   title: Dynamic Tool Updates
   category: function-calling
   tags:
@@ -738,6 +635,9 @@ examples:
   - tool-updates
   - runtime-modification
   - function-composition
+  - assemblyai
+  - openai
+  - cartesia
   difficulty: intermediate
   description: Demonstrates dynamically adding function tools to agents at runtime
   demonstrates:
@@ -746,19 +646,18 @@ examples:
   - External function wrapping with function_tool decorator
   - Tool composition and agent enhancement
   - Combining static and dynamic function tools
-- file_path: pi-zero-transcriber/pi_zero_transcriber.py
+- file_path: pi_zero_transcriber/page.mdoc
   title: Pi Zero Transcriber
   category: hardware
   tags:
   - hardware
-  - openai
   - deepgram
   difficulty: beginner
   description: Shows how to create a simple transcriber that uses the LiveKit SDK to transcribe audio from the microphone.
   demonstrates:
   - Using the LiveKit SDK to transcribe audio from the microphone.
   - Displaying the transcribed text on a Pirate Audio display on a Raspberry Pi Zero 2 W.
-- file_path: home_assistant/homeautomation.py
+- file_path: home_assistant/page.mdoc
   title: Home Automation
   category: home-automation
   tags:
@@ -770,57 +669,48 @@ examples:
   demonstrates:
   - Using function tools to control home automation devices.
   - Using a wake word to trigger the agent.
-- file_path: mcp/http_client.py
+- file_path: stdio_mcp_client/page.mdoc
   title: MCP Agent
   category: mcp
   tags:
   - mcp
   - openai
   - assemblyai
+  - cartesia
   difficulty: beginner
   description: Shows how to use a LiveKit Agent as an MCP client.
   demonstrates:
   - Connecting to a local MCP server as a client.
   - Connecting to a remote MCP server as a client.
   - Using a function tool to retrieve data from the MCP server.
-- file_path: mcp/stdio_client.py
+- file_path: http_mcp_client/page.mdoc
   title: MCP Agent
   category: mcp
   tags:
   - mcp
-  - openai
   - assemblyai
+  - openai
+  - cartesia
   difficulty: beginner
   description: Shows how to use a LiveKit Agent as an MCP client.
   demonstrates:
-  - Connecting to a local MCP server as a client.
-  - Connecting to a remote MCP server as a client.
-  - Using a function tool to retrieve data from the MCP server.
-- file_path: mcp/agent.py
-  title: MCP Agent
-  category: mcp
+  - Connecting to a remote MCP server as a client
+  - Using MCP tools with voice-based interaction
+- file_path: metrics_llm/page.mdoc
+  title: LLM Metrics
+  category: metrics
   tags:
-  - mcp
-  - openai
+  - metrics
   - assemblyai
-  difficulty: beginner
-  description: Shows how to use a LiveKit Agent as an MCP client.
-  demonstrates:
-  - Connecting to a local MCP server as a client.
-  - Connecting to a remote MCP server as a client.
-  - Using a function tool to retrieve data from the MCP server.
-- file_path: mcp/server.py
-  title: MCP Server
-  category: mcp
-  tags:
-  - mcp
   - openai
-  - deepgram
+  - cartesia
   difficulty: beginner
-  description: Shows how to create an MCP server that can be used to control a LiveKit room.
+  description: Shows how to use the LLM metrics to log metrics to the console for all of the different LLM models.
   demonstrates:
-  - Creating an MCP server that can be used to control a LiveKit room.
-- file_path: langfuse_tracing/langfuse_tracing.py
+  - Using the LLM metrics to log metrics to the console
+  - Inspecting fields like type, label, request ID, timestamps, duration, time to first token, cancellation, token counts,
+    and throughput
+- file_path: langfuse_tracing/page.mdoc
   title: Langfuse Tracing
   category: metrics
   tags:
@@ -832,13 +722,14 @@ examples:
   demonstrates:
   - Using the langfuse tracer to trace the agent session.
   - Using the metrics_collected event to log metrics to langfuse.
-- file_path: metrics_stt/metrics_stt.py
+- file_path: metrics_stt/page.mdoc
   title: STT Metrics
   category: metrics
   tags:
   - metrics
-  - openai
   - assemblyai
+  - openai
+  - cartesia
   difficulty: beginner
   description: Shows how to use the STT metrics to log metrics to the console.
   demonstrates:
@@ -851,31 +742,35 @@ examples:
     - Duration
     - Speech ID
     - Error
-- file_path: metrics/send-metrics-to-3p/send_metrics_to_3p.py
-  title: Third-Party Metrics Exporter
+- file_path: metrics_tts/page.mdoc
+  title: TTS Metrics
   category: metrics
   tags:
-  - metrics_export
-  - flask_server
-  - all_metrics_types
-  - async_http
-  - event_handlers
-  difficulty: advanced
-  description: Exports all metric types to third-party server via HTTP
+  - metrics
+  - assemblyai
+  - openai
+  - cartesia
+  difficulty: beginner
+  description: Shows how to use the TTS metrics to log metrics to the console.
   demonstrates:
-  - Complete metrics collection (LLM, STT, TTS, EOU, VAD)
-  - Event handler registration for all metric types
-  - Async HTTP requests to metrics server
-  - JSON serialization of metrics data
-  - Error handling for network requests
-  - Comprehensive metrics tracking
-- file_path: metrics_vad/metrics_vad.py
+  - Using the TTS metrics to log metrics to the console.
+  - This includes:
+    - TTFB
+    - Duration
+    - Audio Duration
+    - Cancelled
+    - Characters Count
+    - Streamed
+    - Speech ID
+    - Error
+- file_path: metrics_vad/page.mdoc
   title: VAD Metrics
   category: metrics
   tags:
   - metrics
-  - openai
   - assemblyai
+  - openai
+  - cartesia
   difficulty: beginner
   description: Shows how to use the VAD metrics to log metrics to the console.
   demonstrates:
@@ -886,53 +781,23 @@ examples:
     - Inference Count
     - Speech ID
     - Error
-- file_path: multi-agent/long_or_short_agent.py
-  title: Long or Short Agent
+- file_path: agent_transfer/page.mdoc
+  title: Agent Transfer
   category: multi-agent
   tags:
   - multi-agent
-  - openai
   - assemblyai
-  difficulty: intermediate
-  description: Shows how to create a multi-agent that can switch between a long and short agent using a function tool.
-  demonstrates:
-  - Creating a multi-agent that can switch between a long and short agent using a function tool.
-  - Using a function tool to change the agent.
-  - Different agents can have different instructions, models, and tools.
-- file_path: pipeline-llm/anthropic_llm.py
-  title: Anthropic LLM
-  category: pipeline-llm
-  tags:
-  - pipeline-llm
   - openai
-  - deepgram
+  - cartesia
   difficulty: intermediate
-  description: Shows how to use the Anthropic LLM.
+  description: Shows how to switch between agents mid-call using function tools.
   demonstrates:
-  - Using the Anthropic LLM.
-- file_path: pipeline-llm/cerebras_llm.py
-  title: Cerebras LLM
-  category: pipeline-llm
-  tags:
-  - pipeline-llm
-  - openai
-  - deepgram
-  difficulty: intermediate
-  description: Shows how to use the Cerebras LLM.
-  demonstrates:
-  - Using the Cerebras LLM.
-- file_path: pipeline-llm/google_llm.py
-  title: Google LLM
-  category: pipeline-llm
-  tags:
-  - pipeline-llm
-  - openai
-  - deepgram
-  difficulty: intermediate
-  description: Shows how to use the Google LLM.
-  demonstrates:
-  - Using the Google LLM.
-- file_path: interrupt_user/interrupt_user.py
+  - Agent transfer using update_agent()
+  - Function tools for agent switching
+  - Lightweight agent design with instructions and tools only
+  - Shared AgentSession across agent swaps
+  style: two-column
+- file_path: interrupt_user/page.mdoc
   title: Interrupt User
   category: pipeline-llm
   tags:
@@ -945,15 +810,14 @@ examples:
   - Using the `session.say` method to interrupt the user.
   - Using the `allow_interruptions` parameter to prevent the user from interrupting the agent.
   - Once the agent has spoken, it will allow the user to interrupt again.
-- file_path: replacing_llm_output/replacing_llm_output.py
+- file_path: replacing_llm_output/page.mdoc
   title: LLM Output Replacement
   category: pipeline-llm
   tags:
   - deepseek
   - groq
-  - stream_manipulation
-  - think_tags
-  - output_processing
+  - deepgram
+  - openai
   difficulty: intermediate
   description: Replaces Deepseek thinking tags with custom messages for TTS
   demonstrates:
@@ -962,14 +826,14 @@ examples:
   - Text replacement in LLM output
   - Custom llm_node for output manipulation
   - Handling model-specific output formats
-- file_path: llm_powered_content_filter/llm_powered_content_filter.py
+- file_path: llm_powered_content_filter/page.mdoc
   title: LLM-Powered Content Filter
   category: pipeline-llm
   tags:
   - content_moderation
-  - dual_llm
-  - sentence_buffering
-  - stream_processing
+  - assemblyai
+  - openai
+  - cartesia
   difficulty: advanced
   description: Content filter using a separate LLM for real-time moderation decisions
   demonstrates:
@@ -979,7 +843,7 @@ examples:
   - Custom llm_node override for filtering
   - Handling different chunk formats
   - Real-time content evaluation
-- file_path: large_context/large_context.py
+- file_path: large_context/page.mdoc
   title: Large Context Window LLM
   category: pipeline-llm
   tags:
@@ -995,38 +859,13 @@ examples:
   - Book analysis and discussion capabilities
   - Direct text quotation from context
   - Custom TTS instructions for literary tone
-- file_path: pipeline-llm/ollama_llm.py
-  title: Ollama Local LLM
-  category: pipeline-llm
-  tags:
-  - ollama
-  - local_llm
-  - self_hosted
-  difficulty: beginner
-  description: Agent using Ollama for local LLM inference
-  demonstrates:
-  - Ollama integration with OpenAI plugin
-  - Local model execution
-  - Self-hosted LLM configuration
-- file_path: pipeline-llm/openai_llm.py
-  title: OpenAI LLM Pipeline
-  category: pipeline-llm
-  tags:
-  - openai
-  - standard_pipeline
-  difficulty: beginner
-  description: Basic agent with OpenAI LLM in standard pipeline configuration
-  demonstrates:
-  - OpenAI LLM integration
-  - Standard pipeline setup
-  - Basic agent configuration
-- file_path: simple_content_filter/simple_content_filter.py
+- file_path: simple_content_filter/page.mdoc
   title: Simple Content Filter
   category: pipeline-llm
   tags:
-  - keyword_filtering
-  - offensive_terms
-  - inline_replacement
+  - pipeline-llm
+  - openai
+  - deepgram
   difficulty: beginner
   description: Basic keyword-based content filter with inline replacement
   demonstrates:
@@ -1035,13 +874,16 @@ examples:
   - Custom llm_node override
   - Static offensive terms list
   - Stream processing with substitution
-- file_path: transcription_node/transcription_node.py
+- file_path: transcription_node/page.mdoc
   title: Transcription Node Modifier
   category: pipeline-llm
   tags:
   - transcription_modification
   - word_replacement
   - emoji_injection
+  - assemblyai
+  - openai
+  - cartesia
   difficulty: intermediate
   description: Modifies transcriptions by replacing words with custom versions
   demonstrates:
@@ -1050,254 +892,112 @@ examples:
   - Emoji injection in text
   - Async stream processing for text
   - Model settings usage
-- file_path: pipeline-stt/diarization.py
-  title: Diarization
-  category: pipeline-stt
-  tags:
-  - pipeline-stt
-  - openai
-  - deepgram
-  difficulty: intermediate
-  description: Shows how to use the Speechmatics STT model with diarization.
-  demonstrates:
-  - Using the Speechmatics STT model with diarization.
-  - Allow speakers to label themselves when they're speaking using function tools.
-  - Using the `stt_node` method to override the default STT node and add custom logic to detect speaker changes.
-- file_path: keyword-detection/keyword_detection.py
+- file_path: keyword-detection/page.mdoc
   title: Keyword Detection
   category: pipeline-stt
   tags:
   - pipeline-stt
+  - assemblyai
   - openai
-  - deepgram
+  - cartesia
   difficulty: intermediate
   description: Shows how to detect keywords in user speech.
   demonstrates:
   - If the user says a keyword, the agent will log the keyword to the console.
-  - Using the `stt_node` method to override the default STT node and add custom logic to detect keywords.
-- file_path: transcriber/transcriber.py
+  - Using the `user_input_transcribed` event to inspect transcripts.
+- file_path: transcriber/page.mdoc
   title: Transcriber
   category: pipeline-stt
   tags:
   - pipeline-stt
-  - openai
-  - deepgram
+  - assemblyai
   difficulty: beginner
   description: Shows how to transcribe user speech to text without TTS or an LLM.
   demonstrates:
   - Saving transcripts to a file.
   - An Agent that does not have TTS or an LLM. This is STT only.
-- file_path: pipeline-tts/cartesia_tts.py
-  title: Cartesia TTS
-  category: pipeline-tts
-  tags:
-  - pipeline-tts
-  - openai
-  - deepgram
-  difficulty: intermediate
-  description: Shows how to use the Cartesia TTS model.
-  demonstrates:
-  - Using the Cartesia TTS model.
-- file_path: changing_language/elevenlabs_change_language.py
+- file_path: changing_language/page.mdoc
   title: ElevenLabs Change Language
   category: pipeline-tts
   tags:
   - pipeline-tts
-  - openai
+  - elevenlabs
   - deepgram
+  - openai
   difficulty: intermediate
   description: Shows how to use the ElevenLabs TTS model to change the language of the agent.
   demonstrates:
-  - Using the `tts.update_options` method to change the language of the agent.
-  - Allowing agents to self-update their own options using function tools.
-- file_path: pipeline-tts/elevenlabs_tts.py
-  title: ElevenLabs TTS
-  category: pipeline-tts
-  tags:
-  - pipeline-tts
-  - openai
-  - deepgram
-  difficulty: intermediate
-  description: Shows how to use the ElevenLabs TTS model.
-  demonstrates:
-  - Using the ElevenLabs TTS model.
-- file_path: pipeline-tts/only_greet.py
-  title: Only Greet
-  category: pipeline-tts
-  tags:
-  - pipeline-tts
-  - openai
-  - deepgram
-  difficulty: beginner
-  description: Greets the user when they join the room, but doesn't respond to anything else.
-  demonstrates:
-  - This agent only has TTS, so it can only speak, not listen or think.
-- file_path: pipeline-tts/openai_tts.py
-  title: OpenAI TTS
-  category: pipeline-tts
-  tags:
-  - pipeline-tts
-  - openai
-  - deepgram
-  difficulty: intermediate
-  description: Shows how to use the OpenAI TTS model.
-  demonstrates:
-  - Using the OpenAI TTS model.
-- file_path: pipeline-tts/playai_tts.py
-  title: PlayAI TTS
-  category: pipeline-tts
-  tags:
-  - pipeline-tts
-  - openai
-  - deepgram
-  difficulty: intermediate
-  description: Shows how to use the PlayAI TTS model.
-  demonstrates:
-  - Using the PlayAI TTS model.
-- file_path: pipeline-tts/rime_tts.py
-  title: Rime TTS
-  category: pipeline-tts
-  tags:
-  - pipeline-tts
-  - openai
-  - deepgram
-  difficulty: intermediate
-  description: Shows how to use the Rime TTS model.
-  demonstrates:
-  - Using the Rime TTS model.
-- file_path: short_replies_only/short_replies_only.py
+  - Using the update_options() method to change the language of STT and TTS
+  - Allowing agents to self-update their own options using function tools
+  - Accessing session STT/TTS from within an agent
+- file_path: short_replies_only/page.mdoc
   title: Short Replies Only
   category: pipeline-tts
   tags:
   - pipeline-tts
   - openai
   - deepgram
+  - rime
   difficulty: beginner
   description: Shows how to override the default TTS node to only respond with short replies based on the number of chunks.
   demonstrates:
   - Using the `tts_node` method to override the default TTS node and add custom logic to only respond with short replies.
-  - Using the `session.interrupt` method to interrupt the agent if it's taking too long to respond, and then informing the user with `session.say`
-- file_path: tts_comparison/tts_comparison.py
+  - Using the `session.interrupt` method to interrupt the agent if it's taking too long to respond, and then informing the
+    user with `session.say`
+- file_path: tts_comparison/page.mdoc
   title: TTS Comparison
   category: pipeline-tts
   tags:
   - pipeline-tts
-  - openai
   - deepgram
+  - openai
+  - rime
+  - elevenlabs
+  - cartesia
+  - playai
   difficulty: intermediate
   description: Switches between different TTS providers using function tools.
   demonstrates:
   - Using function tools to switch between different TTS providers.
   - Each function tool returns a new agent with the same instructions, but with a different TTS provider.
-- file_path: pipeline-tts/tts_node.py
+- file_path: tts_node_modifications/page.mdoc
   title: TTS Node Override
   category: pipeline-tts
   tags:
   - pipeline-tts
-  - openai
   - deepgram
+  - openai
+  - rime
   difficulty: intermediate
   description: Shows how to override the default TTS node to do replacements on the output.
   demonstrates:
-  - Using the `tts_node` method to override the default TTS node and add custom logic to do replacements on the output, like replacing "lol" with "<laughs>".
-- file_path: pipeline-tts/sarvam.py
-  title: Sarvam TTS and STT
-  category: pipeline-tts, pipeline-stt
-  tags:
-  - pipeline-tts
-  - pipeline-stt
-  - sarvam
-  difficulty: beginner
-  description: Shows how to use the Sarvam TTS and STT models.
-  demonstrates:
-  - Using the Sarvam TTS and STT models.
-- file_path: rag/rag_db_builder.py
-  title: RAG Database Builder
+  - Using the `tts_node` method to override the default TTS node and add custom logic to do replacements on the output, like
+    replacing "lol" with "<laughs>".
+- file_path: rag/page.mdoc
+  title: RAG Voice Agent
   category: rag
   tags:
   - annoy_index
-  - sentence_chunking
-  - embeddings_generation
-  - vector_database
+  - vector_search
+  - embeddings
+  - livekit_docs
+  - deduplication
   difficulty: advanced
-  description: Builds vector databases for RAG from text documents
+  description: RAG-enabled agent with vector search for LiveKit documentation
   demonstrates:
-  - Annoy index construction and saving
-  - Text chunking with SentenceChunker
-  - OpenAI embeddings generation
-  - Progress tracking with tqdm
-  - Content cleaning and filtering
-  - UUID-based paragraph storage
-  - Factory pattern for builder creation
-- file_path: rag/rag_handler.py
-  title: RAG Handler Utility
-  category: rag
-  tags:
-  - thinking_styles
-  - rag_enrichment
-  - agent_registration
-  - context_injection
-  difficulty: advanced
-  description: Reusable RAG handler with thinking styles and agent integration
-  demonstrates:
-  - Three thinking styles (none, message, llm)
-  - RAG context retrieval and enrichment
-  - Agent method injection pattern
-  - Function tool registration
-  - Flexible thinking phase handling
-  - Random message selection
-- file_path: realtime/gemini_realtime_api.py
-  title: Basic Gemini Realtime Agent
-  category: realtime
-  tags:
-  - gemini_realtime
-  - minimal_setup
-  difficulty: beginner
-  description: Minimal Gemini Realtime model agent setup
-  demonstrates:
-  - Gemini Realtime model basic usage
-  - Minimal agent configuration
-  - Session-based generation
-  - VAD with Silero
-- file_path: realtime/openai-realtime.py
-  title: Basic OpenAI Realtime Agent
-  category: realtime
-  tags:
-  - openai_realtime
-  - minimal_setup
-  difficulty: beginner
-  description: Minimal OpenAI Realtime model agent setup
-  demonstrates:
-  - OpenAI Realtime model basic usage
-  - Minimal agent configuration
-  - Session-based generation
-  - VAD with Silero
-- file_path: realtime/openai-realtime-drive-thru.py
-  title: Drive-Thru Order System with Realtime
-  category: realtime
-  tags:
-  - order_management
-  - menu_database
-  - combo_handling
-  - order_modifications
-  - userdata_state
-  difficulty: advanced
-  description: Complete drive-thru ordering system with OpenAI Realtime
-  demonstrates:
-  - Complex order state management with userdata
-  - Menu database with pricing and categories
-  - Combo meal handling and upgrades
-  - Order modification tools (add, remove, modify)
-  - Special requests and customization
-  - Discount code application
-  - Order summary and finalization
-  - Real-time order state printing
-- file_path: gemini_live_vision/gemini_live_vision.py
+  - Annoy vector index loading and querying
+  - OpenAI embeddings for semantic search
+  - Result deduplication with seen tracking
+  - Function tool for document search
+  - Paragraph-based context retrieval
+  - Noise cancellation with BVC
+- file_path: gemini_live_vision/page.mdoc
   title: Gemini Realtime Agent with Live Vision
   category: realtime
   tags:
   - gemini_realtime
   - live_vision
+  - google
   difficulty: beginner
   description: Minimal Gemini Realtime model agent setup with live vision capabilities
   demonstrates:
@@ -1305,96 +1005,8 @@ examples:
   - Live vision capabilities
   - Session-based generation
   - VAD with Silero
-- file_path: realtime/openai-realtime-tools.py
-  title: OpenAI Realtime with 50+ Tools
-  category: realtime
-  tags:
-  - massive_function_collection
-  - math_tools
-  - string_tools
-  - list_tools
-  - conversion_tools
-  difficulty: intermediate
-  description: OpenAI Realtime agent with comprehensive function tool collection
-  demonstrates:
-  - 50+ function tools implementation
-  - Math operations (arithmetic, advanced, conversions)
-  - String manipulation tools
-  - List and array operations
-  - Random generation utilities
-  - ASCII and temperature conversions
-  - Password generation
-  - Anagram and palindrome checks
-- file_path: realtime/openai-realtime-pitch-shift.py
-  title: Realtime Audio Pitch Shifting
-  category: realtime
-  tags:
-  - audio_processing
-  - pitch_shift
-  - librosa
-  - realtime_audio_output_node
-  difficulty: advanced
-  description: OpenAI Realtime agent with real-time audio pitch shifting
-  demonstrates:
-  - Custom realtime_audio_output_node override
-  - Audio stream processing with librosa
-  - Pitch shifting by semitones
-  - AudioByteStream for buffering
-  - Frame-by-frame audio transformation
-  - NumPy audio data manipulation
-- file_path: realtime-agents/openai-realtime.py
-  title: AWS Realtime Voice Agent
-  category: realtime-agents
-  tags:
-  - aws_realtime
-  - aws_bedrock
-  - nova_model
-  difficulty: beginner
-  description: Voice agent using AWS Bedrock Nova Realtime model
-  demonstrates:
-  - AWS Realtime model integration
-  - AWS Bedrock Nova model usage
-  - Context connection before session
-  - Minimal agent with AWS
-- file_path: realtime-agents/openai-realtime-pitch-shift.py
-  title: Audio Pitch Shifting (Duplicate)
-  category: realtime-agents
-  tags:
-  - duplicate_example
-  - audio_processing
-  difficulty: advanced
-  description: Duplicate of realtime/openai-realtime-pitch-shift.py
-  demonstrates:
-  - Same pitch shifting implementation
-  - Duplicate for testing purposes
-  - Audio stream processing
-- file_path: realtime-agents/openai-realtime-drive-thru.py
-  title: Drive-Thru Order System (Duplicate)
-  category: realtime-agents
-  tags:
-  - duplicate_example
-  - ordering_system
-  difficulty: advanced
-  description: Duplicate of realtime/openai-realtime-drive-thru.py
-  demonstrates:
-  - Same drive-thru ordering implementation
-  - Duplicate for testing purposes
-  - Full menu and order management
-- file_path: realtime-agents/openai-realtime-tools.py
-  title: OpenAI Realtime with Function Tools (Duplicate)
-  category: realtime-agents
-  tags:
-  - duplicate_example
-  - function_tools
-  - math_operations
-  difficulty: intermediate
-  description: Duplicate of realtime/openai-realtime-tools.py with same 50+ tools
-  demonstrates:
-  - Same extensive function tool collection
-  - Duplicate example for testing
-  - Math and string operations
-  - List manipulations
-- file_path: rpc_agent/rpc_agent.py
+  style: two-column
+- file_path: rpc_agent/page.mdoc
   title: RPC State Management Agent
   category: rpc
   tags:
@@ -1412,15 +1024,15 @@ examples:
   - RPC method registration and error handling
   - Function tools integrated with RPC state
   - Structured error responses and logging
-- file_path: tracking_state/npc_character.py
+  style: two-column
+- file_path: state_tracking/page.mdoc
   title: NPC Character State Tracking
   category: state-management
   tags:
-  - npc-interaction
-  - state-tracking
-  - rapport-system
-  - agent-switching
-  - conversation-flow
+  - state-management
+  - assemblyai
+  - openai
+  - cartesia
   difficulty: advanced
   description: Advanced NPC system with dynamic rapport tracking and conversation state management
   demonstrates:
@@ -1430,31 +1042,28 @@ examples:
   - Dynamic response variation based on relationship state
   - Agent inheritance patterns for character consistency
   - Session data persistence across interactions
-- file_path: make_call/calling_agent.py
-  title: Outbound Calling Agent
+- file_path: make_call/page.mdoc
+  title: Outbound Calling Script
   category: telephony
   tags:
   - telephony
+  - sip
   - outbound-calls
-  - survey
-  - ice-cream-preference
   difficulty: beginner
-  description: Agent that makes outbound calls to ask about ice cream preferences
+  description: Script that makes outbound calls via LiveKit Telephony using the LiveKit API
   demonstrates:
-  - Outbound call agent configuration
-  - Goal-oriented conversation flow
-  - Focused questioning strategy
-  - Brief and direct interaction patterns
-  - Automatic greeting generation
-- file_path: sip_lifecycle/sip_lifecycle.py
+  - Creating agent dispatches via the API
+  - Dialing outbound numbers via SIP trunks
+  - LiveKit API client usage
+- file_path: sip_lifecycle/page.mdoc
   title: SIP Lifecycle Management Agent
   category: telephony
   tags:
+  - telephony
   - sip
-  - call-management
-  - participant-handling
-  - call-lifecycle
-  - function-tools
+  - deepgram
+  - openai
+  - elevenlabs
   difficulty: advanced
   description: Advanced SIP agent demonstrating complete call lifecycle management
   demonstrates:
@@ -1464,23 +1073,25 @@ examples:
   - Participant attribute monitoring
   - Call lifecycle event handlers
   - Function tools for call operations
-- file_path: answer_call/answer_call.py
+- file_path: answer_call/page.mdoc
   title: Simple Call Answering Agent
   category: telephony
   tags:
   - telephony
-  - call-handling
-  - basic-agent
-  - voice-interaction
+  - assemblyai
+  - openai
+  - cartesia
   difficulty: beginner
   description: Basic agent for handling incoming phone calls with simple conversation
+  style: two-column
+  githubUrl: https://github.com/livekit-examples/python-agents-examples/docs/examples/answer_call/answer_call.py
   demonstrates:
   - Simple telephony agent setup
   - Basic call handling workflow
   - Standard STT/LLM/TTS configuration
   - Automatic greeting generation on entry
   - Clean agent session lifecycle
-- file_path: survey_caller/survey_calling_agent.py
+- file_path: survey_caller/page.mdoc
   title: Survey Calling Agent
   category: telephony
   tags:
@@ -1489,6 +1100,9 @@ examples:
   - csv-handling
   - automated-calling
   - metadata-processing
+  - assemblyai
+  - openai
+  - cartesia
   difficulty: intermediate
   description: Automated survey calling agent with CSV data management and response recording
   demonstrates:
@@ -1498,7 +1112,7 @@ examples:
   - Automated room deletion after completion
   - Function tools for survey response recording
   - Professional survey caller persona
-- file_path: warm_handoff/warm_handoff.py
+- file_path: warm_handoff/page.mdoc
   title: Warm Handoff Agent
   category: telephony
   tags:
@@ -1507,6 +1121,9 @@ examples:
   - sip
   - agent-to-human
   - function-tools
+  - deepgram
+  - openai
+  - elevenlabs
   difficulty: intermediate
   description: Agent demonstrating warm handoff functionality to transfer calls to human agents
   demonstrates:
@@ -1582,7 +1199,7 @@ examples:
   - Environment variable loading for tests
   - Simple greeting validation pattern
   - LLM judge pattern for response evaluation
-- file_path: pipeline_translator/pipeline_translator.py
+- file_path: pipeline_translator/page.mdoc
   title: Pipeline Translator Agent
   category: translation
   tags:
@@ -1590,7 +1207,8 @@ examples:
   - multilingual
   - french
   - elevenlabs
-  - direct-translation
+  - deepgram
+  - openai
   difficulty: intermediate
   description: Simple translation pipeline that converts English speech to French
   demonstrates:
@@ -1599,12 +1217,14 @@ examples:
   - Simple translation-focused agent instructions
   - Clean input-to-output translation pipeline
   - Voice-to-voice translation system
-- file_path: tts_translator/tts_translator.py
+  style: two-column
+- file_path: tts_translator/page.mdoc
   title: TTS Translator with Gladia STT
   category: translation
   tags:
   - translation
-  - gladia-stt
+  - gladia
+  - elevenlabs
   - multilingual
   - code-switching
   - event-handling
@@ -1617,13 +1237,17 @@ examples:
   - Custom STT configuration with translation capabilities
   - Event-driven transcription and speech synthesis
   - Advanced multilingual processing pipeline
-- file_path: moondream_vision/moondream_vision.py
+- file_path: moondream_vision/page.mdoc
   title: Moondream Vision Agent
   category: vision
   tags:
   - moondream
   - vision
+  - assemblyai
+  - openai
+  - cartesia
   difficulty: intermediate
   description: Moondream Vision Agent
   demonstrates:
   - Adding vision capabilities to an agent when the LLM does not have vision capabilities
+  style: two-column

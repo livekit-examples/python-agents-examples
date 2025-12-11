@@ -5,19 +5,9 @@ tags: [metrics, assemblyai, openai, cartesia]
 difficulty: beginner
 description: Shows how to use the LLM metrics to log metrics to the console for all of the different LLM models.
 demonstrates:
-  - Using the LLM metrics to log metrics to the console.
-    - This includes:
-        - Type
-        - Label
-        - Request ID
-        - Timestamp
-        - Duration
-        - Time to First Token
-        - Cancelled
-        - Completion Tokens
-        - Prompt Tokens
-        - Total Tokens
-        - Tokens/Second
+  - Using the LLM metrics to log metrics to the console
+  - Inspecting fields like type, label, request ID, timestamps, duration,
+    time to first token, cancellation, token counts, and throughput
 ---
 
 This example shows how to capture token and latency metrics emitted by the LLM pipeline and print them as a Rich table whenever the agent responds. It's a quick way to see prompt/response token counts and time-to-first-token during a live call.
