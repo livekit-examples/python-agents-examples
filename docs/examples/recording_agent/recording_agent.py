@@ -2,7 +2,7 @@
 ---
 title: Recording Agent
 category: egress
-tags: [recording, assemblyai, openai, cartesia]
+tags: [recording, deepgram, openai, cartesia]
 difficulty: intermediate
 description: Shows how to create an agent that can record the input to a room and save it to a file.
 demonstrates:
@@ -67,7 +67,7 @@ async def entrypoint(ctx: JobContext):
     res = await lkapi.egress.start_room_composite_egress(req)
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-5-mini"),
         tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
         vad=ctx.proc.userdata["vad"],

@@ -186,7 +186,7 @@ async def entrypoint(ctx: JobContext):
     moderation_userdata.room = ctx.room
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1"),
         tts=inference.TTS(model="NO_TTS_USED"),
         turn_detection=MultilingualModel(),

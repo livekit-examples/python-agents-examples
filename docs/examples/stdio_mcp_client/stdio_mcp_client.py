@@ -2,7 +2,7 @@
 ---
 title: MCP Agent
 category: mcp
-tags: [mcp, openai, assemblyai, cartesia]
+tags: [mcp, openai, deepgram, cartesia]
 difficulty: beginner
 description: Shows how to use a LiveKit Agent as an MCP client.
 demonstrates:
@@ -53,7 +53,7 @@ async def entrypoint(ctx: JobContext):
     ctx.log_context_fields = {"room": ctx.room.name}
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1-mini"),
         tts=inference.TTS(model="cartesia/sonic-2", voice="6f84f4b8-58a2-430c-8c79-688dad597532"),
         vad=ctx.proc.userdata["vad"],

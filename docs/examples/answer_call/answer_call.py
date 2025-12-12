@@ -2,7 +2,7 @@
 ---
 title: Simple Call Answering Agent
 category: telephony
-tags: [telephony, assemblyai, openai, cartesia]
+tags: [telephony, deepgram, openai, cartesia]
 difficulty: beginner
 description: Basic agent for handling incoming phone calls with simple conversation
 demonstrates:
@@ -47,7 +47,7 @@ async def my_agent(ctx: JobContext):
     ctx.log_context_fields = {"room": ctx.room.name}
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1-mini"),
         tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
         vad=ctx.proc.userdata["vad"],

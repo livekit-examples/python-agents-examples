@@ -2,7 +2,7 @@
 ---
 title: Transcriber
 category: pipeline-stt
-tags: [pipeline-stt, assemblyai]
+tags: [pipeline-stt, deepgram]
 difficulty: beginner
 description: Shows how to transcribe user speech to text without TTS or an LLM.
 demonstrates:
@@ -24,7 +24,7 @@ async def entrypoint(ctx: JobContext):
     ctx.log_context_fields = {"room": ctx.room.name}
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
     )
 
     @session.on("user_input_transcribed")

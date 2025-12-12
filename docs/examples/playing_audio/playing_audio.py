@@ -2,7 +2,7 @@
 ---
 title: Playing Audio
 category: basics
-tags: [audio, assemblyai, openai, cartesia]
+tags: [audio, deepgram, openai, cartesia]
 difficulty: beginner
 description: Shows how to play audio from a file in an agent.
 demonstrates:
@@ -70,7 +70,7 @@ async def entrypoint(ctx: JobContext):
     ctx.log_context_fields = {"room": ctx.room.name}
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-5-mini"),
         tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
         vad=ctx.proc.userdata["vad"],

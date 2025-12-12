@@ -2,7 +2,7 @@
 ---
 title: Function Tool Voice Switching Agent
 category: basics
-tags: [tts, voice-switching, function-tools, inworld, assemblyai, openai]
+tags: [tts, voice-switching, function-tools, inworld, deepgram, openai]
 difficulty: beginner
 description: Demonstrates how to create an agent that can dynamically switch between different voices during a conversation using function tools.
 demonstrates:
@@ -56,7 +56,7 @@ async def entrypoint(ctx: JobContext):
     agent = SayPhraseInVoiceAgent()
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-5-mini"),
         tts=agent._tts,
         vad=ctx.proc.userdata["vad"],

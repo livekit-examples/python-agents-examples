@@ -2,7 +2,7 @@
 ---
 title: TTS Metrics
 category: metrics
-tags: [metrics, assemblyai, openai, cartesia]
+tags: [metrics, deepgram, openai, cartesia]
 difficulty: beginner
 description: Shows how to use the TTS metrics to log metrics to the console.
 demonstrates:
@@ -95,7 +95,7 @@ async def entrypoint(ctx: JobContext):
     tts_instance.on("metrics_collected", on_tts_metrics)
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-5-mini"),
         tts=tts_instance,
         vad=ctx.proc.userdata["vad"],

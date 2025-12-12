@@ -2,7 +2,7 @@
 ---
 title: Tool Calling
 category: basics
-tags: [tool-calling, assemblyai, openai, cartesia]
+tags: [tool-calling, deepgram, openai, cartesia]
 difficulty: beginner
 description: Shows how to use tool calling in an agent.
 demonstrates:
@@ -49,7 +49,7 @@ async def entrypoint(ctx: JobContext):
     ctx.log_context_fields = {"room": ctx.room.name}
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1-mini"),
         tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
         vad=ctx.proc.userdata["vad"],

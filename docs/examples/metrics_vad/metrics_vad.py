@@ -2,7 +2,7 @@
 ---
 title: VAD Metrics
 category: metrics
-tags: [metrics, assemblyai, openai, cartesia]
+tags: [metrics, deepgram, openai, cartesia]
 difficulty: beginner
 description: Shows how to use the VAD metrics to log metrics to the console.
 demonstrates:
@@ -83,7 +83,7 @@ async def entrypoint(ctx: JobContext):
     vad_instance.on("metrics_collected", on_vad_event)
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-5-mini"),
         tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
         vad=vad_instance,

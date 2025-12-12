@@ -2,7 +2,7 @@
 ---
 title: Survey Calling Agent
 category: telephony
-tags: [surveys, data-collection, csv-handling, automated-calling, metadata-processing, assemblyai, openai, cartesia]
+tags: [surveys, data-collection, csv-handling, automated-calling, metadata-processing, deepgram, openai, cartesia]
 difficulty: intermediate
 description: Automated survey calling agent with CSV data management and response recording
 demonstrates:
@@ -103,7 +103,7 @@ async def entrypoint(ctx: JobContext):
     }
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1-mini"),
         tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
         vad=ctx.proc.userdata["vad"],

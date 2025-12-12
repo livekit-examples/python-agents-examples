@@ -2,7 +2,7 @@
 ---
 title: Transcription Node Modifier
 category: pipeline-llm
-tags: [transcription_modification, word_replacement, emoji_injection, assemblyai, openai, cartesia]
+tags: [transcription_modification, word_replacement, emoji_injection, deepgram, openai, cartesia]
 difficulty: intermediate
 description: Modifies transcriptions by replacing words with custom versions
 demonstrates:
@@ -75,7 +75,7 @@ async def entrypoint(ctx: JobContext):
     ctx.log_context_fields = {"room": ctx.room.name}
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1-mini"),
         tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
         vad=ctx.proc.userdata["vad"],

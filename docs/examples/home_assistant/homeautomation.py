@@ -2,7 +2,7 @@
 ---
 title: Home Automation
 category: home-automation
-tags: [home-automation, openai, assemblyai]
+tags: [home-automation, openai, deepgram]
 difficulty: intermediate
 description: Shows how to create an agent that can control home automation devices.
 demonstrates:
@@ -42,8 +42,7 @@ class SimpleAgent(Agent):
                 When asked about devices, first list what's available and then help control them.
             """,
             stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
+                model="deepgram/nova-3-general"
             ),
             llm=inference.LLM(
                 model="openai/gpt-5-mini",

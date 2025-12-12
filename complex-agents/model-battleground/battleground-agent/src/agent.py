@@ -114,7 +114,7 @@ async def entrypoint(ctx: JobContext):
     }
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1-mini"),
         tts=inference.TTS(model="inworld/inworld-tts-1-max"),
         turn_detection=MultilingualModel(),

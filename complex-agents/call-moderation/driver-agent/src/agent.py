@@ -53,7 +53,7 @@ async def entrypoint(ctx: JobContext):
     ctx.add_shutdown_callback(_close_livekit_api)
 
     session = AgentSession(
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1-mini"),
         tts=inference.TTS(
             model="cartesia/sonic-3", voice="228fca29-3a0a-435c-8728-5cb483251068"

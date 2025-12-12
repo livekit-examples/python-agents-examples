@@ -121,8 +121,7 @@ class RPCStateAgent(Agent):
                 - delete_note: Delete a note by ID
             """,
             stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
+                model="deepgram/nova-3-general"
             ),
             llm=inference.LLM(
                 model="openai/gpt-5-mini",

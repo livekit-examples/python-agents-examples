@@ -30,14 +30,14 @@ This example shows how to build a simple voice-to-voice translator: listen in En
   pip install "livekit-agents[silero,openai,elevenlabs,deepgram]" python-dotenv
   ```
 
-{% step %}
-{% instructions %}
+<!-- {% step %} -->
+<!-- {% instructions %} -->
 ## Load environment, logging, and define an AgentServer
 
 Load your `.env` and set up logging to trace translation events.
-{% /instructions %}
+<!-- {% /instructions %} -->
 
-{% stepCode %}
+<!-- {% stepCode %} -->
 ```python
 import logging
 from dotenv import load_dotenv
@@ -51,17 +51,17 @@ logger.setLevel(logging.INFO)
 
 server = AgentServer()
 ```
-{% /stepCode %}
-{% /step %}
+<!-- {% /stepCode %} -->
+<!-- {% /step %}-->
 
-{% step %}
-{% instructions %}
+<!-- {% step %} -->
+<!-- {% instructions %} -->
 ## Define the translation agent
 
 Keep the agent lightweight with focused instructions: always translate from English to French and respond only with the translation.
-{% /instructions %}
+<!-- {% /instructions %} -->
 
-{% stepCode %}
+<!-- {% stepCode %} -->
 ```python
 import logging
 from dotenv import load_dotenv
@@ -75,7 +75,7 @@ logger.setLevel(logging.INFO)
 
 server = AgentServer()
 ```
-{% added %}
+<!-- {% added %} -->
 ```python
 class TranslatorAgent(Agent):
     def __init__(self) -> None:
@@ -90,18 +90,18 @@ class TranslatorAgent(Agent):
     async def on_enter(self):
         self.session.generate_reply()
 ```
-{% /added %}
-{% /stepCode %}
-{% /step %}
+<!-- {% /added %} -->
+<!-- {% /stepCode %} -->
+<!-- {% /step %}-->
 
-{% step %}
-{% instructions %}
+<!-- {% step %} -->
+<!-- {% instructions %} -->
 ## Prewarm VAD for faster connections
 
 Preload the VAD model once per process to reduce connection latency.
-{% /instructions %}
+<!-- {% /instructions %} -->
 
-{% stepCode %}
+<!-- {% stepCode %} -->
 ```python
 import logging
 from dotenv import load_dotenv
@@ -129,25 +129,25 @@ class TranslatorAgent(Agent):
     async def on_enter(self):
         self.session.generate_reply()
 ```
-{% added %}
+<!-- {% added %} -->
 ```python
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()
 
 server.setup_fnc = prewarm
 ```
-{% /added %}
-{% /stepCode %}
-{% /step %}
+<!-- {% /added %} -->
+<!-- {% /stepCode %} -->
+<!-- {% /step %}-->
 
-{% step %}
-{% instructions %}
+<!-- {% step %} -->
+<!-- {% instructions %} -->
 ## Define the rtc session with translation pipeline
 
 Create the session with Deepgram STT, OpenAI LLM, and ElevenLabs multilingual TTS for French output.
-{% /instructions %}
+<!-- {% /instructions %} -->
 
-{% stepCode %}
+<!-- {% stepCode %} -->
 ```python
 import logging
 from dotenv import load_dotenv
@@ -182,7 +182,7 @@ def prewarm(proc: JobProcess):
 
 server.setup_fnc = prewarm
 ```
-{% added %}
+<!-- {% added %} -->
 ```python
 @server.rtc_session()
 async def entrypoint(ctx: JobContext):
@@ -199,18 +199,18 @@ async def entrypoint(ctx: JobContext):
     await session.start(agent=TranslatorAgent(), room=ctx.room)
     await ctx.connect()
 ```
-{% /added %}
-{% /stepCode %}
-{% /step %}
+<!-- {% /added %} -->
+<!-- {% /stepCode %} -->
+<!-- {% /step %}-->
 
-{% step %}
-{% instructions %}
+<!-- {% step %} -->
+<!-- {% instructions %} -->
 ## Run the server
 
 Start the agent server with the CLI runner.
-{% /instructions %}
+<!-- {% /instructions %} -->
 
-{% stepCode %}
+<!-- {% stepCode %} -->
 ```python
 import logging
 from dotenv import load_dotenv
@@ -261,14 +261,14 @@ async def entrypoint(ctx: JobContext):
     await session.start(agent=TranslatorAgent(), room=ctx.room)
     await ctx.connect()
 ```
-{% added %}
+<!-- {% added %} -->
 ```python
 if __name__ == "__main__":
     cli.run_app(server)
 ```
-{% /added %}
-{% /stepCode %}
-{% /step %}
+<!-- {% /added %} -->
+<!-- {% /stepCode %} -->
+<!-- {% /step %}-->
 
 ## Run it
 

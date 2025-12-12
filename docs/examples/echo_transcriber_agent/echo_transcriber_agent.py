@@ -2,7 +2,7 @@
 ---
 title: Echo Transcriber Agent
 category: basics
-tags: [echo, transcriber, assemblyai, silero]
+tags: [echo, transcriber, deepgram, silero]
 difficulty: beginner
 description: Shows how to create an agent that can transcribe audio and echo it back.
 demonstrates:
@@ -32,7 +32,7 @@ class EchoTranscriberAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="You are an echo transcriber that listens and repeats audio.",
-            stt="assemblyai/universal-streaming",
+            stt="deepgram/nova-3-general",
             vad=None,
             allow_interruptions=False
         )

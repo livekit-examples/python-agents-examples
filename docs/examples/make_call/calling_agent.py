@@ -36,8 +36,7 @@ class SimpleAgent(Agent):
                 ask you a question about ice cream. Do you prefer chocolate or vanilla?"
             """,
             stt=inference.STT(
-                model="assemblyai/universal-streaming",
-                language="en"
+                model="deepgram/nova-3-general"
             ),
             llm=inference.LLM(
                 model="openai/gpt-5-mini",

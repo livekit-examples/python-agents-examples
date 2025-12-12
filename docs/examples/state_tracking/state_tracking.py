@@ -2,7 +2,7 @@
 ---
 title: NPC Character State Tracking
 category: state-management
-tags: [state-management, assemblyai, openai, cartesia]
+tags: [state-management, deepgram, openai, cartesia]
 difficulty: advanced
 description: Advanced NPC system with dynamic rapport tracking and conversation state management
 demonstrates:
@@ -182,7 +182,7 @@ async def entrypoint(ctx: JobContext) -> None:
     ctx.log_context_fields = {"room": ctx.room.name}
 
     session = AgentSession[NPCData](
-        stt=inference.STT(model="assemblyai/universal-streaming", language="en"),
+        stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1-mini"),
         tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
         vad=ctx.proc.userdata["vad"],
