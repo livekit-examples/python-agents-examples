@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reachy-mini-agent"
+version = "1.0.0"
+description = "LiveKit agent for controlling Reachy Mini robot with vision capabilities"
+requires-python = ">=3.10"
+
+dependencies = [
+    "livekit-agents[silero]~=1.2",
+    "livekit-plugins-deepgram~=0.2",
+    "livekit-plugins-openai~=0.2",
+    "livekit-plugins-rime~=0.2",
+    "python-dotenv",
+    "opencv-python",
+    "numpy",
+    "reachy-mini",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "B", "A", "C4", "UP", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
