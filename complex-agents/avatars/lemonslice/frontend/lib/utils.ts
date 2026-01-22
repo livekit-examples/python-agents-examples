@@ -95,7 +95,10 @@ export function getStyles(appConfig: AppConfig) {
  * @param appConfig - The app configuration
  * @returns A token source for a sandboxed LiveKit session
  */
-export function getSandboxTokenSource(appConfig: AppConfig, participantAttributes?: Record<string, string>) {
+export function getSandboxTokenSource(
+  appConfig: AppConfig,
+  participantAttributes?: Record<string, string>
+) {
   return TokenSource.custom(async () => {
     const url = new URL(process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT!, window.location.origin);
     const sandboxId = appConfig.sandboxId ?? '';

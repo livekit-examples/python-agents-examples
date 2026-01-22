@@ -41,7 +41,7 @@ interface TileLayoutProps {
   children?: React.ReactNode;
 }
 
-export function TileLayout({ chatOpen, mode, children }: TileLayoutProps) {
+export function TileLayout({ mode, children }: TileLayoutProps) {
   const {
     state: agentState,
     audioTrack: agentAudioTrack,
@@ -84,7 +84,7 @@ export function TileLayout({ chatOpen, mode, children }: TileLayoutProps) {
           <div className="flex flex-col items-center gap-4">
             <div
               className={cn(
-                'rounded-3xl p-6 transition-colors duration-500 border border-border/50',
+                'border-border/50 rounded-3xl border p-6 transition-colors duration-500',
                 getBackgroundColor()
               )}
             >
@@ -110,7 +110,7 @@ export function TileLayout({ chatOpen, mode, children }: TileLayoutProps) {
                         height: VIDEO_DIMENSIONS.height,
                       }}
                       className={cn(
-                        'bg-background rounded-lg border-4 transition-colors drop-shadow-xl',
+                        'bg-background rounded-lg border-4 drop-shadow-xl transition-colors',
                         getBorderColor()
                       )}
                     >
@@ -163,7 +163,7 @@ export function TileLayout({ chatOpen, mode, children }: TileLayoutProps) {
                         height: VIDEO_DIMENSIONS.height,
                       }}
                       className={cn(
-                        'overflow-hidden bg-black drop-shadow-xl border-4 transition-colors',
+                        'overflow-hidden border-4 bg-black drop-shadow-xl transition-colors',
                         getBorderColor()
                       )}
                     >
@@ -171,7 +171,7 @@ export function TileLayout({ chatOpen, mode, children }: TileLayoutProps) {
                         width={videoWidth}
                         height={videoHeight}
                         trackRef={agentVideoTrack}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
                       />
                     </MotionContainer>
                   )}
@@ -179,7 +179,8 @@ export function TileLayout({ chatOpen, mode, children }: TileLayoutProps) {
 
                 {/* User Camera */}
                 <AnimatePresence>
-                  {((cameraTrack && isCameraEnabled) || (screenShareTrack && isScreenShareEnabled)) && (
+                  {((cameraTrack && isCameraEnabled) ||
+                    (screenShareTrack && isScreenShareEnabled)) && (
                     <MotionContainer
                       key="camera"
                       layout="position"
@@ -202,15 +203,19 @@ export function TileLayout({ chatOpen, mode, children }: TileLayoutProps) {
                         height: VIDEO_DIMENSIONS.height,
                       }}
                       className={cn(
-                        'bg-muted overflow-hidden rounded-lg drop-shadow-xl border-4 transition-colors',
+                        'bg-muted overflow-hidden rounded-lg border-4 drop-shadow-xl transition-colors',
                         getBorderColor()
                       )}
                     >
                       <VideoTrack
                         trackRef={cameraTrack || screenShareTrack}
-                        width={(cameraTrack || screenShareTrack)?.publication.dimensions?.width ?? 0}
-                        height={(cameraTrack || screenShareTrack)?.publication.dimensions?.height ?? 0}
-                        className="w-full h-full object-cover"
+                        width={
+                          (cameraTrack || screenShareTrack)?.publication.dimensions?.width ?? 0
+                        }
+                        height={
+                          (cameraTrack || screenShareTrack)?.publication.dimensions?.height ?? 0
+                        }
+                        className="h-full w-full object-cover"
                       />
                     </MotionContainer>
                   )}
@@ -219,7 +224,7 @@ export function TileLayout({ chatOpen, mode, children }: TileLayoutProps) {
 
               {/* Mode indicator text */}
               {mode && (
-                <div className="mt-4 text-center text-sm text-muted-foreground font-medium">
+                <div className="text-muted-foreground mt-4 text-center text-sm font-medium">
                   {getModeLabel()}
                 </div>
               )}

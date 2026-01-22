@@ -1,23 +1,23 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { ParticipantKind } from 'livekit-client';
 import { AnimatePresence, motion } from 'motion/react';
 import {
+  useParticipantAttributes,
+  useRemoteParticipant,
   useSessionContext,
   useSessionMessages,
-  useRemoteParticipant,
-  useParticipantAttributes,
 } from '@livekit/components-react';
-import { ParticipantKind } from 'livekit-client';
 import type { AppConfig } from '@/app-config';
 import {
   AgentControlBar,
   type AgentControlBarControls,
 } from '@/components/agents-ui/agent-control-bar';
 import { ChatTranscript } from '@/components/app/chat-transcript';
-import { TileLayout } from '@/components/app/tile-layout';
-import { SessionTimer } from '@/components/app/session-timer';
 import { CoachingButton } from '@/components/app/coaching-button';
+import { SessionTimer } from '@/components/app/session-timer';
+import { TileLayout } from '@/components/app/tile-layout';
 import { cn } from '@/lib/shadcn/utils';
 import { Shimmer } from '../ai-elements/shimmer';
 

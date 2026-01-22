@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { cn } from '@/lib/shadcn/utils';
 import type { BossPersonality } from '@/lib/boss-personalities';
+import { cn } from '@/lib/shadcn/utils';
 
 interface BossCardProps {
   boss: BossPersonality;
@@ -15,22 +15,16 @@ export function BossCard({ boss, selected = false, onSelect }: BossCardProps) {
     <button
       onClick={onSelect}
       className={cn(
-        'group relative flex flex-col items-center gap-4 rounded-lg border-2 p-6 text-left transition-all cursor-pointer',
-        'hover:shadow-lg hover:scale-105',
+        'group relative flex cursor-pointer flex-col items-center gap-4 rounded-lg border-2 p-6 text-left transition-all',
+        'hover:scale-105 hover:shadow-lg',
         selected
-          ? `${boss.borderColor} ${boss.bgColor} shadow-lg scale-105`
+          ? `${boss.borderColor} ${boss.bgColor} scale-105 shadow-lg`
           : 'border-border bg-background hover:border-foreground/20'
       )}
     >
       {/* Boss image */}
-      <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-border">
-        <Image
-          src={boss.imageUrl}
-          alt={boss.name}
-          fill
-          className="object-cover"
-          priority
-        />
+      <div className="border-border relative h-32 w-32 overflow-hidden rounded-full border-4">
+        <Image src={boss.imageUrl} alt={boss.name} fill className="object-cover" priority />
       </div>
 
       {/* Difficulty badge */}
@@ -45,19 +39,17 @@ export function BossCard({ boss, selected = false, onSelect }: BossCardProps) {
       </div>
 
       {/* Boss name */}
-      <h3 className="text-xl font-bold text-foreground text-center">{boss.name}</h3>
+      <h3 className="text-foreground text-center text-xl font-bold">{boss.name}</h3>
 
       {/* Description */}
-      <p className="text-sm text-muted-foreground leading-relaxed text-center">{boss.description}</p>
+      <p className="text-muted-foreground text-center text-sm leading-relaxed">
+        {boss.description}
+      </p>
 
       {/* Selection indicator */}
       {selected && (
         <div className="absolute top-3 right-3">
-          <svg
-            className={cn('h-6 w-6', boss.textColor)}
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
+          <svg className={cn('h-6 w-6', boss.textColor)} fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
               d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"

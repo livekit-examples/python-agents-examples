@@ -28,7 +28,8 @@ export const BOSS_PERSONALITIES: Record<BossType, BossPersonality> = {
     id: 'medium',
     name: 'The Skeptic',
     difficulty: 'Medium',
-    description: 'Questions everything and pushes back on numbers. Prepares you for tough conversations.',
+    description:
+      'Questions everything and pushes back on numbers. Prepares you for tough conversations.',
     imageUrl: '/img/boss_2.png',
     color: 'yellow',
     borderColor: 'border-yellow-500',

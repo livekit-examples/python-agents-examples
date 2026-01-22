@@ -96,7 +96,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 className="text-foreground hover:text-foreground/80 transition-colors"
                 aria-label="View source code on GitHub"
               >
-                <Github className="w-5 h-5" />
+                <Github className="h-5 w-5" />
               </a>
               <span className="text-foreground font-mono text-xs font-bold tracking-wider uppercase">
                 Built with{' '}

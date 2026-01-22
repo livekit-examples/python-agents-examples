@@ -31,8 +31,8 @@ export function SessionTimer({ startTime, duration = 180, className }: SessionTi
       className={cn(
         'inline-flex items-center gap-2 rounded-full px-4 py-2 font-mono text-sm font-semibold',
         isLowTime
-          ? 'bg-red-500/10 text-red-500 border border-red-500/30'
-          : 'bg-muted text-muted-foreground border border-border',
+          ? 'border border-red-500/30 bg-red-500/10 text-red-500'
+          : 'bg-muted text-muted-foreground border-border border',
         className
       )}
     >

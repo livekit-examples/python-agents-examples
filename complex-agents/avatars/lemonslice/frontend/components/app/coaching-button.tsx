@@ -33,16 +33,16 @@ export function CoachingButton({ disabled = false, className }: CoachingButtonPr
       onClick={handleClick}
       disabled={disabled || isSending}
       className={cn(
-        'bg-green-500/10 border-green-500/30 text-green-500 hover:bg-green-500/20 hover:border-green-500/50',
+        'border-green-500/30 bg-green-500/10 text-green-500 hover:border-green-500/50 hover:bg-green-500/20',
         'font-semibold tracking-wide',
-        'disabled:opacity-50 disabled:cursor-not-allowed',
+        'disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
     >
       {isSending ? (
         <>
           <svg
-            className="animate-spin -ml-1 mr-2 h-4 w-4"
+            className="mr-2 -ml-1 h-4 w-4 animate-spin"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
