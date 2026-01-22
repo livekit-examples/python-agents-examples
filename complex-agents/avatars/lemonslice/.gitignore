@@ -1,0 +1,12 @@
+# IDE
+.cursor/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Environment variables
+.env*
+!.env.example
