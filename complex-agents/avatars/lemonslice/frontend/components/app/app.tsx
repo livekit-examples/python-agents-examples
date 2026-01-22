@@ -38,10 +38,17 @@ export function App({ appConfig }: AppProps) {
     
     // Use custom token source for non-sandbox to pass attributes
     return TokenSource.custom(async () => {
+      const roomConfig = appConfig.agentName
+        ? { agents: [{ agent_name: appConfig.agentName }] }
+        : undefined;
+        
       const res = await fetch('/api/connection-details', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ participant_attributes: participantAttributes }),
+        body: JSON.stringify({ 
+          room_config: roomConfig,
+          participant_attributes: participantAttributes 
+        }),
       });
       return res.json();
     });

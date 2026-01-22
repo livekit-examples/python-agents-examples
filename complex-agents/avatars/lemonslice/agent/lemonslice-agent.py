@@ -140,7 +140,7 @@ class BaseBossAgent(Agent):
         
         # Update instructions to activate coaching mode
         await self.update_instructions(
-            f"{self.instructions}\n\nIMPORTANT: You are now in COACHING MODE. Break character completely and provide honest, specific feedback on their negotiation performance so far. Then tell them you'll switch back to the boss role when they're ready."
+            f"{self.instructions}\n\nIMPORTANT: You are now in COACHING MODE. Break character from the boss role completely and provide honest, specific feedback on their negotiation performance so far. Speak naturally using complete sentences and paragraphs. Do not use markdown, bullet points, headings, emojis, or symbols. After giving feedback, tell them you'll switch back to the boss role when they're ready, and then call the return_to_roleplay function to actually switch back to roleplay mode."
         )
         
         return "Switching to coaching mode to provide feedback."
@@ -250,7 +250,7 @@ class HardBossAgent(BaseBossAgent):
         )
 
 
-@server.rtc_session()
+@server.rtc_session(agent_name="lemonslice-salary-coach")
 async def entrypoint(ctx: JobContext):
     """Main entry point for the salary negotiation coach."""
     logger.info("Starting salary negotiation coach session")
