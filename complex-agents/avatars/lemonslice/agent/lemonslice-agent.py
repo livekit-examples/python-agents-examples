@@ -77,8 +77,6 @@ class BaseBossAgent(Agent):
     def __init__(self, instructions: str, tts: inference.TTS) -> None:
         super().__init__(
             instructions=instructions,
-            stt=inference.STT("deepgram/nova-3"),
-            llm=inference.LLM("google/gemini-2.5-flash"),
             tts=tts,
         )
 
@@ -291,7 +289,7 @@ async def entrypoint(ctx: JobContext):
     # Create session with userdata
     session = AgentSession[UserData](
         stt=inference.STT("deepgram/nova-3"),
-        llm=inference.LLM("google/gemini-2.5-flash"),
+        llm=inference.LLM("openai/gpt-4o-mini"),
         tts=inference.TTS("cartesia/sonic-3", voice=boss_config.voice_id),
         resume_false_interruption=False,
         userdata=userdata
