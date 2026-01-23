@@ -15,7 +15,7 @@ export function BossCard({ boss, selected = false, onSelect }: BossCardProps) {
     <button
       onClick={onSelect}
       className={cn(
-        'group relative flex cursor-pointer flex-col items-center gap-4 rounded-lg border-2 p-6 text-left transition-all',
+        'group relative flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 p-4 text-left transition-all md:gap-4 md:p-6',
         'hover:scale-105 hover:shadow-lg',
         selected
           ? `${boss.borderColor} ${boss.bgColor} scale-105 shadow-lg`
@@ -23,7 +23,7 @@ export function BossCard({ boss, selected = false, onSelect }: BossCardProps) {
       )}
     >
       {/* Boss image */}
-      <div className="border-border relative h-32 w-32 overflow-hidden rounded-full border-4">
+      <div className="border-border relative h-24 w-24 overflow-hidden rounded-full border-4 md:h-32 md:w-32">
         <Image src={boss.imageUrl} alt={boss.name} fill className="object-cover" priority />
       </div>
 
@@ -39,10 +39,10 @@ export function BossCard({ boss, selected = false, onSelect }: BossCardProps) {
       </div>
 
       {/* Boss name */}
-      <h3 className="text-foreground text-center text-xl font-bold">{boss.name}</h3>
+      <h3 className="text-foreground text-center text-lg font-bold md:text-xl">{boss.name}</h3>
 
       {/* Description */}
-      <p className="text-muted-foreground text-center text-sm leading-relaxed">
+      <p className="text-muted-foreground text-center text-xs leading-relaxed md:text-sm">
         {boss.description}
       </p>
 

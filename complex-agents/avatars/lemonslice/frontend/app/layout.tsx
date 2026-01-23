@@ -72,7 +72,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <header className="fixed top-0 left-0 z-50 hidden w-full flex-row justify-between p-6 md:flex">
+          <header className="fixed top-0 left-0 z-50 flex w-full flex-row justify-between p-3 md:p-6">
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -80,15 +80,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               className="scale-100 transition-transform duration-300 hover:scale-110"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logo} alt={`${companyName} Logo`} className="block size-6 dark:hidden" />
+              <img src={logo} alt={`${companyName} Logo`} className="block size-5 dark:hidden md:size-6" />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={logoDark ?? logo}
                 alt={`${companyName} Logo`}
-                className="hidden size-6 dark:block"
+                className="hidden size-5 dark:block md:size-6"
               />
             </a>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <a
                 href="https://github.com/livekit-examples/python-agents-examples/tree/main/complex-agents/avatars/lemonslice"
                 target="_blank"
@@ -96,9 +96,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 className="text-foreground hover:text-foreground/80 transition-colors"
                 aria-label="View source code on GitHub"
               >
-                <Github className="h-5 w-5" />
+                <Github className="h-4 w-4 md:h-5 md:w-5" />
               </a>
-              <span className="text-foreground font-mono text-xs font-bold tracking-wider uppercase">
+              <span className="text-foreground font-mono text-[10px] font-bold tracking-wider uppercase md:text-xs">
                 Built with{' '}
                 <a
                   target="_blank"
