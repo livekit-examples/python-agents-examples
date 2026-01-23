@@ -90,7 +90,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             </a>
             <div className="flex items-center gap-4">
               <a
-                href="#"
+                href="https://github.com/livekit-examples/python-agents-examples/tree/main/complex-agents/avatars/lemonslice"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-foreground hover:text-foreground/80 transition-colors"
