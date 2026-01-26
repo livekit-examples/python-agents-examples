@@ -80,11 +80,12 @@ export function TileLayout({ mode, children }: TileLayoutProps) {
   return (
     <div className="pointer-events-none fixed inset-x-0 top-8 bottom-32 z-50 md:top-12 md:bottom-40">
       <div className="relative mx-auto h-full px-4 md:px-8">
-        <div className="flex h-full items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
+        <div className="flex h-full items-start justify-center pt-8 md:pt-12">
+          <div className="flex flex-col items-center gap-4 max-h-full">
             <div
               className={cn(
                 'border-border/50 rounded-3xl border p-6 transition-colors duration-500',
+                'max-h-[calc(100%-5rem)]',
                 getBackgroundColor()
               )}
             >
@@ -105,12 +106,9 @@ export function TileLayout({ mode, children }: TileLayoutProps) {
                         scale: 1,
                       }}
                       transition={ANIMATION_TRANSITION}
-                      style={{
-                        width: VIDEO_DIMENSIONS.width,
-                        height: VIDEO_DIMENSIONS.height,
-                      }}
                       className={cn(
                         'bg-background rounded-lg border-4 drop-shadow-xl transition-colors',
+                        'h-[min(400px,calc(100vh-20rem))] md:h-[min(480px,calc(100vh-24rem))] w-auto aspect-[3/4]',
                         getBorderColor()
                       )}
                     >
@@ -158,12 +156,9 @@ export function TileLayout({ mode, children }: TileLayoutProps) {
                           duration: 1,
                         },
                       }}
-                      style={{
-                        width: VIDEO_DIMENSIONS.width,
-                        height: VIDEO_DIMENSIONS.height,
-                      }}
                       className={cn(
                         'overflow-hidden border-4 bg-black drop-shadow-xl transition-colors',
+                        'h-[min(400px,calc(100vh-20rem))] md:h-[min(480px,calc(100vh-24rem))] w-auto aspect-[3/4]',
                         getBorderColor()
                       )}
                     >
@@ -198,12 +193,9 @@ export function TileLayout({ mode, children }: TileLayoutProps) {
                         scale: 0,
                       }}
                       transition={ANIMATION_TRANSITION}
-                      style={{
-                        width: VIDEO_DIMENSIONS.width,
-                        height: VIDEO_DIMENSIONS.height,
-                      }}
                       className={cn(
                         'bg-muted overflow-hidden rounded-lg border-4 drop-shadow-xl transition-colors',
+                        'h-[min(400px,calc(100vh-20rem))] md:h-[min(480px,calc(100vh-24rem))] w-auto aspect-[3/4]',
                         getBorderColor()
                       )}
                     >
@@ -232,7 +224,7 @@ export function TileLayout({ mode, children }: TileLayoutProps) {
 
             {/* Timer and button controls */}
             {children && (
-              <div className="pointer-events-auto flex w-full max-w-[850px] items-center justify-between px-2">
+              <div className="pointer-events-auto flex w-full max-w-[850px] items-center justify-between gap-4 px-2">
                 {children}
               </div>
             )}
