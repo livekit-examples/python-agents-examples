@@ -160,6 +160,7 @@ Bring your agent to life with animated avatars.
 | [Dynamic Avatar](complex-agents/avatars/hedra/dynamically_created_avatar/) | Create avatars on-the-fly | Intermediate |
 | [Education Avatar](complex-agents/avatars/hedra/education_avatar/) | Teaching avatar with flash cards via RPC | Advanced |
 | [Tavus Avatar](complex-agents/avatars/tavus/) | Tavus-powered avatar assistant | Intermediate |
+| [Negotiation Avatar](complex-agents/avatars/lemonslice/) | LemonSlice-powered Salary Negotiation Coach | Advanced |
 
 ### Translation & Multilingual
 
@@ -305,7 +306,7 @@ Examples demonstrate integration with these providers:
 | **STT** | Deepgram, AssemblyAI, Gladia, Cartesia |
 | **TTS** | Cartesia, ElevenLabs, Rime, PlayAI, Inworld, OpenAI |
 | **VAD** | Silero |
-| **Avatar** | Hedra, Tavus |
+| **Avatar** | Hedra, Tavus, LemonSlice |
 | **Vision** | OpenAI GPT-4V, Google Gemini, X.AI Grok, Moondream |
 | **Realtime** | OpenAI Realtime, Google Gemini Live, AWS Nova Sonic |
 
