@@ -1,0 +1,3 @@
+livekit-agents[anam,silero,turn-detector]~=1.3
+livekit-plugins-noise-cancellation~=0.2
+python-dotenv
