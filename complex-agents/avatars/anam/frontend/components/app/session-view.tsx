@@ -14,7 +14,11 @@ interface SessionViewProps {
 
 const POST_SUBMIT_FALLBACK_MS = 90_000;
 
-export const SessionView = ({ appConfig, ...props }: React.ComponentProps<'section'> & SessionViewProps) => {
+export const SessionView = ({
+  appConfig,
+  ...props
+}: React.ComponentProps<'section'> & SessionViewProps) => {
+  void appConfig; // passed for type/API consistency; may be used later
   const { end, room, isConnected } = useSessionContext();
   const agent = useAgent();
   const [formData, setFormData] = useState<IntakeFormData>(EMPTY_FORM_DATA);

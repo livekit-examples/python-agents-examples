@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, type ComponentPropsWithoutRef } from 'react';
+import React, { type ComponentPropsWithoutRef, useEffect, useRef } from 'react';
+
 const PRECISIONS = ['lowp', 'mediump', 'highp'];
 const FS_MAIN_SHADER = `\nvoid main(void){
     vec4 color = vec4(0.0,0.0,0.0,1.0);
@@ -40,7 +41,7 @@ const processUniform = <T extends UniformType>(
   gl: WebGLRenderingContext,
   location: WebGLUniformLocation,
   t: T,
-  value: number | number[],
+  value: number | number[]
 ) => {
   if (isVectorType(t, value)) {
     switch (t) {
@@ -134,7 +135,7 @@ const uniformTypeToGLSLType = (t: string) => {
       return 'mat4';
     default:
       console.error(
-        log(`The uniform type "${t}" is not valid, please make sure your uniform type is valid`),
+        log(`The uniform type "${t}" is not valid, please make sure your uniform type is valid`)
       );
   }
 };
@@ -142,10 +143,6 @@ const uniformTypeToGLSLType = (t: string) => {
 const LinearFilter = 9729;
 const NearestFilter = 9728;
 const LinearMipMapLinearFilter = 9987;
-const NearestMipMapLinearFilter = 9986;
-const LinearMipMapNearestFilter = 9985;
-const NearestMipMapNearestFilter = 9984;
-const MirroredRepeatWrapping = 33648;
 const ClampToEdgeWrapping = 33071;
 const RepeatWrapping = 10497;
 
@@ -198,7 +195,7 @@ class Texture {
         this.height = video.videoHeight || 0;
         checkReady();
       },
-      true,
+      true
     );
     video.addEventListener(
       'timeupdate',
@@ -206,7 +203,7 @@ class Texture {
         timeupdate = true;
         checkReady();
       },
-      true,
+      true
     );
     video.src = url;
     return video;
@@ -224,8 +221,8 @@ class Texture {
       context?.drawImage(image, 0, 0, this.pow2canvas.width, this.pow2canvas.height);
       console.warn(
         log(
-          `Image is not power of two ${image.width} x ${image.height}. Resized to ${this.pow2canvas.width} x ${this.pow2canvas.height};`,
-        ),
+          `Image is not power of two ${image.width} x ${image.height}. Resized to ${this.pow2canvas.width} x ${this.pow2canvas.height};`
+        )
       );
       return this.pow2canvas as T;
     }
@@ -236,16 +233,14 @@ class Texture {
     const { url, wrapS, wrapT, minFilter, magFilter, flipY = -1 }: TextureParams = textureArgs;
     if (!url) {
       return Promise.reject(
-        new Error(
-          log('Missing url, please make sure to pass the url of your texture { url: ... }'),
-        ),
+        new Error(log('Missing url, please make sure to pass the url of your texture { url: ... }'))
       );
     }
     const isImage = /(\.jpg|\.jpeg|\.png|\.gif|\.bmp)$/i.exec(url);
     const isVideo = /(\.mp4|\.3gp|\.webm|\.ogv)$/i.exec(url);
     if (isImage === null && isVideo === null) {
       return Promise.reject(
-        new Error(log(`Please upload a video or an image with a valid format (url: ${url})`)),
+        new Error(log(`Please upload a video or an image with a valid format (url: ${url})`))
       );
     }
     Object.assign(this, { url, wrapS, wrapT, minFilter, magFilter, flipY });
@@ -268,7 +263,7 @@ class Texture {
       border,
       srcFormat,
       srcType,
-      pixel,
+      pixel
     );
     if (isVideo) {
       const video = this.setupVideo(url);
@@ -320,7 +315,7 @@ class Texture {
     gl.texParameteri(
       gl.TEXTURE_2D,
       gl.TEXTURE_MIN_FILTER,
-      this.minFilter || LinearMipMapLinearFilter,
+      this.minFilter || LinearMipMapLinearFilter
     );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this.magFilter || LinearFilter);
     this._webglTexture = texture;
@@ -501,7 +496,7 @@ export function ReactShaderToy({
     glRef.current = (canvasRef.current.getContext('webgl', contextAttributes) ||
       canvasRef.current.getContext(
         'experimental-webgl',
-        contextAttributes,
+        contextAttributes
       )) as WebGLRenderingContext | null;
     glRef.current?.getExtension('OES_standard_derivatives');
     glRef.current?.getExtension('EXT_shader_texture_lod');
@@ -619,15 +614,15 @@ export function ReactShaderToy({
     if (!gl.getProgramParameter(shaderProgramRef.current, gl.LINK_STATUS)) {
       onError?.(
         log(
-          `Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgramRef.current)}`,
-        ),
+          `Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgramRef.current)}`
+        )
       );
       return;
     }
     gl.useProgram(shaderProgramRef.current);
     vertexPositionAttributeRef.current = gl.getAttribLocation(
       shaderProgramRef.current,
-      'aVertexPosition',
+      'aVertexPosition'
     );
     gl.enableVertexAttribArray(vertexPositionAttributeRef.current);
   };
@@ -693,8 +688,8 @@ export function ReactShaderToy({
     if (!isValidPrecision) {
       onWarning?.(
         log(
-          `wrong precision type ${precision}, please make sure to pass one of a valid precision lowp, mediump, highp, by default you shader precision will be set to highp.`,
-        ),
+          `wrong precision type ${precision}, please make sure to pass one of a valid precision lowp, mediump, highp, by default you shader precision will be set to highp.`
+        )
       );
     }
     let fragmentShader = precisionString
@@ -707,7 +702,7 @@ export function ReactShaderToy({
         fragmentShader = insertStringAtIndex(
           fragmentShader,
           `uniform ${u.type} ${uniform}${u.arraySize || ''}; \n`,
-          fragmentShader.lastIndexOf(precisionString) + precisionString.length,
+          fragmentShader.lastIndexOf(precisionString) + precisionString.length
         );
         u.isNeeded = true;
       }
@@ -735,7 +730,7 @@ export function ReactShaderToy({
             gl,
             customUniformLocation,
             currentUniform.type as UniformType,
-            currentUniform.value,
+            currentUniform.value
           );
         }
       }
@@ -747,18 +742,18 @@ export function ReactShaderToy({
     if (uniformsRef.current.iChannelResolution?.isNeeded) {
       const channelResUniform = gl.getUniformLocation(
         shaderProgramRef.current,
-        UNIFORM_CHANNELRESOLUTION,
+        UNIFORM_CHANNELRESOLUTION
       );
       gl.uniform3fv(channelResUniform, uniformsRef.current.iChannelResolution.value as number[]);
     }
     if (uniformsRef.current.iDeviceOrientation?.isNeeded) {
       const deviceOrientationUniform = gl.getUniformLocation(
         shaderProgramRef.current,
-        UNIFORM_DEVICEORIENTATION,
+        UNIFORM_DEVICEORIENTATION
       );
       gl.uniform4fv(
         deviceOrientationUniform,
-        uniformsRef.current.iDeviceOrientation.value as number[],
+        uniformsRef.current.iDeviceOrientation.value as number[]
       );
     }
     if (uniformsRef.current.iTime?.isNeeded) {

@@ -1,11 +1,14 @@
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
 function WelcomeImage() {
   return (
     <div className="mb-4 size-64 overflow-hidden rounded-lg border-4 border-gray-200 dark:border-gray-800">
-      <img
+      <Image
         src="/liv.jpg"
         alt="Liv AI assistant"
+        width={256}
+        height={256}
         className="size-full object-cover"
       />
     </div>
@@ -28,7 +31,9 @@ export const WelcomeView = ({
         <WelcomeImage />
 
         <p className="text-foreground max-w-prose pt-1 leading-6 font-medium">
-          Complete your healthcare intake<br />Powered by Anam + LiveKit
+          Complete your healthcare intake
+          <br />
+          Powered by Anam + LiveKit
         </p>
 
         <Button
