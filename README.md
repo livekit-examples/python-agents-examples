@@ -160,7 +160,8 @@ Bring your agent to life with animated avatars.
 | [Dynamic Avatar](complex-agents/avatars/hedra/dynamically_created_avatar/) | Create avatars on-the-fly | Intermediate |
 | [Education Avatar](complex-agents/avatars/hedra/education_avatar/) | Teaching avatar with flash cards via RPC | Advanced |
 | [Tavus Avatar](complex-agents/avatars/tavus/) | Tavus-powered avatar assistant | Intermediate |
-| [Negotiation Avatar](complex-agents/avatars/lemonslice/) | LemonSlice-powered Salary Negotiation Coach | Advanced |
+| [LemonSlice Negotiation Coach](complex-agents/avatars/lemonslice/) | Salary negotiation practice with boss personalities and real-time coaching | Advanced |
+| [Anam Healthcare Intake](complex-agents/avatars/anam/) | Voice intake form with Anam lip-synced avatar and real-time RPC updates | Intermediate |
 
 ### Translation & Multilingual
 
