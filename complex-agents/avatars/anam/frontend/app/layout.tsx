@@ -72,9 +72,10 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           disableTransitionOnChange
         >
           <header
-            className="fixed top-0 left-0 hidden w-full flex-row items-center justify-between px-4 md:flex"
+            className="border-border/60 bg-background/90 fixed top-0 left-0 flex w-full items-center justify-between border-b px-3 backdrop-blur-sm md:px-4"
             style={{
-              height: 'var(--app-top-strip-height)',
+              height: 'calc(var(--app-top-strip-height) + env(safe-area-inset-top))',
+              paddingTop: 'env(safe-area-inset-top)',
               zIndex: 'var(--app-z-header)',
             }}
           >
@@ -85,29 +86,34 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               className="scale-100 transition-transform duration-300 hover:scale-110"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logo} alt={`${companyName} Logo`} className="block size-26 dark:hidden" />
+              <img
+                src={logo}
+                alt={`${companyName} Logo`}
+                className="block size-14 sm:size-26 dark:hidden"
+              />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={logoDark ?? logo}
                 alt={`${companyName} Logo`}
-                className="hidden size-26 dark:block"
+                className="hidden size-14 sm:size-26 dark:block"
               />
             </a>
-            <span className="text-foreground font-mono text-xs font-bold tracking-wider uppercase">
-              Built with{' '}
+            <span className="text-foreground text-right font-mono text-[11px] font-bold tracking-wider uppercase md:text-xs">
+              <span className="hidden sm:inline">Built with </span>
               <a
                 target="_blank"
                 rel="noopener noreferrer"
                 href="https://docs.livekit.io/agents"
                 className="underline underline-offset-4"
               >
-                LiveKit Agents
+                <span className="sm:hidden">LiveKit docs</span>
+                <span className="hidden sm:inline">LiveKit Agents</span>
               </a>
             </span>
           </header>
 
           {children}
-          <div className="group fixed bottom-0 left-1/2 z-50 mb-2 -translate-x-1/2">
+          <div className="group fixed bottom-0 left-1/2 z-50 mb-6 -translate-x-1/2 md:mb-2">
             <ThemeToggle className="translate-y-20 transition-transform delay-150 duration-300 group-hover:translate-y-0" />
           </div>
         </ThemeProvider>

@@ -56,7 +56,10 @@ export function IntakeForm({
   }
 
   return (
-    <form className={cn('space-y-6 overflow-y-auto p-6', className)} onSubmit={handleSubmit}>
+    <form
+      className={cn('space-y-6 overflow-y-auto p-6 pb-24 md:pb-6', className)}
+      onSubmit={handleSubmit}
+    >
       <div className="space-y-1">
         <h2 className="text-2xl font-semibold tracking-tight">Patient intake form</h2>
         <p className="text-muted-foreground text-sm">

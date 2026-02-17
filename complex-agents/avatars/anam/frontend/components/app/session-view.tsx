@@ -71,7 +71,7 @@ export const SessionView = ({
         <div className="flex max-h-[45%] w-full min-w-0 shrink-0 flex-col border-b md:max-h-none md:w-[46%] md:border-b-0">
           <AvatarPanel className="flex-1" />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
           <IntakeForm
             formData={formData}
             onFormDataChange={setFormData}

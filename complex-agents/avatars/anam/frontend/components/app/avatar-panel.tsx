@@ -59,7 +59,7 @@ export function AvatarPanel({ className }: AvatarPanelProps) {
   const videoHeight = trackRef?.publication.dimensions?.height ?? 0;
 
   return (
-    <div className={cn('flex flex-col items-center justify-center gap-5 p-6', className)}>
+    <div className={cn('flex flex-col items-center justify-start gap-5 p-6', className)}>
       <div className="relative flex aspect-square w-full max-w-xl min-w-0 items-center justify-center overflow-hidden rounded-lg bg-black">
         {trackRef ? (
           <VideoTrack

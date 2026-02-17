@@ -41,7 +41,7 @@ export function App({ appConfig }: AppProps) {
   return (
     <AgentSessionProvider session={session}>
       <AppSetup />
-      <main className="grid h-svh grid-cols-1 place-content-center pt-[var(--app-top-strip-height)]">
+      <main className="grid min-h-dvh grid-cols-1 place-content-center pt-[calc(var(--app-top-strip-height)+env(safe-area-inset-top))]">
         <ViewController appConfig={appConfig} />
       </main>
       <StartAudioButton label="Start Audio" />
