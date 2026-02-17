@@ -1,6 +1,7 @@
 import { Public_Sans } from 'next/font/google';
 import localFont from 'next/font/local';
 import { headers } from 'next/headers';
+import { GithubLogoIcon } from '@phosphor-icons/react/dist/ssr';
 import { ThemeProvider } from '@/components/app/theme-provider';
 import { ThemeToggle } from '@/components/app/theme-toggle';
 import { cn } from '@/lib/shadcn/utils';
@@ -98,18 +99,29 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 className="hidden size-14 sm:size-26 dark:block"
               />
             </a>
-            <span className="text-foreground text-right font-mono text-[11px] font-bold tracking-wider uppercase md:text-xs">
-              <span className="hidden sm:inline">Built with </span>
+            <div className="text-foreground flex items-center gap-3 text-right font-mono text-[11px] font-bold tracking-wider uppercase md:text-xs">
+              <span>
+                <span className="hidden sm:inline">Built with </span>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://docs.livekit.io/agents"
+                  className="underline underline-offset-4"
+                >
+                  <span className="sm:hidden">LiveKit docs</span>
+                  <span className="hidden sm:inline">LiveKit Agents</span>
+                </a>
+              </span>
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                href="https://docs.livekit.io/agents"
-                className="underline underline-offset-4"
+                href="https://github.com/livekit-examples/python-agents-examples/tree/main/complex-agents/avatars/anam"
+                aria-label="Anam GitHub repository"
+                className="text-foreground/80 hover:text-foreground transition-colors"
               >
-                <span className="sm:hidden">LiveKit docs</span>
-                <span className="hidden sm:inline">LiveKit Agents</span>
+                <GithubLogoIcon size={18} weight="fill" />
               </a>
-            </span>
+            </div>
           </header>
 
           {children}
