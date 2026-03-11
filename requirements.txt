@@ -12,3 +12,8 @@ rich
 mcp
 librosa
 moondream
+livekit-plugins-langchain
+langchain-openai
+langgraph
+langchain
+deepagents

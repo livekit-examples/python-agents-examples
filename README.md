@@ -208,6 +208,9 @@ Connect to external services.
 | [Home Automation](docs/examples/home_assistant/) | Control smart home devices | Intermediate |
 | [RAG Voice Agent](docs/examples/rag/) | Vector search with Annoy + embeddings | Advanced |
 | [Shopify Voice](complex-agents/shopify-voice-shopper/) | Voice shopping with MCP + Shopify | Advanced |
+| [LangChain LangGraph](docs/examples/langchain_langgraph/) | LangGraph StateGraph as a LiveKit LLM backend | Beginner |
+| [LangChain Agent](docs/examples/langchain_agent/) | LangChain agent with tools via `create_agent` | Beginner |
+| [LangChain Deep Agent](docs/examples/langchain_deepagent/) | Deep agent with planning, subagents, and tools | Intermediate |
 
 ---
 

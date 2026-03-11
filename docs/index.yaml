@@ -1,6 +1,6 @@
 version: '1.0'
 description: Index of all LiveKit Agent examples with metadata
-total_examples: 77
+total_examples: 80
 examples:
 - file_path: complex-agents/avatars/hedra/dynamically_created_avatar/agent.py
   title: Dynamically Created Avatar
@@ -1237,6 +1237,44 @@ examples:
   - Custom STT configuration with translation capabilities
   - Event-driven transcription and speech synthesis
   - Advanced multilingual processing pipeline
+- file_path: docs/examples/langchain_langgraph/langchain_langraph.py
+  title: LangChain Integration
+  category: integrations
+  tags:
+  - langchain
+  - openai
+  difficulty: beginner
+  description: Shows how to use LangGraph to integrate LangChain with LiveKit.
+  demonstrates:
+  - Using LangGraph StateGraph to build a conversational workflow
+  - Using langchain.LLMAdapter to connect a LangGraph workflow to a LiveKit agent
+  - Using ChatOpenAI from langchain_openai as the LLM provider
+- file_path: docs/examples/langchain_agent/langchain_agent.py
+  title: LangChain Agent
+  category: integrations
+  tags:
+  - langchain
+  - openai
+  difficulty: beginner
+  description: Shows how to use a LangChain agent with tools in a LiveKit voice agent.
+  demonstrates:
+  - Using create_agent from langchain.agents to build a tool-calling agent
+  - Defining LangChain tools with the @tool decorator
+  - Using a custom llm_node to stream only AI responses and filter tool messages
+- file_path: docs/examples/langchain_deepagent/langchain_deepagent.py
+  title: LangChain Deep Agent
+  category: integrations
+  tags:
+  - langchain
+  - openai
+  - deepagents
+  difficulty: intermediate
+  description: Shows how to use a LangChain deep agent with planning and subagents in a LiveKit voice agent.
+  demonstrates:
+  - Using create_deep_agent from the deepagents library
+  - Delegating work to a subagent for weather research
+  - Using built-in planning (write_todos)
+  - Using a custom llm_node to stream only AI responses and filter tool messages
 - file_path: moondream_vision/page.mdoc
   title: Moondream Vision Agent
   category: vision
