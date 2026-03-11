@@ -12,7 +12,7 @@ demonstrates:
   - Using a custom llm_node to stream only AI responses and filter tool messages
 ---
 
-Latency note: Deep agents add significant abstraction overhead compared to calling an LLM provider directly. A single user request may trigger multiple LLM round-trips for planning and subagent delegation before producing a final response.
+Latency note: The LLMAdapter uses LangGraph's streaming mode to minimise time-to-first-token, but care should be taken when porting LangChain workflows that were not originally designed for voice use cases. 
 """
 from dotenv import load_dotenv
 from deepagents import create_deep_agent

@@ -11,9 +11,7 @@ demonstrates:
   - Using a custom llm_node to stream only AI responses and filter tool messages
 ---
 
-Latency note: LangChain and LangGraph add abstraction layers that may increase latency
-compared to calling an LLM provider directly. The LLMAdapter uses LangGraph's streaming
-mode to minimise time-to-first-token.
+Latency note: The LLMAdapter uses LangGraph's streaming mode to minimise time-to-first-token, but care should be taken when porting LangChain workflows that were not originally designed for voice use cases. 
 """
 from dotenv import load_dotenv
 from langchain.agents import create_agent

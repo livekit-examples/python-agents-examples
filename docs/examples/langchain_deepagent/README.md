@@ -17,7 +17,7 @@ This example shows how to build a trip planning voice assistant using a LangChai
 
 This demonstrates how deep agents go beyond simple tool calling by orchestrating multi-step workflows with planning and delegation — all driven by voice.
 
-> **Latency note:** Deep agents add significant abstraction overhead compared to calling an LLM provider directly. A single user request like "plan a trip to Paris" may trigger multiple LLM round-trips: planning with `write_todos`, delegating to a subagent via `task`, and calling custom tools — each requiring inference. LangGraph streaming helps minimise time-to-first-token for the final spoken response, but expect noticeably higher latency than a simple conversational agent. For more information on handling long-running operations and providing a better user experience, see the [user feedback documentation](https://docs.livekit.io/agents/logic/external-data/#user-feedback).
+> **Latency note:** The `LLMAdapter` uses LangGraph's streaming mode to minimise time-to-first-token, but care should be taken when porting LangChain workflows that were not originally designed for voice use cases. For more information on handling long-running operations and providing a better user experience, see the [user feedback documentation](https://docs.livekit.io/agents/logic/external-data/#user-feedback).
 
 ## Prerequisites
 

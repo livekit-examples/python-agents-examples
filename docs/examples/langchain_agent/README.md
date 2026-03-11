@@ -14,7 +14,7 @@ This example shows how to use a LangChain agent with tools as the LLM backend fo
 
 **Ask the agent for the weather in your city**
 
-> **Latency note:** LangChain agents add abstraction overhead that may increase latency compared to calling an LLM provider directly. LangGraph streaming helps minimise time-to-first-token for the final response. For more information on handling long-running operations and providing a better user experience, see the [user feedback documentation](https://docs.livekit.io/agents/logic/external-data/#user-feedback).
+> **Latency note:** The `LLMAdapter` uses LangGraph's streaming mode to minimise time-to-first-token, but care should be taken when porting LangChain workflows that were not originally designed for voice use cases. For more information on handling long-running operations and providing a better user experience, see the [user feedback documentation](https://docs.livekit.io/agents/logic/external-data/#user-feedback).
 
 ## Prerequisites
 

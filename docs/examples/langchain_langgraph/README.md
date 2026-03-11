@@ -12,7 +12,7 @@ demonstrates:
 
 This example shows how to use a LangGraph `StateGraph` as the LLM backend for a LiveKit voice agent via the `livekit-plugins-langchain` plugin. The `LLMAdapter` wraps a compiled LangGraph workflow so it can be used as a drop-in LLM provider in an `AgentSession`.
 
-> **Latency note:** LangChain and LangGraph add abstraction layers that may increase latency compared to calling an LLM provider directly. The `LLMAdapter` uses LangGraph's streaming mode to minimise time-to-first-token. For more information on handling long-running operations and providing a better user experience, see the [user feedback documentation](https://docs.livekit.io/agents/logic/external-data/#user-feedback).
+> **Latency note:** The `LLMAdapter` uses LangGraph's streaming mode to minimise time-to-first-token, but care should be taken when porting LangChain workflows that were not originally designed for voice use cases. For more information on handling long-running operations and providing a better user experience, see the [user feedback documentation](https://docs.livekit.io/agents/logic/external-data/#user-feedback).
 
 ## Prerequisites
 
