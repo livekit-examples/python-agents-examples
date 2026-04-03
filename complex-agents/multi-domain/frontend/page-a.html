@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domain A - Support</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+    nav {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav .brand {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #60a5fa;
+    }
+    nav .links { display: flex; gap: 1.5rem; }
+    nav .links a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    nav .links a:hover { color: #e2e8f0; }
+    nav .links a.active { color: #60a5fa; }
+    .hero {
+      max-width: 720px;
+      margin: 4rem auto;
+      padding: 0 2rem;
+    }
+    .badge {
+      display: inline-block;
+      background: #1e40af;
+      color: #93c5fd;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.75rem; }
+    .subtitle { color: #94a3b8; font-size: 1.1rem; margin-bottom: 2.5rem; line-height: 1.6; }
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+    }
+    .card h3 { font-size: 0.95rem; margin-bottom: 0.4rem; }
+    .card p { color: #94a3b8; font-size: 0.85rem; line-height: 1.5; }
+    .faq { margin-top: 2rem; }
+    .faq h2 { font-size: 1.25rem; margin-bottom: 1rem; }
+    .faq-item {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.5rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .faq-item strong { font-size: 0.9rem; }
+    .faq-item p { color: #94a3b8; font-size: 0.85rem; margin-top: 0.3rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    <span class="brand">Acme Support</span>
+    <div class="links">
+      <a href="/page-a.html" class="active">Support</a>
+      <a href="/page-b.html">Products</a>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="badge">Domain A</div>
+    <h1>Support Center</h1>
+    <p class="subtitle">
+      Get help with your account, billing, or technical issues.
+      Use the voice assistant in the bottom-right corner to talk to our AI.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Account Issues</h3>
+        <p>Password resets, login problems, and account recovery.</p>
+      </div>
+      <div class="card">
+        <h3>Billing</h3>
+        <p>Invoices, payment methods, and subscription management.</p>
+      </div>
+      <div class="card">
+        <h3>Technical Support</h3>
+        <p>API issues, integration help, and troubleshooting.</p>
+      </div>
+      <div class="card">
+        <h3>Feature Requests</h3>
+        <p>Submit ideas and vote on upcoming features.</p>
+      </div>
+    </div>
+
+    <div class="faq">
+      <h2>Common Questions</h2>
+      <div class="faq-item">
+        <strong>How do I reset my password?</strong>
+        <p>Click "Forgot password" on the login page, or ask the voice assistant for help.</p>
+      </div>
+      <div class="faq-item">
+        <strong>Where can I find my invoices?</strong>
+        <p>Go to Settings &rarr; Billing &rarr; Invoice History.</p>
+      </div>
+      <div class="faq-item">
+        <strong>How do I contact a human?</strong>
+        <p>Start with the voice assistant — it can escalate to a live agent if needed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simulate a customer site that has user_id in localStorage -->
+  <script>
+    if (!localStorage.getItem("user_id")) {
+      localStorage.setItem("user_id", crypto.randomUUID());
+    }
+  </script>
+  <script src="/embed.js" data-user-key="user_id"></script>
+</body>
+</html>
