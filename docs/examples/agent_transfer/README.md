@@ -9,7 +9,6 @@ demonstrates:
   - Function tools for agent switching
   - Lightweight agent design with instructions and tools only
   - Shared AgentSession across agent swaps
-style: two-column
 ---
 
 This example demonstrates how to build two agents—one short-winded and one long-winded—and let them swap places mid-call with a function tool. Each agent has its own instructions and personality, but they share the same session so the call and media pipelines remain active across swaps.
@@ -27,14 +26,10 @@ This example demonstrates how to build two agents—one short-winded and one lon
   pip install "livekit-agents[silero]" python-dotenv
   ```
 
-<!-- {% step %} -->
-<!-- {% instructions %} -->
 ## Load environment, logging, and define an AgentServer
 
 Start by loading your environment variables and setting up logging. Define an `AgentServer` which wraps your application and handles the worker lifecycle.
-<!-- {% /instructions %} -->
 
-<!-- {% stepCode %} -->
 ```python
 import logging
 from dotenv import load_dotenv
@@ -48,48 +43,22 @@ logger.setLevel(logging.INFO)
 
 server = AgentServer()
 ```
-<!-- {% /stepCode %} -->
-<!-- {% /step %}-->
 
-<!-- {% step %} -->
-<!-- {% instructions %} -->
 ## Prewarm VAD for faster connections
 
 Preload the VAD model once per process using the `setup_fnc`. This runs before any sessions start and stores the VAD instance in `proc.userdata` so it can be reused across sessions without reloading.
-<!-- {% /instructions %} -->
 
-<!-- {% stepCode %} -->
 ```python
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()
 
 server.setup_fnc = prewarm
 ```
-<!-- {% /stepCode %} -->
-<!-- {% /step %}-->
 
-<!-- {% step %} -->
-<!-- {% instructions %} -->
 ## Create the short and long agents
 
 Define two lightweight agent classes. Each agent only contains its instructions and a function tool to swap to the other agent. The `on_enter` method is called when the agent becomes active and announces itself.
-<!-- {% /instructions %} -->
 
-<!-- {% stepCode %} -->
-```python
-import logging
-from dotenv import load_dotenv
-from livekit.agents import JobContext, JobProcess, Agent, AgentSession, AgentServer, cli, inference, function_tool
-from livekit.plugins import silero
-
-load_dotenv()
-
-logger = logging.getLogger("agent-transfer")
-logger.setLevel(logging.INFO)
-
-server = AgentServer()
-```
-<!-- {% added %} -->
 ```python
 class ShortAgent(Agent):
     def __init__(self) -> None:
@@ -124,73 +93,11 @@ class LongAgent(Agent):
         """Change the agent to the short agent."""
         self.session.update_agent(ShortAgent())
 ```
-<!-- {% /added %} -->
-<!-- {% /stepCode %} -->
-<!-- {% /step %}-->
 
-<!-- {% step %} -->
-<!-- {% instructions %} -->
 ## Define the RTC session entrypoint
 
 The `@server.rtc_session()` decorator marks this function as the entry point for new sessions. Inside, create an `AgentSession` with your STT, LLM, TTS, and VAD configuration. These settings are shared across both agents since they use the same session. Start the session with the short agent as the default, then connect to the room.
-<!-- {% /instructions %} -->
 
-<!-- {% stepCode %} -->
-```python
-import logging
-from dotenv import load_dotenv
-from livekit.agents import JobContext, JobProcess, Agent, AgentSession, AgentServer, cli, inference, function_tool
-from livekit.plugins import silero
-
-load_dotenv()
-
-logger = logging.getLogger("agent-transfer")
-logger.setLevel(logging.INFO)
-
-server = AgentServer()
-
-
-def prewarm(proc: JobProcess):
-    proc.userdata["vad"] = silero.VAD.load()
-
-
-server.setup_fnc = prewarm
-
-
-class ShortAgent(Agent):
-    def __init__(self) -> None:
-        super().__init__(
-            instructions="""
-                You are a helpful agent. When the user speaks, you listen and respond. Be as brief as possible. Arguably too brief.
-            """
-        )
-
-    async def on_enter(self):
-        self.session.say("Hi. It's Short agent.")
-
-    @function_tool
-    async def change_agent(self):
-        """Change the agent to the long agent."""
-        self.session.update_agent(LongAgent())
-
-
-class LongAgent(Agent):
-    def __init__(self) -> None:
-        super().__init__(
-            instructions="""
-                You are a helpful agent. When the user speaks, you listen and respond in overly verbose, flowery, obnoxiously detailed sentences.
-            """
-        )
-
-    async def on_enter(self):
-        self.session.say("Salutations! It is I, your friendly neighborhood long agent.")
-
-    @function_tool
-    async def change_agent(self):
-        """Change the agent to the short agent."""
-        self.session.update_agent(ShortAgent())
-```
-<!-- {% added %} -->
 ```python
 @server.rtc_session()
 async def entrypoint(ctx: JobContext):
@@ -207,96 +114,15 @@ async def entrypoint(ctx: JobContext):
     await session.start(agent=ShortAgent(), room=ctx.room)
     await ctx.connect()
 ```
-<!-- {% /added %} -->
-<!-- {% /stepCode %} -->
-<!-- {% /step %}-->
 
-<!-- {% step %} -->
-<!-- {% instructions %} -->
 ## Run the server
 
 The `cli.run_app()` function starts the agent server. It manages the worker lifecycle, connects to LiveKit, and processes incoming jobs.
-<!-- {% /instructions %} -->
 
-<!-- {% stepCode %} -->
-```python
-import logging
-from dotenv import load_dotenv
-from livekit.agents import JobContext, JobProcess, Agent, AgentSession, AgentServer, cli, inference, function_tool
-from livekit.plugins import silero
-
-load_dotenv()
-
-logger = logging.getLogger("agent-transfer")
-logger.setLevel(logging.INFO)
-
-server = AgentServer()
-
-
-def prewarm(proc: JobProcess):
-    proc.userdata["vad"] = silero.VAD.load()
-
-
-server.setup_fnc = prewarm
-
-
-class ShortAgent(Agent):
-    def __init__(self) -> None:
-        super().__init__(
-            instructions="""
-                You are a helpful agent. When the user speaks, you listen and respond. Be as brief as possible. Arguably too brief.
-            """
-        )
-
-    async def on_enter(self):
-        self.session.say("Hi. It's Short agent.")
-
-    @function_tool
-    async def change_agent(self):
-        """Change the agent to the long agent."""
-        self.session.update_agent(LongAgent())
-
-
-class LongAgent(Agent):
-    def __init__(self) -> None:
-        super().__init__(
-            instructions="""
-                You are a helpful agent. When the user speaks, you listen and respond in overly verbose, flowery, obnoxiously detailed sentences.
-            """
-        )
-
-    async def on_enter(self):
-        self.session.say("Salutations! It is I, your friendly neighborhood long agent.")
-
-    @function_tool
-    async def change_agent(self):
-        """Change the agent to the short agent."""
-        self.session.update_agent(ShortAgent())
-
-
-@server.rtc_session()
-async def entrypoint(ctx: JobContext):
-    ctx.log_context_fields = {"room": ctx.room.name}
-
-    session = AgentSession(
-        stt=inference.STT(model="deepgram/nova-3-general"),
-        llm=inference.LLM(model="openai/gpt-4.1-mini"),
-        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
-        vad=ctx.proc.userdata["vad"],
-        preemptive_generation=True,
-    )
-
-    await session.start(agent=ShortAgent(), room=ctx.room)
-    await ctx.connect()
-```
-<!-- {% added %} -->
 ```python
 if __name__ == "__main__":
     cli.run_app(server)
 ```
-<!-- {% /added %} -->
-<!-- {% /stepCode %} -->
-<!-- {% /step %}-->
 
 ## Run it
 

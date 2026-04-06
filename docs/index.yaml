@@ -1,6 +1,6 @@
 version: '1.0'
 description: Index of all LiveKit Agent examples with metadata
-total_examples: 80
+total_examples: 81
 examples:
 - file_path: complex-agents/avatars/hedra/dynamically_created_avatar/agent.py
   title: Dynamically Created Avatar
@@ -1055,6 +1055,26 @@ examples:
   - Creating agent dispatches via the API
   - Dialing outbound numbers via SIP trunks
   - LiveKit API client usage
+- file_path: ivr_routing/page.mdoc
+  title: IVR Phone Tree with DTMF Navigation
+  category: telephony
+  tags:
+  - telephony
+  - ivr
+  - dtmf
+  - deepgram
+  - openai
+  - cartesia
+  difficulty: intermediate
+  description: Voice agent that serves a multi-level IVR phone tree, collecting DTMF keypad input or spoken digits to route
+    callers
+  style: two-column
+  demonstrates:
+  - Multi-level IVR menu tree with dataclass nodes
+  - DTMF digit collection using GetDtmfTask
+  - Recursive menu navigation with back button support
+  - Async leaf actions for business logic
+  - Agent-driven voice prompts at each menu level
 - file_path: sip_lifecycle/page.mdoc
   title: SIP Lifecycle Management Agent
   category: telephony

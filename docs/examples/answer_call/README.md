@@ -4,7 +4,6 @@ category: telephony
 tags: [telephony, assemblyai, openai, cartesia]
 difficulty: beginner
 description: Basic agent for handling incoming phone calls with simple conversation
-style: step-by-step
 githubUrl: https://github.com/livekit-examples/python-agents-examples/docs/examples/answer_call/answer_call.py
 demonstrates:
   - Simple telephony agent setup
@@ -31,15 +30,10 @@ This example is a basic agent that can answer inbound phone calls. This doesn't 
   pip install "livekit-agents[silero]" python-dotenv
   ```
 
-<!-- {% step %} -->
-<!-- {% instructions %} -->
 ## Load environment, logging, and define an AgentServer
 
 Start by importing the necessary modules and setting up the basic agent server. Load environment variables and configure logging for debugging.
-<!-- {% /instructions %} -->
 
-<!-- {% stepCode %} -->
-<!-- {% added %} -->
 ```python
 import logging
 from dotenv import load_dotenv
@@ -53,35 +47,13 @@ logger.setLevel(logging.INFO)
 
 server = AgentServer()
 ```
-<!-- {% /added %} -->
-<!-- {% /stepCode %} -->
-<!-- {% /step %}-->
 
-<!-- {% step %} -->
-<!-- {% instructions %} -->
 ## Define the agent and session
 
 Keep your Agent lightweight by only including the instructions. Preload VAD so that it runs once per process to cut down on connection latency.
 
 Define STT, LLM, and TTS as a part of your AgentSession inside the RTC session. Start your session with your agent and connect to the room.
-<!-- {% /instructions %} -->
 
-<!-- {% stepCode %} -->
-```python
-import logging
-from dotenv import load_dotenv
-from livekit.agents import JobContext, JobProcess, Agent, AgentSession, AgentServer, cli, inference
-from livekit.plugins import silero
-
-load_dotenv()
-
-logger = logging.getLogger("answer-call")
-logger.setLevel(logging.INFO)
-
-server = AgentServer()
-```
-
-<!-- {% added %} -->
 ```python
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()
@@ -116,72 +88,15 @@ async def my_agent(ctx: JobContext):
     await session.start(agent=agent, room=ctx.room)
     await ctx.connect()
 ```
-<!-- {% /added %} -->
-<!-- {% /stepCode %} -->
-<!-- {% /step %}-->
 
-<!-- {% step %} -->
-<!-- {% instructions %} -->
 ## Run the server
 
 The `cli.run_app()` function starts the agent server. It manages the worker lifecycle, connects to LiveKit, and processes incoming jobs. When you run the script, it listens for incoming calls and automatically spawns agent sessions when calls arrive.
-<!-- {% /instructions %} -->
 
-<!-- {% stepCode %} -->
-```python
-import logging
-from dotenv import load_dotenv
-from livekit.agents import JobContext, JobProcess, Agent, AgentSession, AgentServer, cli, inference
-from livekit.plugins import silero
-
-load_dotenv()
-
-logger = logging.getLogger("answer-call")
-logger.setLevel(logging.INFO)
-
-server = AgentServer()
-
-def prewarm(proc: JobProcess):
-    proc.userdata["vad"] = silero.VAD.load()
-
-server.setup_fnc = prewarm
-
-class SimpleAgent(Agent):
-    def __init__(self) -> None:
-        super().__init__(
-            instructions="""
-                You are a helpful agent.
-            """
-        )
-
-    async def on_enter(self):
-        self.session.generate_reply()
-
-@server.rtc_session()
-async def my_agent(ctx: JobContext):
-    ctx.log_context_fields = {"room": ctx.room.name}
-
-    session = AgentSession(
-        stt=inference.STT(model="deepgram/nova-3-general"),
-        llm=inference.LLM(model="openai/gpt-4.1-mini"),
-        tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
-        vad=ctx.proc.userdata["vad"],
-        preemptive_generation=True,
-    )
-    agent = SimpleAgent()
-
-    await session.start(agent=agent, room=ctx.room)
-    await ctx.connect()
-```
-
-<!-- {% added %} -->
 ```python
 if __name__ == "__main__":
     cli.run_app(server)
 ```
-<!-- {% /added %} -->
-<!-- {% /stepCode %} -->
-<!-- {% /step %}-->
 
 ## Run it
 
