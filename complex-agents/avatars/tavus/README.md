@@ -30,7 +30,7 @@ Demo: https://www.youtube.com/watch?v=iuX5PDP73bQ
    ```
    pip install -r requirements.txt
    ```
-3. Create a `.env` file in the parent directory with your API keys
+3. Create a `.env` file in the parent directory ("avatars") with your API keys
 
 ## Configuration
 
@@ -38,7 +38,7 @@ Set the following environment variables in your `.env` file:
 
 ```
 OPENAI_API_KEY=your_openai_key
-ELEVENLABS_API_KEY=your_elevenlabs_key
+ELEVEN_API_KEY=your_elevenlabs_key
 DEEPGRAM_API_KEY=your_deepgram_key
 TAVUS_API_KEY=your_tavus_key
 LIVEKIT_API_KEY=your_livekit_key
