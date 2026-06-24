@@ -13,7 +13,7 @@ interface AppProps {
 export function App({ appConfig }: AppProps) {
   return (
     <SessionProvider appConfig={appConfig}>
-      <main className="h-svh w-full overflow-hidden">
+      <main className="min-h-svh w-full overflow-y-auto">
         <ViewController />
       </main>
       <StartAudio label="Start Audio" />
