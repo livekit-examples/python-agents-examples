@@ -184,6 +184,7 @@ Monitor and debug your agents.
 | [TTS Metrics](docs/examples/metrics_tts/) | Speech synthesis performance | Beginner |
 | [VAD Metrics](docs/examples/metrics_vad/) | Voice activity detection stats | Beginner |
 | [Langfuse Tracing](docs/examples/langfuse_tracing/) | Full session tracing with Langfuse | Intermediate |
+| [Noveum Tracing](docs/examples/noveum_tracing/) | Full session tracing with Noveum Trace (community-maintained) | Intermediate |
 
 ### Events & State
 
