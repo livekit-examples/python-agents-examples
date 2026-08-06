@@ -4,9 +4,15 @@ import os
 from dotenv import load_dotenv
 
 import noveum_trace
-from noveum_trace.integrations.livekit import setup_livekit_tracing
-from livekit.agents import JobContext, JobProcess, cli, Agent, AgentSession, AgentServer, inference, RunContext, function_tool
-from livekit.plugins import silero
+from noveum_trace.integrations.livekit import (
+    LiveKitLLMWrapper,
+    LiveKitSTTWrapper,
+    LiveKitTTSWrapper,
+    extract_job_context,
+    setup_livekit_tracing,
+)
+from livekit.agents import JobContext, JobProcess, cli, Agent, AgentSession, AgentServer, RunContext, function_tool
+from livekit.plugins import cartesia, deepgram, openai, silero
 
 logger = logging.getLogger("noveum-trace-example")
 load_dotenv()
@@ -51,9 +57,6 @@ class Kelly(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions="Your name is Kelly.",
-            stt=inference.STT(model="deepgram/nova-3-general"),
-            llm=inference.LLM(model="openai/gpt-4.1-mini"),
-            tts=inference.TTS(model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
             tools=[lookup_weather],
         )
 
@@ -64,7 +67,31 @@ class Kelly(Agent):
 
 @server.rtc_session()
 async def entrypoint(ctx: JobContext):
-    session = AgentSession(vad=ctx.proc.userdata["vad"])
+    job_context = await extract_job_context(ctx)
+    session_id = ctx.job.id
+
+    traced_stt = LiveKitSTTWrapper(
+        stt=deepgram.STT(model="nova-3", language="en-US"),
+        session_id=session_id,
+        job_context=job_context,
+    )
+    traced_llm = LiveKitLLMWrapper(
+        llm=openai.LLM(model="gpt-4.1-mini"),
+        session_id=session_id,
+        job_context=job_context,
+    )
+    traced_tts = LiveKitTTSWrapper(
+        tts=cartesia.TTS(model="sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"),
+        session_id=session_id,
+        job_context=job_context,
+    )
+
+    session = AgentSession(
+        vad=ctx.proc.userdata["vad"],
+        stt=traced_stt,
+        llm=traced_llm,
+        tts=traced_tts,
+    )
 
     setup_livekit_tracing(session, record=True, trace_name_prefix="livekit-example")
 

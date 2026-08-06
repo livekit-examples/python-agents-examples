@@ -729,11 +729,13 @@ examples:
   - metrics
   - openai
   - deepgram
+  - cartesia
   difficulty: intermediate
   description: Shows how to use Noveum Trace, a community-maintained integration, to
     trace the agent session.
   demonstrates:
   - Using setup_livekit_tracing to trace an AgentSession with Noveum Trace.
+  - Wrapping STT/TTS/LLM providers for per-utterance audio and per-call LLM capture.
   - Configuring record=False for privacy-sensitive deployments.
 - file_path: metrics_stt/page.mdoc
   title: STT Metrics
