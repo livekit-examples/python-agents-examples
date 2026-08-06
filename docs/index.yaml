@@ -1,6 +1,6 @@
 version: '1.0'
 description: Index of all LiveKit Agent examples with metadata
-total_examples: 80
+total_examples: 81
 examples:
 - file_path: complex-agents/avatars/hedra/dynamically_created_avatar/agent.py
   title: Dynamically Created Avatar
@@ -722,6 +722,21 @@ examples:
   demonstrates:
   - Using the langfuse tracer to trace the agent session.
   - Using the metrics_collected event to log metrics to langfuse.
+- file_path: noveum_tracing/page.mdoc
+  title: Noveum Tracing
+  category: metrics
+  tags:
+  - metrics
+  - openai
+  - deepgram
+  - cartesia
+  difficulty: intermediate
+  description: Shows how to use Noveum Trace, a community-maintained integration, to
+    trace the agent session.
+  demonstrates:
+  - Using setup_livekit_tracing to trace an AgentSession with Noveum Trace.
+  - Wrapping STT/TTS/LLM providers for per-utterance audio and per-call LLM capture.
+  - Configuring record=False for privacy-sensitive deployments.
 - file_path: metrics_stt/page.mdoc
   title: STT Metrics
   category: metrics
