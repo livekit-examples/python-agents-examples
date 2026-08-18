@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-starter-python"
+version = "1.0.0"
+description = "Simple voice AI assistant built with LiveKit Agents for Python"
+requires-python = ">=3.10, <3.15"
+
+dependencies = [
+    "livekit-agents>=1.6.1",
+    "livekit-plugins-ai-coustics~=0.2",
+    "python-dotenv",
+]
+
+[dependency-groups]
+dev = [
+    "mypy",
+    "pytest",
+    "pytest-asyncio",
+    "pyyaml",
+    "ruff",
+]
+
+[tool.uv]
+# yarl 1.24.1 was published with only a cp310 wheel and no sdist, so it can't
+# install on Python 3.11+. Remove this once upstream uploads the remaining wheels.
+constraint-dependencies = ["yarl<1.24"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.package-data]
+prompts = ["*.md"]
+"clinic.practice_info" = ["*.md"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "unit: fast, deterministic tests with no external services",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "B", "A", "C4", "UP", "SIM", "RUF"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+files = ["src"]
+# The project environment lives at src/.venv, so keep site-packages out of the check.
+exclude = ['(^|/)\.venv/']
+ignore_missing_imports = true
+strict = true
