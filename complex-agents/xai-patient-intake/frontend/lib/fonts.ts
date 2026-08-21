@@ -1,4 +1,4 @@
-import { Public_Sans } from 'next/font/google';
+import { Public_Sans, Space_Grotesk } from 'next/font/google';
 import localFont from 'next/font/local';
 
 /**
@@ -24,18 +24,17 @@ export const monoFont = localFont({
 });
 
 /**
- * TWK Everett
+ * Space Grotesk
  *
- * @see {@link https://weltkern.com/typefaces/everett | Everett website}
+ * A grotesque display face for headings, in place of the commercially licensed one the
+ * LiveKit brand uses — this repo is public, so every font here has to be redistributable.
+ * The variable axis covers 300-700, the weights `font-display` headings ask for. There is
+ * no italic; nothing in this app sets one on a heading, so the browser would synthesize it.
+ *
+ * @see {@link https://fonts.google.com/specimen/Space+Grotesk | Space Grotesk website}
  */
-export const displayFont = localFont({
-  src: [
-    { path: '../fonts/everett-light.woff2', weight: '300', style: 'normal' },
-    { path: '../fonts/everett-regular.woff2', weight: '400', style: 'normal' },
-    { path: '../fonts/everett-regular-italic.woff2', weight: '400', style: 'italic' },
-    { path: '../fonts/everett-medium.woff2', weight: '600', style: 'normal' },
-    { path: '../fonts/everett-bold.woff2', weight: '700', style: 'normal' },
-  ],
+export const displayFont = Space_Grotesk({
   variable: '--font-lk-display',
+  subsets: ['latin'],
   preload: false,
 });

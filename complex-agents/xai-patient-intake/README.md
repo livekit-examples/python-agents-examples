@@ -9,7 +9,7 @@ The speech pipeline is xAI end to end.
 | Stage | Model |
 | --- | --- |
 | Speech to text | `xai/stt-1` |
-| Reasoning | `xai/grok-4.20-0309-non-reasoning` |
+| Reasoning | `xai/grok-4.3` (`reasoning_effort="none"`) |
 | Text to speech | `xai/tts-1` (voice `carina`) |
 
 > The clinic is an in-memory fake. No real patient data is involved, and nothing here is a

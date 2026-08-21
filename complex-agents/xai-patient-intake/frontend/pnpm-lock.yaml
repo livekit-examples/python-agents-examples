@@ -14,9 +14,6 @@ importers:
       '@livekit/components-react':
         specifier: 2.9.24
         version: 2.9.24(@livekit/krisp-noise-filter@0.2.16(livekit-client@2.21.0(@types/dom-mediacapture-record@1.0.22)))(livekit-client@2.21.0(@types/dom-mediacapture-record@1.0.22))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(tslib@2.8.1)
-      '@livekit/krisp-noise-filter':
-        specifier: 0.2.16
-        version: 0.2.16(livekit-client@2.21.0(@types/dom-mediacapture-record@1.0.22))
       '@livekit/protocol':
         specifier: 1.50.4
         version: 1.50.4
@@ -1756,6 +1753,7 @@ snapshots:
   '@livekit/krisp-noise-filter@0.2.16(livekit-client@2.21.0(@types/dom-mediacapture-record@1.0.22))':
     dependencies:
       livekit-client: 2.21.0(@types/dom-mediacapture-record@1.0.22)
+    optional: true
 
   '@livekit/mutex@1.1.1': {}
 

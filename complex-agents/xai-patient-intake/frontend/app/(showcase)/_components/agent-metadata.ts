@@ -33,8 +33,8 @@ export const AGENTS: AgentMetadata[] = [
     title: 'Patient Intake',
     description:
       'A family-medicine front-desk agent. Identifies callers against a chart, books and moves appointments, collects pre-visit clinical intake, and triages red-flag symptoms to emergency care',
-    headlineModel: 'Grok 4.20',
-    models: ['xAI Speech to Text', 'Grok 4.20', 'xAI Text to Speech'],
+    headlineModel: 'Grok 4.3',
+    models: ['xAI Speech to Text', 'Grok 4.3', 'xAI Text to Speech'],
     comingSoon: false,
   },
 ];

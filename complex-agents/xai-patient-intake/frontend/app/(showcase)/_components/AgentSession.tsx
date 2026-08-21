@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { useSessionContext } from '@livekit/components-react';
-import { useKrispNoiseFilter } from '@livekit/components-react/krisp';
 
 import { SessionProvider } from '@/components/SessionProvider';
 
@@ -11,11 +10,13 @@ interface AgentHooksProps {
 function AgentHooks({ onLeave }: AgentHooksProps) {
   const session = useSessionContext();
   const hasConnectedRef = useRef(false);
-  const { setNoiseFilterEnabled } = useKrispNoiseFilter();
 
   useEffect(() => {
+    // No client-side noise filter on purpose. The worker runs the ai-coustics enhancer on the
+    // way into STT (see agent.py), and stacking a second denoiser ahead of it over-suppresses
+    // the quiet, trailing-off speech this agent is tuned to wait for. Suppressing on the server
+    // also covers SIP callers, who never run this code.
     session.start({ tracks: { microphone: { enabled: true } } });
-    setNoiseFilterEnabled(true);
     return () => {
       session.end();
     };

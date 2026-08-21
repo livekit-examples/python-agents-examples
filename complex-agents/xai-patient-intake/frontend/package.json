@@ -12,7 +12,6 @@
   "dependencies": {
     "@icons-pack/react-simple-icons": "12.9.0",
     "@livekit/components-react": "2.9.24",
-    "@livekit/krisp-noise-filter": "0.2.16",
     "@livekit/protocol": "1.50.4",
     "@radix-ui/react-slot": "1.2.4",
     "class-variance-authority": "0.7.1",
