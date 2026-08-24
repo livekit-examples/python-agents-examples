@@ -66,12 +66,7 @@ async def patient_intake(ctx: JobContext) -> None:
                 "parallel_tool_calls": False,
             },
         ),
-        # optimize_streaming_latency=1 trades a little quality for a faster first word.
-        tts=inference.TTS(
-            model="xai/tts-1",
-            voice="carina",
-            extra_kwargs={"optimize_streaming_latency": 1},
-        ),
+        tts=inference.TTS(model="xai/tts-1", voice="carina"),
         expressive=ExpressiveOptions(tts_instructions_append=prompt("expressive")),
         vad=inference.VAD(),
         max_tool_steps=5,

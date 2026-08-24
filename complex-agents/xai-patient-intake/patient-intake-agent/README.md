@@ -51,8 +51,8 @@ builds a second environment at the project root and uses that instead.
 `console` talks to the agent in your terminal; `dev` registers the worker with
 LiveKit Cloud. Both read credentials from `.env.local`.
 
-The xAI TTS uses `optimize_streaming_latency=1`. Every model and audio setting is a
-literal in the single `AgentSession(...)` call in `src/agent.py`.
+Every model and audio setting is a literal in the single `AgentSession(...)` call in
+`src/agent.py`.
 
 ## Verify
 
