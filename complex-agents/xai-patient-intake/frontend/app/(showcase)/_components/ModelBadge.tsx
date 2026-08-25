@@ -52,9 +52,9 @@ export function ModelBadge({ agent }: ModelBadgeProps) {
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Portal>
           <TooltipPrimitive.Content
-            side="bottom"
-            align="start"
-            sideOffset={6}
+            side="right"
+            align="center"
+            sideOffset={8}
             collisionPadding={12}
             className="border-separator1 bg-bg2 text-fg1 animate-in fade-in-0 zoom-in-95 z-50 rounded-md border px-3 py-2 shadow-lg"
           >
