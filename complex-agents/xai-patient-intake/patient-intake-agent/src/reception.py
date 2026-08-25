@@ -107,7 +107,10 @@ class PatientIntakeAgent(Agent):
             raise ToolError(
                 "No patient matched that last name and date of birth. Ask the caller "
                 "to check those two details. Do not guess and do not create a chart "
-                "unless the caller has said they are new to the practice."
+                "unless the caller has said they are new to the practice. If they "
+                "confirm both details are right, stop asking: say you cannot find "
+                "their chart, and offer either to set them up as a new patient or to "
+                "take a message for the office."
             ) from error
 
     @function_tool
