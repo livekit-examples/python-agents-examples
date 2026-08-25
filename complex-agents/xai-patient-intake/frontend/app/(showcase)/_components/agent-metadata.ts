@@ -35,6 +35,8 @@ export const AGENTS: AgentMetadata[] = [
       'A family-medicine front-desk agent. Identifies callers against a chart, books and moves appointments, collects pre-visit clinical intake, and triages red-flag symptoms to emergency care',
     headlineModel: 'Grok 4.3',
     models: ['xAI Speech to Text', 'Grok 4.3', 'xAI Text to Speech'],
+    repoUrl:
+      'https://github.com/livekit-examples/python-agents-examples/tree/main/complex-agents/xai-patient-intake',
     comingSoon: false,
   },
 ];
