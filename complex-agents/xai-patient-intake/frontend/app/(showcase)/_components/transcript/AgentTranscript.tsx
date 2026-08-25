@@ -22,6 +22,7 @@ import { Shimmer } from '@/components/shimmer';
 import { MORPH_SPRING, getMoodColor } from '../utils';
 import { AgentTurn } from './AgentTurn';
 import { MiniVisualizer } from './MiniVisualizer';
+import { SpeakHints } from './SpeakHints';
 import { Suggestions } from './Suggestions';
 import { UserMessage } from './UserMessage';
 
@@ -56,8 +57,8 @@ interface AgentTranscriptProps {
   className?: string;
   /** Agent in this conversation, so an accent-themed one can opt out of the mood tint. */
   agentName?: string;
-  /** Openers to offer once the agent has spoken, until the caller says something. */
-  starters?: Suggestion[];
+  /** Openers to suggest aloud once the agent has spoken, until the caller says something. */
+  starters?: string[];
 }
 
 export function AgentTranscript({ className, agentName, starters }: AgentTranscriptProps) {
@@ -112,14 +113,15 @@ export function AgentTranscript({ className, agentName, starters }: AgentTranscr
     return { agentSpoke, callerSpoke };
   }, [transcriptionStreams, localIdentity]);
 
-  const showStarters =
+  const starterHints =
     agentSuggestions.length === 0 &&
-    (starters?.length ?? 0) > 0 &&
     spokenBy.agentSpoke &&
     !spokenBy.callerSpoke &&
-    sentMessages.length === 0;
-  const suggestions = agentSuggestions.length > 0 ? agentSuggestions : showStarters ? starters! : [];
-  const showSuggestions = !dismissed && suggestions.length > 0 && state === 'listening';
+    sentMessages.length === 0 &&
+    state === 'listening'
+      ? (starters ?? [])
+      : [];
+  const showSuggestions = !dismissed && agentSuggestions.length > 0 && state === 'listening';
 
   useEffect(() => {
     setDismissed(false);
@@ -306,8 +308,12 @@ export function AgentTranscript({ className, agentName, starters }: AgentTranscr
           </AnimatePresence>
 
           {showSuggestions && (
-            <Suggestions suggestions={suggestions} handleSuggestionClick={handleSuggestionClick} />
+            <Suggestions
+              suggestions={agentSuggestions}
+              handleSuggestionClick={handleSuggestionClick}
+            />
           )}
+          {starterHints.length > 0 && <SpeakHints hints={starterHints} />}
         </div>
       </div>
     </motion.div>

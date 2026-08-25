@@ -13,8 +13,8 @@ export interface AgentMetadata {
   headlineModel?: string;
   /** One entry per pipeline stage, shown in the headline badge's tooltip. */
   models: ModelStage[];
-  /** Openers offered once the agent has spoken, until the caller says something. */
-  starters?: { label: string; value: string }[];
+  /** Openers to suggest aloud once the agent has spoken, until the caller says something. */
+  starters?: string[];
   repoUrl?: string;
   comingSoon: boolean;
 }
@@ -50,11 +50,7 @@ export const AGENTS: AgentMetadata[] = [
       { role: 'Reasoning', name: 'xai/grok-4.3' },
       { role: 'Text to speech', name: 'xai/tts-1' },
     ],
-    starters: [
-      { label: 'Book an appointment', value: "I'd like to book an appointment." },
-      { label: 'Request a refill', value: 'I need a refill on my prescription.' },
-      { label: 'Reschedule a visit', value: 'I need to move my appointment.' },
-    ],
+    starters: ['Book an appointment', 'Request a refill', 'Reschedule a visit'],
     repoUrl:
       'https://github.com/livekit-examples/python-agents-examples/tree/main/complex-agents/xai-patient-intake',
     comingSoon: false,
