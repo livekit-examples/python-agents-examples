@@ -53,7 +53,7 @@ export const AGENTS: AgentMetadata[] = [
     starters: [
       'Can I book an appointment?',
       'I need a refill on my prescription.',
-      'I need to move my appointment.',
+      "I'd like to reschedule my visit.",
     ],
     repoUrl:
       'https://github.com/livekit-examples/python-agents-examples/tree/main/complex-agents/xai-patient-intake',
