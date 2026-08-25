@@ -56,9 +56,11 @@ interface AgentTranscriptProps {
   className?: string;
   /** Agent in this conversation, so an accent-themed one can opt out of the mood tint. */
   agentName?: string;
+  /** Openers to offer once the agent has spoken, until the caller says something. */
+  starters?: Suggestion[];
 }
 
-export function AgentTranscript({ className, agentName }: AgentTranscriptProps) {
+export function AgentTranscript({ className, agentName, starters }: AgentTranscriptProps) {
   const { agent, state, audioTrack } = useVoiceAssistant();
   const { attributes } = useParticipantAttributes({ participant: agent });
   const room = useRoomContext();
@@ -84,10 +86,39 @@ export function AgentTranscript({ className, agentName }: AgentTranscriptProps) 
   }, [transcriptionStreams]);
 
   const rawSuggestions = attributes?.[AGENT_SUGGESTIONS_ATTRIBUTE];
-  const suggestions = useMemo(() => parseSuggestions(rawSuggestions), [rawSuggestions]);
+  const agentSuggestions = useMemo(() => parseSuggestions(rawSuggestions), [rawSuggestions]);
   const [dismissed, setDismissed] = useState(false);
   const [sentMessages, setSentMessages] = useState<{ id: string; ts: number; text: string }[]>([]);
   const sentCountRef = useRef(0);
+
+  // Starters are for the opening beat only: they appear once the agent has said its greeting
+  // and retire the moment the caller has said anything at all, since past that point the
+  // conversation has a subject and a generic "book an appointment" is noise. An agent that
+  // publishes its own suggestions always wins, being able to read the room.
+  const localIdentity = room?.localParticipant?.identity;
+  const spokenBy = useMemo(() => {
+    let agentSpoke = false;
+    let callerSpoke = false;
+    for (const stream of transcriptionStreams) {
+      if (!stream.text.trim()) {
+        continue;
+      }
+      if (stream.participantInfo.identity === localIdentity) {
+        callerSpoke = true;
+      } else {
+        agentSpoke = true;
+      }
+    }
+    return { agentSpoke, callerSpoke };
+  }, [transcriptionStreams, localIdentity]);
+
+  const showStarters =
+    agentSuggestions.length === 0 &&
+    (starters?.length ?? 0) > 0 &&
+    spokenBy.agentSpoke &&
+    !spokenBy.callerSpoke &&
+    sentMessages.length === 0;
+  const suggestions = agentSuggestions.length > 0 ? agentSuggestions : showStarters ? starters! : [];
   const showSuggestions = !dismissed && suggestions.length > 0 && state === 'listening';
 
   useEffect(() => {

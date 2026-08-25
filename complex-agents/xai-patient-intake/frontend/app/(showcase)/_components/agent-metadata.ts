@@ -1,9 +1,20 @@
+export interface ModelStage {
+  /** Stage of the pipeline, e.g. "Speech to text". */
+  role: string;
+  /** Model id serving that stage. */
+  name: string;
+}
+
 export interface AgentMetadata {
   name: string;
   title: string;
   description: string;
+  /** Badge text. Names the family, not one model; the cascade lives in `models`. */
   headlineModel?: string;
-  models: string[];
+  /** One entry per pipeline stage, shown in the headline badge's tooltip. */
+  models: ModelStage[];
+  /** Openers offered once the agent has spoken, until the caller says something. */
+  starters?: { label: string; value: string }[];
   repoUrl?: string;
   comingSoon: boolean;
 }
@@ -33,8 +44,17 @@ export const AGENTS: AgentMetadata[] = [
     title: 'Patient Intake',
     description:
       'A family-medicine front-desk agent. Identifies callers against a chart, books and moves appointments, collects pre-visit clinical intake, and triages red-flag symptoms to emergency care',
-    headlineModel: 'Grok 4.3',
-    models: ['xAI Speech to Text', 'Grok 4.3', 'xAI Text to Speech'],
+    headlineModel: 'Grok Voice Models',
+    models: [
+      { role: 'Speech to text', name: 'xai/stt-1' },
+      { role: 'Reasoning', name: 'xai/grok-4.3' },
+      { role: 'Text to speech', name: 'xai/tts-1' },
+    ],
+    starters: [
+      { label: 'Book an appointment', value: "I'd like to book an appointment." },
+      { label: 'Request a refill', value: 'I need a refill on my prescription.' },
+      { label: 'Reschedule a visit', value: 'I need to move my appointment.' },
+    ],
     repoUrl:
       'https://github.com/livekit-examples/python-agents-examples/tree/main/complex-agents/xai-patient-intake',
     comingSoon: false,

@@ -10,6 +10,7 @@ import { motion } from 'motion/react';
 import { agentAccentStyle } from '@/app/(showcase)/_components/agent-themes';
 import { AgentAudioVisualizerGrid } from '@/components/voice-agent/agent-audio-visualizer-grid';
 import { slugFromAgentName, type AgentMetadata } from './agent-metadata';
+import { ModelBadge } from './ModelBadge';
 import { agentMorphName, MORPH_SPRING } from './utils';
 
 const CARD_BASE =
@@ -90,11 +91,7 @@ export function AgentCard({ agent, onSelect, justExitedAgentName }: AgentCardPro
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <h2 className="text-fg0 text-xl font-semibold">{agent.title}</h2>
-            {agent.headlineModel && (
-              <Badge variant="muted" size="large">
-                {agent.headlineModel}
-              </Badge>
-            )}
+            <ModelBadge agent={agent} />
           </div>
           {agent.description && <p className="text-fg3 text-sm">{agent.description}</p>}
         </div>

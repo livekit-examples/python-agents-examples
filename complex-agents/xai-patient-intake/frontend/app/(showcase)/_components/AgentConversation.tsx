@@ -3,12 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { SiGithub } from '@icons-pack/react-simple-icons';
-import { ArrowLeftIcon, Badge, Button, IconButton } from '@/components/bytes';
+import { ArrowLeftIcon, Button, IconButton } from '@/components/bytes';
 import { motion } from 'motion/react';
 
 import { agentAccentStyle } from '@/app/(showcase)/_components/agent-themes';
 import { AgentControlBar } from '@/components/agents-ui/agent-control-bar';
 import { type AgentMetadata } from './agent-metadata';
+import { ModelBadge } from './ModelBadge';
 import { AgentSession } from './AgentSession';
 import { AgentTranscript } from './transcript/AgentTranscript';
 import { MORPH_SPRING } from './utils';
@@ -93,11 +94,7 @@ export function AgentConversation({
               <ArrowLeftIcon />
             </IconButton>
             <h2 className="text-fg0 truncate text-lg font-semibold">{agent.title}</h2>
-            {agent.headlineModel && (
-              <Badge variant="muted" size="large" className="shrink-0 tracking-wider">
-                {agent.headlineModel.toUpperCase()}
-              </Badge>
-            )}
+            <ModelBadge agent={agent} />
           </div>
           {agent.repoUrl && (
             <Button variant="ghost" className="shrink-0" asChild>
@@ -110,7 +107,11 @@ export function AgentConversation({
         </div>
         <div className="flex min-h-0 flex-1 flex-col gap-8 pt-6 pb-8">
           <AgentSession agentName={agent.name} onLeave={handleLeave}>
-            <AgentTranscript className="min-h-0 w-full flex-1" agentName={agent.name} />
+            <AgentTranscript
+              className="min-h-0 w-full flex-1"
+              agentName={agent.name}
+              starters={agent.starters}
+            />
             <div className="flex flex-col items-center justify-center gap-4">
               <AgentControlBar
                 variant="livekit"
