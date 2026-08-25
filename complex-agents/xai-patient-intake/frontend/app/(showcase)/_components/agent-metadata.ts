@@ -50,7 +50,11 @@ export const AGENTS: AgentMetadata[] = [
       { role: 'Reasoning', name: 'xai/grok-4.3' },
       { role: 'Text to speech', name: 'xai/tts-1' },
     ],
-    starters: ['Book an appointment', 'Request a refill', 'Reschedule a visit'],
+    starters: [
+      'Can I book an appointment?',
+      'I need a refill on my prescription',
+      'I need to move my appointment',
+    ],
     repoUrl:
       'https://github.com/livekit-examples/python-agents-examples/tree/main/complex-agents/xai-patient-intake',
     comingSoon: false,
