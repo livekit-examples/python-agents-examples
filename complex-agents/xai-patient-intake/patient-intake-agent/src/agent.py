@@ -9,7 +9,6 @@ from dotenv import load_dotenv
 from livekit.agents import (
     AgentServer,
     AgentSession,
-    ExpressiveOptions,
     JobContext,
     TurnHandlingOptions,
     cli,
@@ -19,7 +18,6 @@ from livekit.agents import (
 from livekit.plugins import ai_coustics
 
 from clinic import open_clinic
-from prompts import prompt
 from reception import PatientIntakeAgent
 from visit import Visit
 
@@ -67,7 +65,7 @@ async def patient_intake(ctx: JobContext) -> None:
             },
         ),
         tts=inference.TTS(model="xai/tts-1", voice="carina"),
-        expressive=ExpressiveOptions(tts_instructions_append=prompt("expressive")),
+        expressive=True,
         vad=inference.VAD(),
         max_tool_steps=5,
         # Dynamic endpointing gives hesitant, incomplete speech time to continue. Both delays
