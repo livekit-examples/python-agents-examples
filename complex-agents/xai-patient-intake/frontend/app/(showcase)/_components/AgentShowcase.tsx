@@ -2,9 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { SiGithub } from '@icons-pack/react-simple-icons';
-import { Button, cn } from '@/components/bytes';
+import { cn } from '@/components/bytes';
 import { AnimatePresence } from 'motion/react';
 
 import { AGENTS, resolveActiveAgent } from './agent-metadata';
@@ -101,16 +99,6 @@ export function AgentShowcase() {
                 </div>
               ))}
             </div>
-            <Button variant="outline" size="sm" asChild>
-              <Link
-                href="https://github.com/livekit/agents"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <SiGithub className="size-4" />
-                View on GitHub
-              </Link>
-            </Button>
           </div>
         )}
       </AnimatePresence>
