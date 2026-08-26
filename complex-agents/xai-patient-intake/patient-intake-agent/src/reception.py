@@ -99,9 +99,6 @@ class PatientIntakeAgent(Agent):
         self.clinic = clinic
         self.practice_info: PracticeInfo = PracticeInfo()
         self._greet = greet
-        # Every name and date of birth that a search has already failed to match. A new
-        # chart may only be opened under one of these, so a surname guessed after the
-        # search, or a name the caller never gave, cannot become a chart.
         self._searched_without_a_chart: set[tuple[str, date]] = set()
 
     async def on_enter(self) -> None:
