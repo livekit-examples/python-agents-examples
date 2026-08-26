@@ -30,6 +30,12 @@ CallerRelationship = Literal["the patient", "parent or guardian", "someone else"
 
 
 def _date(value: str, *, field: str) -> date:
+    if not value.strip():
+        raise ToolError(
+            f"{field} is empty: the caller has not given it yet. Ask for the last name "
+            "and date of birth together, once, and wait. If you asked in this same "
+            "reply, say nothing more."
+        )
     try:
         return date.fromisoformat(value)
     except ValueError as error:
@@ -93,25 +99,36 @@ class PatientIntakeAgent(Agent):
         self.clinic = clinic
         self.practice_info: PracticeInfo = PracticeInfo()
         self._greet = greet
+        # Every name and date of birth that a search has already failed to match. A new
+        # chart may only be opened under one of these, so a surname guessed after the
+        # search, or a name the caller never gave, cannot become a chart.
+        self._searched_without_a_chart: set[tuple[str, date]] = set()
 
     async def on_enter(self) -> None:
         if self._greet:
             await self.session.generate_reply(instructions=prompt("greeting"))
 
-    def _patient(self, last_name: str, date_of_birth: str) -> Patient:
+    def _lookup(self, last_name: str, date_of_birth: str) -> Patient | None:
+        born = _date(date_of_birth, field="date_of_birth")
         try:
-            return self.clinic.find_patient(
-                last_name, _date(date_of_birth, field="date_of_birth")
-            )
-        except RecordNotFoundError as error:
+            return self.clinic.find_patient(last_name, born)
+        except RecordNotFoundError:
+            self._searched_without_a_chart.add((last_name.strip().casefold(), born))
+            return None
+
+    def _patient(self, last_name: str, date_of_birth: str) -> Patient:
+        patient = self._lookup(last_name, date_of_birth)
+        if patient is None:
             raise ToolError(
                 "No patient matched that last name and date of birth. Ask the caller "
                 "to check those two details. Do not guess and do not create a chart "
                 "unless the caller has said they are new to the practice. If they "
                 "confirm both details are right, stop asking: say you cannot find "
                 "their chart, and offer either to set them up as a new patient or to "
-                "take a message for the office."
-            ) from error
+                "take a message for the office. Do not offer any appointment times "
+                "until a search succeeds."
+            )
+        return patient
 
     @function_tool
     async def read_practice_information(self) -> str:
@@ -151,8 +168,15 @@ class PatientIntakeAgent(Agent):
             preferred_time: Exact requested time in HH:MM, or empty for any time.
         """
         born = _date(date_of_birth, field="date_of_birth")
+        preface = ""
         if patient_status == "established":
             self._patient(last_name, date_of_birth)
+        elif self._lookup(last_name, date_of_birth) is not None:
+            patient_status = "established"
+            preface = (
+                "This patient already has a chart, so they are established, not new. "
+                "Searching as established; book with patient_status=established.\n"
+            )
         on_date = (
             _date(preferred_date, field="preferred_date") if preferred_date else None
         )
@@ -265,8 +289,10 @@ class PatientIntakeAgent(Agent):
                 "There is no waitlist or notification message. Tell the caller to "
                 "call back later because same-day openings are released each morning."
             )
-        return "Open appointments:\n" + "\n".join(
-            _slot_line(self.clinic, slot) for slot in slots[:3]
+        return (
+            preface
+            + "Open appointments:\n"
+            + "\n".join(_slot_line(self.clinic, slot) for slot in slots[:3])
         )
 
     @function_tool
@@ -311,6 +337,16 @@ class PatientIntakeAgent(Agent):
             if not first_name.strip():
                 raise ToolError(
                     "first_name is required to register a new patient"
+                ) from None
+            if (
+                last_name.strip().casefold(),
+                born,
+            ) not in self._searched_without_a_chart:
+                raise ToolError(
+                    "No search has been run under this last name and date of birth, so "
+                    "a chart cannot be opened under them. Confirm both with the caller, "
+                    "call find_open_times with exactly what they said, and book only "
+                    "from what it returns."
                 ) from None
             try:
                 slot = self.clinic.slot(slot_id)
@@ -439,8 +475,10 @@ class PatientIntakeAgent(Agent):
         """Route one chart message to the appropriate practice team.
 
         Use this for prescription refills, test results, billing, referrals, nurse
-        callbacks, or medical records. This records a request; it never means the
-        request was clinically approved or completed. After it succeeds, state what
+        callbacks, or medical records. It needs the patient's real last name and date
+        of birth; if either is still missing, ask for it and end the turn instead of
+        calling. This records a request; it never means the request was clinically
+        approved or completed. After it succeeds, state what
         was routed in one sentence and yield without a follow-up question.
 
         Args:

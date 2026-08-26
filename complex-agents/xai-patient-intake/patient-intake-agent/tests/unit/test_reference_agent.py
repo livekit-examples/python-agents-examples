@@ -84,6 +84,9 @@ async def test_new_patient_booking_registers_and_books_in_one_tool_call() -> Non
     agent = PatientIntakeAgent(clinic=records, greet=False)
     slot = records.open_slots()[0]
 
+    await agent.find_open_times(
+        patient_status="new", last_name="Parlo", date_of_birth="1989-08-01"
+    )
     result = await agent.book_appointment(
         patient_status="new",
         last_name="Parlo",
@@ -282,3 +285,75 @@ async def test_emergency_direction_is_durable_and_unambiguous() -> None:
     assert (
         result == "Emergency escalation recorded. Give the appropriate direction now."
     )
+
+
+async def test_new_status_with_a_matching_chart_uses_it_instead_of_registering() -> (
+    None
+):
+    records = clinic()
+    agent = PatientIntakeAgent(clinic=records, greet=False)
+
+    result = await agent.find_open_times(
+        patient_status="new", last_name="Whitaker", date_of_birth="1958-03-14"
+    )
+    assert "already has a chart" in result
+    assert "Open appointments" in result
+
+    await agent.book_appointment(
+        patient_status="new",
+        last_name="Whitaker",
+        date_of_birth="1958-03-14",
+        slot_id=records.open_slots()[0].id,
+        visit_type="sick_visit",
+        reason="rash",
+        first_name="Dolores",
+    )
+    assert len(records.patients) == 1
+
+
+async def test_registration_needs_a_search_under_the_same_name_and_birth_date() -> None:
+    records = clinic()
+    agent = PatientIntakeAgent(clinic=records, greet=False)
+    slot = records.open_slots()[0]
+
+    await agent.find_open_times(
+        patient_status="new", last_name="Thompson", date_of_birth="1991-09-12"
+    )
+    with pytest.raises(ToolError, match="find_open_times"):
+        await agent.book_appointment(
+            patient_status="new",
+            last_name="Venkat",
+            date_of_birth="1991-09-12",
+            slot_id=slot.id,
+            visit_type="sick_visit",
+            reason="sore throat",
+            first_name="Priya",
+        )
+    assert len(records.patients) == 1
+
+    await agent.find_open_times(
+        patient_status="new", last_name="Venkat", date_of_birth="1991-09-12"
+    )
+    await agent.book_appointment(
+        patient_status="new",
+        last_name="Venkat",
+        date_of_birth="1991-09-12",
+        slot_id=slot.id,
+        visit_type="sick_visit",
+        reason="sore throat",
+        first_name="Priya",
+    )
+    assert [p.last_name for p in records.patients if p.registered_on_this_call] == [
+        "Venkat"
+    ]
+
+
+async def test_a_failed_lookup_tells_the_model_not_to_offer_times() -> None:
+    agent = PatientIntakeAgent(clinic=clinic(), greet=False)
+
+    with pytest.raises(ToolError, match="Do not offer any appointment times"):
+        await agent.find_open_times(
+            patient_status="established",
+            last_name="Whitaker",
+            date_of_birth="1958-03-15",
+        )
