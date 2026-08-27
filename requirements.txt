@@ -17,3 +17,4 @@ langchain-openai
 langgraph
 langchain
 deepagents
+smart-turn-livekit
