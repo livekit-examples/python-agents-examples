@@ -523,7 +523,7 @@ async def entrypoint(ctx: JobContext):
         userdata=userdata,
         stt="assemblyai/universal-streaming:en",
         llm="openai/gpt-4.1",
-        tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
+        tts="cartesia/sonic-3.6:6f84f4b8-58a2-430c-8c79-688dad597532",
         turn_detection=MultilingualModel(),
         vad=silero.VAD.load(),
         max_tool_steps=10,

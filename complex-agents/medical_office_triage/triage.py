@@ -114,7 +114,7 @@ class TriageAgent(BaseAgent):
             instructions=load_prompt('triage_prompt.yaml'),
             stt="assemblyai/universal-streaming",
             llm="openai/gpt-4.1-mini",
-            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
+            tts="cartesia/sonic-3.6:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load()
         )
 

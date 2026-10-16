@@ -111,7 +111,7 @@ class SimpleAgent(Agent):
             """,
             stt="assemblyai/universal-streaming",
             llm="openai/gpt-4.1-mini",
-            tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
+            tts="cartesia/sonic-3.6:6f84f4b8-58a2-430c-8c79-688dad597532",
             vad=silero.VAD.load(),
             turn_detection=self.custom_turn_detector
         )
@@ -146,7 +146,7 @@ async def entrypoint(ctx: JobContext):
             languages=["en", "fr", "de", "pt", "zh", "ja", "ko", "id", "ru", "nl", "tr", "es", "it"]
         ),
         llm="openai/gpt-4.1-mini",
-        tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
+        tts="cartesia/sonic-3.6:6f84f4b8-58a2-430c-8c79-688dad597532",
         turn_detection=CustomTurnDetector(userdata),
     )
 

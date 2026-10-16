@@ -55,7 +55,7 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession(
         stt=inference.STT(model="deepgram/nova-3-general"),
         llm=inference.LLM(model="openai/gpt-4.1-mini"),
-        tts=inference.TTS(model="cartesia/sonic-2", voice="6f84f4b8-58a2-430c-8c79-688dad597532"),
+        tts=inference.TTS(model="cartesia/sonic-3.6", voice="6f84f4b8-58a2-430c-8c79-688dad597532"),
         vad=ctx.proc.userdata["vad"],
         turn_detection=MultilingualModel(),
         mcp_servers=[mcp.MCPServerStdio(command="codex", args=["mcp"], client_session_timeout_seconds=600000)],

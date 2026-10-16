@@ -84,7 +84,7 @@ async def entrypoint(ctx: JobContext):
         vad=ctx.proc.userdata["vad"],
         stt="deepgram/nova-3-general",
         llm="openai/gpt-4.1-mini",
-        tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
+        tts="cartesia/sonic-3.6:6f84f4b8-58a2-430c-8c79-688dad597532",
         mcp_servers=[mcp.MCPServerHTTP(url="https://shayne.app/mcp")],
     )
 
@@ -157,7 +157,7 @@ async def entrypoint(ctx: JobContext):
         vad=ctx.proc.userdata["vad"],
         stt="deepgram/nova-3-general",
         llm="openai/gpt-4.1-mini",
-        tts="cartesia/sonic-2:6f84f4b8-58a2-430c-8c79-688dad597532",
+        tts="cartesia/sonic-3.6:6f84f4b8-58a2-430c-8c79-688dad597532",
         mcp_servers=[mcp.MCPServerHTTP(url="https://shayne.app/mcp")],
     )
 

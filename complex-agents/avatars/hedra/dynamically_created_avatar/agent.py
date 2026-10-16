@@ -148,7 +148,7 @@ async def entrypoint(ctx: agents.JobContext):
     session = AgentSession[SessionState](
         stt=deepgram.STT(model="nova-3", language="multi"),
         llm=openai.LLM(model="gpt-4.1-mini", client=openai_client),
-        tts=cartesia.TTS(model="sonic-2", voice="f786b574-daa5-4673-aa0c-cbe3e8534c02"),
+        tts=cartesia.TTS(model="sonic-3.6", voice="f786b574-daa5-4673-aa0c-cbe3e8534c02"),
         vad=silero.VAD.load(),
         userdata=session_state,
         turn_detection=MultilingualModel(),
