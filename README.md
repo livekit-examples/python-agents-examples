@@ -1,3 +1,6 @@
+> [!CAUTION]
+> The examples in this repo are a legacy, unmaintained set of examples that don't represent the best way to build agents today. For an up-to-date set of examples that exercise best practices, see the main [Agents repository](https://github.com/livekit/agents/tree/main/examples).
+
 <p align="center">
   <img src="livekit-logo-dark.png" alt="LiveKit" height="80">
 </p>
